@@ -232,4 +232,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get check_connection => 'Check Connection';
+
+  @override
+  String get home => 'Home';
+
+  @override
+  String get tablets => 'Tablets';
+
+  @override
+  String get my_classes => 'My Classes';
+
+  @override
+  String get homeworks => 'Homeworks';
+
+  @override
+  String get messages => 'Messages';
 }

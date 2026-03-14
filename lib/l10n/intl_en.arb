@@ -69,6 +69,11 @@
   "contact_support": "Contact Support",
   "go_back": "Go Back",
   "refresh": "Refresh",
-  "check_connection": "Check Connection"
+  "check_connection": "Check Connection",
+  "home": "Home",
+  "tablets": "Tablets",
+  "my_classes": "My Classes",
+  "homeworks": "Homeworks",
+  "messages": "Messages"
 
 }

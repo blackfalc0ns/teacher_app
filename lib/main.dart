@@ -4,7 +4,12 @@ import 'package:teacher_app/generated/app_localizations.dart';
 import 'core/utils/helper/on_genrated_routes.dart';
 import 'core/utils/theme/app_theme.dart';
 
-void main() {
+import 'core/di/injection_container.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initDI();
+
   runApp(const MyApp());
 }
 

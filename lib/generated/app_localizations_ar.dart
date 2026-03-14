@@ -224,4 +224,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get check_connection => 'فحص الاتصال';
+
+  @override
+  String get home => 'الرئيسية';
+
+  @override
+  String get tablets => 'التابلات';
+
+  @override
+  String get my_classes => 'الصفوف الخاصة بي';
+
+  @override
+  String get homeworks => 'واجباتي';
+
+  @override
+  String get messages => 'الرسائل';
 }

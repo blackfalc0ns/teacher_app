@@ -43,6 +43,7 @@ lib/core/
 ## 📌 Constants
 
 ### `app_constants.dart`
+
 ثوابت التطبيق الأساسية للمسافات والأبعاد.
 
 ```dart
@@ -51,12 +52,12 @@ class AppConstants {
   static const double paddingSmall = 8.0;
   static const double paddingMedium = 16.0;
   static const double paddingLarge = 24.0;
-  
+
   // Border Radius
   static const double radiusSmall = 8.0;
   static const double radiusMedium = 12.0;
   static const double radiusLarge = 16.0;
-  
+
   // Animation Duration
   static const Duration animationDuration = Duration(milliseconds: 300);
   static const Duration shimmerDuration = Duration(milliseconds: 1500);
@@ -68,9 +69,11 @@ class AppConstants {
 ## 🌐 Cubit
 
 ### `language_cubit.dart` & `language_state.dart`
+
 إدارة حالة اللغة في التطبيق (عربي/إنجليزي).
 
 **الميزات:**
+
 - حفظ اللغة في SharedPreferences
 - تحديث DioClient عند تغيير اللغة
 - إشعار جميع الـ Cubits المسجلة بتغيير اللغة
@@ -94,6 +97,7 @@ if (languageCubit.isArabic) { ... }
 ## ⚠️ Errors
 
 ### `api_error_type.dart`
+
 تعريف جميع أنواع أخطاء API.
 
 ```dart
@@ -103,13 +107,13 @@ enum ApiErrorType {
   connectionTimeout,
   receiveTimeout,
   sendTimeout,
-  
+
   // Server errors (5xx)
   serverError,
   internalServerError,
   badGateway,
   serviceUnavailable,
-  
+
   // Client errors (4xx)
   badRequest,
   unauthorized,
@@ -121,6 +125,7 @@ enum ApiErrorType {
 ```
 
 ### `api_exception.dart`
+
 Exception موحد لجميع أخطاء API.
 
 ```dart
@@ -134,6 +139,7 @@ class ApiException implements Exception {
 ```
 
 ### `dio_exception_handler.dart`
+
 معالج أخطاء Dio - يحول DioException إلى ApiException.
 
 ```dart
@@ -147,15 +153,15 @@ final exception = DioExceptionHandler.handleDioException(dioException);
 
 واجهات عرض الأخطاء المخصصة لكل نوع خطأ.
 
-| الملف | الوصف |
-|-------|-------|
-| `api_error_widget.dart` | Widget رئيسي يختار Widget المناسب حسب نوع الخطأ |
-| `base_error_widget.dart` | Widget أساسي تُبنى عليه باقي الـ Widgets |
-| `no_internet_error_widget.dart` | عرض خطأ عدم الاتصال بالإنترنت |
-| `timeout_error_widget.dart` | عرض أخطاء انتهاء المهلة |
-| `server_error_widget.dart` | عرض أخطاء السيرفر (5xx) |
-| `client_error_widget.dart` | عرض أخطاء العميل (4xx) |
-| `generic_error_widget.dart` | عرض الأخطاء العامة |
+| الملف                           | الوصف                                           |
+| ------------------------------- | ----------------------------------------------- |
+| `api_error_widget.dart`         | Widget رئيسي يختار Widget المناسب حسب نوع الخطأ |
+| `base_error_widget.dart`        | Widget أساسي تُبنى عليه باقي الـ Widgets        |
+| `no_internet_error_widget.dart` | عرض خطأ عدم الاتصال بالإنترنت                   |
+| `timeout_error_widget.dart`     | عرض أخطاء انتهاء المهلة                         |
+| `server_error_widget.dart`      | عرض أخطاء السيرفر (5xx)                         |
+| `client_error_widget.dart`      | عرض أخطاء العميل (4xx)                          |
+| `generic_error_widget.dart`     | عرض الأخطاء العامة                              |
 
 ```dart
 // الاستخدام
@@ -177,6 +183,7 @@ ApiErrorWidget.fromException(
 ## 🔌 Interceptors
 
 ### `language_interceptor.dart`
+
 يضيف header اللغة لكل طلب API.
 
 ```dart
@@ -186,9 +193,11 @@ options.headers['Accept-Language'] = 'ar';
 ```
 
 ### `logging_interceptor.dart`
+
 تسجيل جميع الطلبات والاستجابات للـ debugging.
 
 ### `retry_interceptor.dart`
+
 إعادة المحاولة التلقائية للطلبات الفاشلة.
 
 ```dart
@@ -200,6 +209,7 @@ RetryInterceptor(
 ```
 
 **الميزات:**
+
 - Exponential backoff (2s, 4s, 8s)
 - إعادة المحاولة لأخطاء الشبكة والـ timeout
 - إعادة المحاولة لـ status codes محددة
@@ -209,6 +219,7 @@ RetryInterceptor(
 ## 🔄 Mixins
 
 ### `language_refresh_mixin.dart`
+
 Mixin للتحديث التلقائي عند تغيير اللغة.
 
 ```dart
@@ -216,12 +227,12 @@ class MyCubit extends Cubit<MyState> with LanguageRefreshMixin {
   MyCubit() : super(MyInitialState()) {
     initLanguageRefresh('my_cubit_id');
   }
-  
+
   @override
   void onLanguageRefresh() {
     loadData(); // إعادة تحميل البيانات
   }
-  
+
   @override
   Future<void> close() {
     disposeLanguageRefresh();
@@ -231,6 +242,7 @@ class MyCubit extends Cubit<MyState> with LanguageRefreshMixin {
 ```
 
 ### `location_refresh_mixin.dart`
+
 Mixin للتحديث التلقائي عند تغيير الموقع.
 
 ```dart
@@ -244,58 +256,28 @@ class MyCubit extends Cubit<MyState> with LocationRefreshMixin {
 
 ---
 
-## 📦 Models
-
-### `property_card_model.dart`
-Model موحد لعرض كروت العقارات في جميع أنحاء التطبيق.
-
-**الميزات:**
-- Safe parsing مع fallback values
-- دعم مصادر بيانات متعددة (JSON, CompanyProperty, PropertyModel)
-- Computed getters للموقع والسعر
-- Validation للبيانات
-
-```dart
-// من JSON
-final property = PropertyCardModel.fromJson(json);
-
-// من قائمة JSON
-final properties = PropertyCardModel.fromJsonList(jsonList);
-
-// من CompanyProperty
-final property = PropertyCardModel.fromCompanyProperty(companyProperty);
-
-// Computed properties
-property.location      // "المنطقة، المدينة"
-property.displayPrice  // السعر حسب نوع العرض
-property.isValid       // هل البيانات صالحة للعرض
-```
-
 ---
 
 ## 🌐 Network
 
 ### `api_endpoints.dart`
+
 جميع endpoints الـ API.
 
 ```dart
 class ApiEndpoints {
-  static const String baseUrl = 'https://newdashboard.amtalek.com/public/api/v1/mobile';
-  
+  static const String baseUrl = '';
+
   // Auth
   static const String login = '/auth/login';
   static const String register = '/auth/register';
-  
-  // Properties
-  static String getPropertyDetails(int id) => '/property/$id';
-  
-  // Projects
-  static String getProjectDetails(int id) => '/project/$id';
+
   // ... المزيد
 }
 ```
 
 ### `api_service.dart`
+
 خدمة API الرئيسية مع دعم جميع أنواع الطلبات.
 
 ```dart
@@ -329,6 +311,7 @@ final result = await apiService.safePostMultipart<Map<String, dynamic>>(
 ```
 
 ### `api_helper.dart`
+
 Helper functions لتنفيذ API calls مع معالجة الأخطاء.
 
 ```dart
@@ -344,9 +327,11 @@ final result = await ApiHelper.safeApiCall(() async {
 ```
 
 ### `dio_client.dart`
+
 Dio client مُحسّن مع caching و interceptors.
 
 **الميزات:**
+
 - Connection pooling
 - Response caching (30 دقيقة)
 - Automatic retry
@@ -369,6 +354,7 @@ await DioClient.instance.clearCache();
 ```
 
 ### `app_state_service.dart`
+
 إدارة حالة التطبيق (تسجيل الدخول، التوكنات، المفضلة).
 
 ```dart
@@ -397,6 +383,7 @@ appState.isCurrentUser(ownerId);
 ```
 
 ### `token_refresh_helper.dart`
+
 Helper لتجديد التوكنات تلقائياً.
 
 ```dart
@@ -406,27 +393,29 @@ final isValid = await helper.ensureValidToken();
 
 ### Network Interceptors (`network/interceptors/`)
 
-| الملف | الوصف |
-|-------|-------|
-| `auth_interceptor.dart` | يضيف Authorization header |
-| `language_interceptor.dart` | يضيف Language header |
-| `logging_interceptor.dart` | تسجيل الطلبات |
-| `retry_interceptor.dart` | إعادة المحاولة |
+| الملف                       | الوصف                     |
+| --------------------------- | ------------------------- |
+| `auth_interceptor.dart`     | يضيف Authorization header |
+| `language_interceptor.dart` | يضيف Language header      |
+| `logging_interceptor.dart`  | تسجيل الطلبات             |
+| `retry_interceptor.dart`    | إعادة المحاولة            |
 
 ---
 
 ## 📱 Responsive
 
 ### `app_responsive.dart`
+
 نظام تجاوب ذكي للتطبيق.
 
 #### Breakpoints
+
 ```dart
 class Breakpoints {
   static const double smallPhone = 360;
   static const double phone = 600;
   static const double tablet = 1024;
-  
+
   // التحقق من نوع الجهاز
   Breakpoints.isSmallPhone(context);
   Breakpoints.isPhone(context);
@@ -436,6 +425,7 @@ class Breakpoints {
 ```
 
 #### AppTokens
+
 قيم متجاوبة للـ padding, radius, fonts, icons, buttons.
 
 ```dart
@@ -464,6 +454,7 @@ AppTokens.buttonMd(context);   // 44-52
 ```
 
 #### GridConfig
+
 إعدادات الـ Grid للكروت.
 
 ```dart
@@ -482,36 +473,13 @@ GridConfig.jobCardTileExtent(context, contentWidth: w, columns: cols);
 ```
 
 #### CarouselConfig
-إعدادات الـ Carousel للمشاريع.
-
-```dart
-CarouselConfig.projectCarouselHeight(context);
-CarouselConfig.viewportFraction(context);
-CarouselConfig.cardMargin(context);
-CarouselConfig.cardRadius(context);
-```
-
-#### Extensions
-```dart
-// على BuildContext
-context.isSmallPhone;
-context.isMobile;
-context.isTablet;
-context.isDesktop;
-context.screenPadding;
-
-context.responsive<int>(
-  mobile: 2,
-  tablet: 3,
-  desktop: 4,
-);
-```
 
 ---
 
 ## 🔧 Services
 
 ### `service_locator.dart`
+
 تسجيل جميع الـ dependencies باستخدام GetIt.
 
 ```dart
@@ -524,11 +492,13 @@ final languageCubit = getIt<LanguageCubit>();
 ```
 
 **المسجلات:**
+
 - Core Services (AppStateService, DioClient, ApiService)
 - Repositories (جميع الـ repositories)
 - Cubits (جميع الـ cubits)
 
 ### `language_refresh_service.dart`
+
 خدمة إشعار الـ Cubits بتغيير اللغة.
 
 ```dart
@@ -542,54 +512,17 @@ LanguageRefreshService.instance.register(
 LanguageRefreshService.instance.notifyLanguageChanged('en');
 ```
 
-### `location_refresh_service.dart`
-خدمة إشعار الـ Cubits بتغيير الموقع.
-
-```dart
-LocationRefreshService.instance.notifyLocationChanged(
-  countryId: 1,
-  cityId: 5,
-  countryName: 'مصر',
-  cityName: 'القاهرة',
-);
-```
-
-### `lead_management_service.dart`
-إدارة إرسال الـ Leads للشركات والعقارات.
-
-```dart
-final leadService = getIt<LeadManagementService>();
-
-// التحقق من إرسال سابق
-final hasSent = await leadService.hasUserSentLeadToCompany(vendorId);
-
-// إرسال lead للشركة
-final result = await leadService.sendLeadToCompany(
-  vendorId: 123,
-  context: context,
-  name: 'أحمد',
-  countryCode: '+20',
-  mobile: '1012345678',
-);
-
-// إرسال lead للعقار
-final result = await leadService.sendPropertyLeadToCompany(
-  propertyId: 456,
-  context: context,
-);
-```
-
 ---
 
 ## 🛠️ Utils
 
 ### 📁 utils/animations/
 
-| الملف | الوصف |
-|-------|-------|
-| `custom_animations.dart` | Animations جاهزة (slideFromBottom, fadeIn, scaleIn, etc.) |
-| `custom_progress_indcator.dart` | Loading indicator مخصص مع GIF |
-| `scroll_animation_widget.dart` | Widget للـ animations مع الـ scroll |
+| الملف                           | الوصف                                                     |
+| ------------------------------- | --------------------------------------------------------- |
+| `custom_animations.dart`        | Animations جاهزة (slideFromBottom, fadeIn, scaleIn, etc.) |
+| `custom_progress_indcator.dart` | Loading indicator مخصص مع GIF                             |
+| `scroll_animation_widget.dart`  | Widget للـ animations مع الـ scroll                       |
 
 ```dart
 // Custom Animations
@@ -612,14 +545,14 @@ StaggeredScrollAnimation(
 
 ### 📁 utils/common/
 
-| الملف | الوصف |
-|-------|-------|
-| `custom_app_bar.dart` | AppBar مخصص مع factory constructors |
-| `custom_button.dart` | زر مخصص مع gradient و loading state |
-| `custom_dialog_button.dart` | زر للـ dialogs |
-| `custom_dropdown.dart` | Dropdown مخصص |
-| `custom_text_field.dart` | TextField مخصص |
-| `image_viewer.dart` | عارض صور مع zoom و gallery |
+| الملف                       | الوصف                               |
+| --------------------------- | ----------------------------------- |
+| `custom_app_bar.dart`       | AppBar مخصص مع factory constructors |
+| `custom_button.dart`        | زر مخصص مع gradient و loading state |
+| `custom_dialog_button.dart` | زر للـ dialogs                      |
+| `custom_dropdown.dart`      | Dropdown مخصص                       |
+| `custom_text_field.dart`    | TextField مخصص                      |
+| `image_viewer.dart`         | عارض صور مع zoom و gallery          |
 
 ```dart
 // Custom AppBar
@@ -644,14 +577,14 @@ ImageViewer(
 
 ### 📁 utils/constant/
 
-| الملف | الوصف |
-|-------|-------|
-| `api_endpoints.dart` | Endpoints قديمة (غير مستخدمة) |
-| `app_assets.dart` | مسارات الـ assets |
-| `app_dimensions.dart` | أبعاد ثابتة |
-| `font_manger.dart` | إدارة الخطوط |
-| `image_constant.dart` | ثوابت الصور |
-| `styles_manger.dart` | دوال إنشاء TextStyle |
+| الملف                 | الوصف                         |
+| --------------------- | ----------------------------- |
+| `api_endpoints.dart`  | Endpoints قديمة (غير مستخدمة) |
+| `app_assets.dart`     | مسارات الـ assets             |
+| `app_dimensions.dart` | أبعاد ثابتة                   |
+| `font_manger.dart`    | إدارة الخطوط                  |
+| `image_constant.dart` | ثوابت الصور                   |
+| `styles_manger.dart`  | دوال إنشاء TextStyle          |
 
 ```dart
 // Font Manager
@@ -672,30 +605,31 @@ getSemiBoldStyle(...);
 
 ### 📁 utils/error/
 
-| الملف | الوصف |
-|-------|-------|
-| `error_handler.dart` | معالج الأخطاء (معطل حالياً) |
+| الملف                           | الوصف                             |
+| ------------------------------- | --------------------------------- |
+| `error_handler.dart`            | معالج الأخطاء (معطل حالياً)       |
 | `error_message_translator.dart` | مترجم رسائل الأخطاء (معطل حالياً) |
 
 ### 📁 utils/formatters/
 
-### `price_formatter.dart`
+<!-- ### `price_formatter.dart`
+
 تنسيق الأسعار.
 
 ```dart
 PriceFormatter.formatPrice(5000000);           // "5,000,000"
 PriceFormatter.formatPrice(1500.6);            // "1,500.60"
 PriceFormatter.formatPriceWithCurrency(1500, 'EGP');  // "1,500 EGP"
-```
+``` -->
 
 ### 📁 utils/helper/
 
-| الملف | الوصف |
-|-------|-------|
-| `location_helper.dart` | استخراج lat/lng من Google Maps iframe |
-| `on_genrated_routes.dart` | إدارة الـ routes |
+| الملف                     | الوصف                                 |
+| ------------------------- | ------------------------------------- |
+| `location_helper.dart`    | استخراج lat/lng من Google Maps iframe |
+| `on_genrated_routes.dart` | إدارة الـ routes                      |
 
-```dart
+<!-- ```dart
 // Location Helper
 final coords = LocationHelper.extractLatLngFromIframe(iframeString);
 // Returns: {'lat': 30.0444, 'lng': 31.2357}
@@ -703,11 +637,12 @@ final coords = LocationHelper.extractLatLngFromIframe(iframeString);
 // Routes
 Navigator.pushNamed(context, AppRoutes.home);
 Navigator.pushNamed(context, AppRoutes.profile);
-```
+``` -->
 
 ### 📁 utils/navigation/
 
 ### `custom_page_route.dart`
+
 Page transitions مخصصة.
 
 ```dart
@@ -733,6 +668,7 @@ navigateBack(context, result);
 ### 📁 utils/theme/
 
 ### `app_colors.dart`
+
 ألوان التطبيق.
 
 ```dart
@@ -757,6 +693,7 @@ AppColors.cardBackground;
 ```
 
 ### `app_theme.dart`
+
 إعدادات الـ Theme (Light & Dark).
 
 ```dart
@@ -774,33 +711,33 @@ customColors.textPrimary;
 
 ### 📁 utils/theme/custom_themes/
 
-| الملف | الوصف |
-|-------|-------|
-| `appbar_theme.dart` | إعدادات AppBar |
-| `bottom_sheet_theme.dart` | إعدادات BottomSheet |
-| `checkbox_theme.dart` | إعدادات Checkbox |
-| `chip_theme.dart` | إعدادات Chip |
+| الملف                        | الوصف                  |
+| ---------------------------- | ---------------------- |
+| `appbar_theme.dart`          | إعدادات AppBar         |
+| `bottom_sheet_theme.dart`    | إعدادات BottomSheet    |
+| `checkbox_theme.dart`        | إعدادات Checkbox       |
+| `chip_theme.dart`            | إعدادات Chip           |
 | `elevated_button_theme.dart` | إعدادات ElevatedButton |
-| `outline_button_theme.dart` | إعدادات OutlinedButton |
-| `text_field_theme.dart` | إعدادات TextField |
-| `text_theme.dart` | إعدادات النصوص |
+| `outline_button_theme.dart`  | إعدادات OutlinedButton |
+| `text_field_theme.dart`      | إعدادات TextField      |
+| `text_theme.dart`            | إعدادات النصوص         |
 
 ### 📁 utils/widgets/
 
-| الملف | الوصف |
-|-------|-------|
-| `custom_icon_button.dart` | زر أيقونة مخصص |
-| `custom_image_view.dart` | عرض صور (SVG, PNG, Network) |
-| `custom_search_bar.dart` | شريط بحث مخصص |
-| `custom_snackbar.dart` | Snackbar مخصص (success, error, warning, info) |
-| `empty_state_widget_property.dart` | Widget للحالة الفارغة |
-| `lead_contact_dialog.dart` | Dialog إرسال بيانات التواصل |
-| `login_prompt_widget.dart` | Widget طلب تسجيل الدخول |
-| `login_required_dialog.dart` | Dialog تسجيل الدخول مطلوب |
-| `logout_confirmation_dialog.dart` | Dialog تأكيد تسجيل الخروج |
-| `network_image_widget.dart` | عرض صور من الشبكة مع معالجة |
-| `premium_contact_bar.dart` | شريط التواصل المميز |
-| `property_card_shimmer.dart` | Shimmer loading للكروت |
+| الملف                              | الوصف                                         |
+| ---------------------------------- | --------------------------------------------- |
+| `custom_icon_button.dart`          | زر أيقونة مخصص                                |
+| `custom_image_view.dart`           | عرض صور (SVG, PNG, Network)                   |
+| `custom_search_bar.dart`           | شريط بحث مخصص                                 |
+| `custom_snackbar.dart`             | Snackbar مخصص (success, error, warning, info) |
+| `empty_state_widget_property.dart` | Widget للحالة الفارغة                         |
+| `lead_contact_dialog.dart`         | Dialog إرسال بيانات التواصل                   |
+| `login_prompt_widget.dart`         | Widget طلب تسجيل الدخول                       |
+| `login_required_dialog.dart`       | Dialog تسجيل الدخول مطلوب                     |
+| `logout_confirmation_dialog.dart`  | Dialog تأكيد تسجيل الخروج                     |
+| `network_image_widget.dart`        | عرض صور من الشبكة مع معالجة                   |
+| `premium_contact_bar.dart`         | شريط التواصل المميز                           |
+| `property_card_shimmer.dart`       | Shimmer loading للكروت                        |
 
 ```dart
 // Custom Snackbar
@@ -827,21 +764,13 @@ CustomSearchBar(
   onMapTap: () {},
 );
 
-// Premium Contact Bar
-PremiumContactBar(
-  phone: '+201234567890',
-  email: 'info@company.com',
-  whatsapp: '+201234567890',
-  vendorId: 123,
-  companyName: 'اسم الشركة',
-  title: 'تواصل معنا',
-);
+
 
 // Empty State
 EmptyStateWidget(
   icon: FontAwesomeIcons.building,
-  title: 'لا توجد عقارات',
-  message: 'لم يتم العثور على عقارات',
+  title: 'لا توجد .....',
+  message: 'لم يتم العثور على ....',
 );
 
 // Shimmer Loading
@@ -855,6 +784,7 @@ PropertyCardShimmerGrid(itemCount: 4, crossAxisCount: 2);
 ## 🚀 كيفية الاستخدام
 
 ### 1. التهيئة في `main.dart`
+
 ```dart
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -864,6 +794,7 @@ void main() async {
 ```
 
 ### 2. استخدام الـ Services
+
 ```dart
 // في أي مكان
 final apiService = getIt<ApiService>();
@@ -872,6 +803,7 @@ final languageCubit = getIt<LanguageCubit>();
 ```
 
 ### 3. استخدام الـ Responsive
+
 ```dart
 Padding(
   padding: EdgeInsets.all(AppTokens.paddingMd(context)),
@@ -883,6 +815,7 @@ Padding(
 ```
 
 ### 4. معالجة الأخطاء
+
 ```dart
 final result = await apiService.safeGet<Map>('/endpoint');
 result.when(

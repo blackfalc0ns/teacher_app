@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:student_app/core/errors/api_error_type.dart';
-import 'package:student_app/core/errors/api_exception.dart';
+import 'package:teacher_app/core/errors/api_error_type.dart';
+import 'package:teacher_app/core/errors/api_exception.dart';
 
 import 'no_internet_error_widget.dart';
 import 'timeout_error_widget.dart';

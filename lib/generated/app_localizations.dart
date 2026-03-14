@@ -499,6 +499,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check Connection'**
   String get check_connection;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @tablets.
+  ///
+  /// In en, this message translates to:
+  /// **'Tablets'**
+  String get tablets;
+
+  /// No description provided for @my_classes.
+  ///
+  /// In en, this message translates to:
+  /// **'My Classes'**
+  String get my_classes;
+
+  /// No description provided for @homeworks.
+  ///
+  /// In en, this message translates to:
+  /// **'Homeworks'**
+  String get homeworks;
+
+  /// No description provided for @messages.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messages;
 }
 
 class _AppLocalizationsDelegate
