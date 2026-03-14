@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
 
             // Horizontal Stats
             SizedBox(
-              height: 100,
+              height: 85,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   SummaryActionCard(
                     summary: data.actionSummaries[1],
-                    iconColor: Colors.indigo,
+                    iconColor: AppColors.primary,
                   ),
                   SummaryActionCard(
                     summary: data.actionSummaries[0],
@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(
-              height: 35,
+              height: 56,
             ), // Extra space for the floating bottom bar
           ],
         ),

@@ -509,7 +509,7 @@ abstract class AppLocalizations {
   /// No description provided for @tablets.
   ///
   /// In en, this message translates to:
-  /// **'Tablets'**
+  /// **'Table'**
   String get tablets;
 
   /// No description provided for @my_classes.

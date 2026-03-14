@@ -12,7 +12,7 @@ class WeeklyScheduleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -28,9 +28,9 @@ class WeeklyScheduleWidget extends StatelessWidget {
       child: Column(
         children: [
           _buildHeader(),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           _buildTable(),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           _buildFullViewButton(),
         ],
       ),
@@ -41,7 +41,6 @@ class WeeklyScheduleWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Icon(Icons.more_horiz, color: AppColors.grey),
         Text(
           'الجدول الدراسي الأسبوعي',
           style: getBoldStyle(
@@ -50,6 +49,7 @@ class WeeklyScheduleWidget extends StatelessWidget {
             fontFamily: FontConstant.cairo,
           ),
         ),
+        const Icon(Icons.more_horiz, color: AppColors.grey),
       ],
     );
   }
@@ -82,7 +82,9 @@ class WeeklyScheduleWidget extends StatelessWidget {
         TableRow(
           children: [
             _buildTableHeaderCell('اليوم / الحصة'),
-            ...periods.map((p) => _buildTableHeaderCell(p['label']!, subTitle: p['time'])),
+            ...periods.map(
+              (p) => _buildTableHeaderCell(p['label']!, subTitle: p['time']),
+            ),
           ],
         ),
         // Rows for each day
@@ -98,9 +100,13 @@ class WeeklyScheduleWidget extends StatelessWidget {
                 final periodIndex = index + 1;
                 final item = dayData.items.firstWhere(
                   (i) => i.periodIndex == periodIndex,
-                  orElse: () => ScheduleItemModel(subject: '', className: '', time: ''),
+                  orElse: () =>
+                      ScheduleItemModel(subject: '', className: '', time: ''),
                 );
-                return _buildScheduleCell(item);
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                  child: _buildScheduleCell(item),
+                );
               }),
             ],
           );
@@ -126,9 +132,9 @@ class WeeklyScheduleWidget extends StatelessWidget {
           if (subTitle != null)
             Text(
               subTitle,
-              style: getRegularStyle(
-                color: AppColors.grey.withValues(alpha: 0.4),
-                fontSize: FontSize.size8,
+              style: getMediumStyle(
+                color: AppColors.grey.withValues(alpha: 0.5),
+                fontSize: FontSize.size9,
                 fontFamily: FontConstant.cairo,
               ),
               textAlign: TextAlign.center,
@@ -139,16 +145,23 @@ class WeeklyScheduleWidget extends StatelessWidget {
   }
 
   Widget _buildDayLabelCell(String day) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Text(
-        day,
-        style: getBoldStyle(
-          color: AppColors.grey,
-          fontSize: FontSize.size14,
-          fontFamily: FontConstant.cairo,
+    return Container(
+      height: 50,
+      margin: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: AppColors.lightGrey.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Center(
+        child: Text(
+          day,
+          style: getBoldStyle(
+            color: AppColors.grey,
+            fontSize: FontSize.size14,
+            fontFamily: FontConstant.cairo,
+          ),
+          textAlign: TextAlign.center,
         ),
-        textAlign: TextAlign.center,
       ),
     );
   }
@@ -156,29 +169,31 @@ class WeeklyScheduleWidget extends StatelessWidget {
   Widget _buildScheduleCell(ScheduleItemModel item) {
     if (item.subject.isEmpty) {
       return Container(
-        height: 55,
-        margin: const EdgeInsets.all(4),
+        height: 50,
+        margin: const EdgeInsets.symmetric(horizontal: 2),
         decoration: BoxDecoration(
-          color: AppColors.lightGrey.withValues(alpha: 0.3),
+          color: AppColors.lightGrey.withValues(alpha: 0.6),
           borderRadius: BorderRadius.circular(10),
         ),
       );
     }
 
     return Container(
-      height: 55,
-      margin: const EdgeInsets.all(4),
+      height: 50,
+      margin: const EdgeInsets.all(1),
       decoration: BoxDecoration(
         color: item.isCurrent ? AppColors.primary : AppColors.white,
         borderRadius: BorderRadius.circular(10),
-        border: item.isCurrent ? null : Border.all(color: AppColors.grey.withValues(alpha: 0.2)),
+        border: item.isCurrent
+            ? Border.all(color: AppColors.secondary.withValues(alpha: 0.9))
+            : Border.all(color: AppColors.grey.withValues(alpha: 0.4)),
         boxShadow: item.isCurrent
             ? [
                 BoxShadow(
                   color: AppColors.primary.withValues(alpha: 0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
-                )
+                ),
               ]
             : null,
       ),
@@ -197,7 +212,9 @@ class WeeklyScheduleWidget extends StatelessWidget {
           Text(
             item.className,
             style: getRegularStyle(
-              color: item.isCurrent ? AppColors.white.withValues(alpha: 0.8) : AppColors.primary,
+              color: item.isCurrent
+                  ? AppColors.white.withValues(alpha: 0.8)
+                  : AppColors.primary,
               fontSize: FontSize.size10,
               fontFamily: FontConstant.cairo,
             ),
@@ -211,9 +228,9 @@ class WeeklyScheduleWidget extends StatelessWidget {
   Widget _buildFullViewButton() {
     return Container(
       width: double.infinity,
-      height: 50,
+      height: 40,
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        gradient: AppColors.primaryGradient,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Center(

@@ -229,13 +229,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get home => 'الرئيسية';
 
   @override
-  String get tablets => 'التابلات';
+  String get tablets => 'الجدول';
 
   @override
-  String get my_classes => 'الصفوف الخاصة بي';
+  String get my_classes => 'فصولى';
 
   @override
-  String get homeworks => 'واجباتي';
+  String get homeworks => 'الواجبات';
 
   @override
   String get messages => 'الرسائل';

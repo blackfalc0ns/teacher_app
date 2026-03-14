@@ -71,8 +71,8 @@
   "refresh": "تحديث",
   "check_connection": "فحص الاتصال",
   "home": "الرئيسية",
-  "tablets": "التابلات",
-  "my_classes": "الصفوف الخاصة بي",
-  "homeworks": "واجباتي",
+  "tablets": "الجدول",
+  "my_classes": "فصولى",
+  "homeworks": "الواجبات",
   "messages": "الرسائل"
 }

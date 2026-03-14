@@ -6,7 +6,7 @@ import 'package:teacher_app/core/utils/constant/styles_manger.dart';
 
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../generated/app_localizations.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -55,35 +55,35 @@ class CustomBottomNavBar extends StatelessWidget {
                   Expanded(
                     child: _buildNavItem(
                       index: 0,
-                      icon: Icons.home_rounded,
+                      icon: Iconsax.home1,
                       label: l10n.home,
                     ),
                   ),
                   Expanded(
                     child: _buildNavItem(
                       index: 1,
-                      icon: FontAwesomeIcons.bookOpen,
+                      icon: Iconsax.calendar_25,
                       label: l10n.tablets,
                     ),
                   ),
                   Expanded(
                     child: _buildNavItem(
                       index: 2,
-                      icon: FontAwesomeIcons.clipboardList,
+                      icon: Iconsax.teacher5,
                       label: l10n.my_classes,
                     ),
                   ),
                   Expanded(
                     child: _buildNavItem(
                       index: 3,
-                      icon: FontAwesomeIcons.chartLine,
+                      icon: Iconsax.note_15,
                       label: l10n.homeworks,
                     ),
                   ),
                   Expanded(
                     child: _buildNavItem(
                       index: 4,
-                      icon: FontAwesomeIcons.solidComments,
+                      icon: Iconsax.messages_15,
                       label: l10n.messages,
                     ),
                   ),
@@ -115,10 +115,10 @@ class CustomBottomNavBar extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            FaIcon(
+            Icon(
               icon,
               color: isSelected ? AppColors.primary : AppColors.grey,
-              size: 20,
+              size: 24,
             ),
             const SizedBox(height: 4),
             FittedBox(

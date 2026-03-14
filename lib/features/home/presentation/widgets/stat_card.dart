@@ -14,7 +14,7 @@ class StatCard extends StatelessWidget {
     final bool isFeatured = stat.type == HomeStatType.currentClass;
 
     return Container(
-      width: 135,
+      width: 130,
       margin: const EdgeInsetsDirectional.only(end: 8),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -47,7 +47,7 @@ class StatCard extends StatelessWidget {
                     color: isFeatured
                         ? AppColors.white
                         : AppColors.grey.withValues(alpha: 0.6),
-                    fontSize: FontSize.size12,
+                    fontSize: FontSize.size10,
                     fontFamily: FontConstant.cairo,
                   ),
                   maxLines: 1,
@@ -56,18 +56,16 @@ class StatCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 4),
           Text(
             stat.value,
             style: getBoldStyle(
               color: isFeatured ? AppColors.white : _getValueColor(),
-              fontSize: FontSize.size22,
+              fontSize: FontSize.size20,
               fontFamily: FontConstant.cairo,
             ),
             textAlign: TextAlign.start,
           ),
           if (stat.subValue != null) ...[
-            const SizedBox(height: 4),
             Row(
               children: [
                 if (isFeatured) ...[
