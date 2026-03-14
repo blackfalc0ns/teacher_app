@@ -19,7 +19,7 @@ class DayDateSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: 108,
       margin: const EdgeInsets.only(bottom: 10),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -27,28 +27,28 @@ class DayDateSelector extends StatelessWidget {
         itemCount: days.length,
         itemBuilder: (context, index) {
           final day = days[index];
-          final isSelected = day.date.day == selectedDate.day;
+          final isSelected = DateUtils.isSameDay(day.date, selectedDate);
 
           return GestureDetector(
             onTap: () => onDateSelected(day.date),
             child: Container(
-              width: 70,
+              width: 78,
               margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               decoration: BoxDecoration(
                 color: isSelected ? AppColors.primary : AppColors.white,
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(18),
                 boxShadow: isSelected
                     ? [
                         BoxShadow(
                           color: AppColors.primary.withValues(alpha: 0.3),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
+                          blurRadius: 14,
+                          offset: const Offset(0, 6),
                         )
                       ]
                     : [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.02),
-                          blurRadius: 5,
+                          blurRadius: 8,
                         )
                       ],
               ),

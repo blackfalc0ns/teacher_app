@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../di/injection_container.dart';
+import '../../../features/classroom/presentation/pages/classroom_page.dart';
 import '../../../features/home/presentation/pages/main_page.dart';
 import '../../../features/home/presentation/cubits/home_cubit.dart';
 import '../../../features/schedule/presentation/pages/schedule_page.dart';
+import '../../../features/schedule/data/model/schedule_model.dart';
 
 class Routes {
   static const String home = '/';
   static const String schedule = '/schedule';
+  static const String classroom = '/classroom';
 }
 
 class OnGeneratedRoutes {
@@ -23,6 +26,18 @@ class OnGeneratedRoutes {
       case Routes.schedule:
         return MaterialPageRoute(
           builder: (_) => const SchedulePage(),
+        );
+      case Routes.classroom:
+        final args = settings.arguments;
+        if (args is! ScheduleModel) {
+          return MaterialPageRoute(
+            builder: (_) => const Scaffold(
+              body: Center(child: Text('Invalid classroom route arguments')),
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (_) => ClassroomPage(scheduleItem: args),
         );
       default:
         return MaterialPageRoute(

@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-import '../../../../core/utils/theme/app_colors.dart';
+﻿import 'package:flutter/material.dart';
+
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
+import '../../../../core/utils/helper/on_genrated_routes.dart';
+import '../../../../core/utils/theme/app_colors.dart';
+import '../../../classroom/presentation/pages/attendance_page.dart';
 import '../../data/model/schedule_model.dart';
 
 class ScheduleItemCard extends StatelessWidget {
@@ -12,56 +14,40 @@ class ScheduleItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isCurrent = item.status == ScheduleStatus.current;
-    final bool isCompleted = item.status == ScheduleStatus.completed;
+    final statusConfig = _statusConfig(item.status);
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Timeline dot (Now on the left)
-          Column(
-            children: [
-              const SizedBox(height: 25),
-              Container(
-                width: 16,
-                height: 16,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    if (isCurrent)
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.4),
-                        blurRadius: 12,
-                        spreadRadius: 1,
-                        offset: const Offset(0, 2),
-                      ),
-                  ],
-                  color: isCurrent ? AppColors.primary : AppColors.white,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: isCurrent ? AppColors.primary : AppColors.lightGrey,
-                    width: 3,
-                  ),
-                ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: Container(
+              width: 12,
+              height: 12,
+              decoration: BoxDecoration(
+                color: statusConfig.dotColor,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.white, width: 2),
               ),
-            ],
+            ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 10),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: isCurrent
-                    ? Border.all(color: AppColors.primary, width: 1.5)
-                    : null,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: statusConfig.borderColor.withValues(alpha: 0.14),
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
@@ -69,164 +55,134 @@ class ScheduleItemCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: isCurrent
-                                  ? AppColors.primary.withValues(alpha: 0.1)
-                                  : isCompleted
-                                  ? AppColors.green.withValues(alpha: 0.1)
-                                  : AppColors.lightGrey.withValues(alpha: 0.3),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Icon(
-                              item.icon,
-                              color: isCurrent
-                                  ? AppColors.primary
-                                  : isCompleted
-                                  ? AppColors.green
-                                  : AppColors.grey,
-                              size: 20,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${item.startTime} - ${item.endTime}',
-                                style: getRegularStyle(
-                                  color: AppColors.grey.withValues(alpha: 0.5),
-                                  fontSize: FontSize.size12,
-                                  fontFamily: FontConstant.cairo,
-                                ),
-                              ),
-                              Text(
-                                item.periodLabel,
-                                style: getBoldStyle(
-                                  color: isCurrent
-                                      ? AppColors.primary
-                                      : AppColors.grey,
-                                  fontSize: FontSize.size14,
-                                  fontFamily: FontConstant.cairo,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      if (isCurrent)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFE0F2F1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            'جاري الآن',
-                            style: getBoldStyle(
-                              color: AppColors.primary,
-                              fontSize: FontSize.size10,
-                              fontFamily: FontConstant.cairo,
-                            ),
-                          ),
-                        )
-                      else if (isCompleted)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.green.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            'مكتملة',
-                            style: getBoldStyle(
-                              color: AppColors.green,
-                              fontSize: FontSize.size10,
-                              fontFamily: FontConstant.cairo,
-                            ),
-                          ),
+                      Container(
+                        width: 34,
+                        height: 34,
+                        decoration: BoxDecoration(
+                          color: statusConfig.backgroundColor,
+                          borderRadius: BorderRadius.circular(10),
                         ),
+                        child: Icon(
+                          item.icon,
+                          color: statusConfig.iconColor,
+                          size: 18,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    item.subjectName,
+                                    style: getBoldStyle(
+                                      color: AppColors.primaryDark,
+                                      fontSize: FontSize.size16,
+                                      fontFamily: FontConstant.cairo,
+                                    ),
+                                  ),
+                                ),
+                                _StatusBadge(config: statusConfig),
+                              ],
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              '${item.startTime} - ${item.endTime}',
+                              style: getMediumStyle(
+                                color: AppColors.primary,
+                                fontSize: FontSize.size11,
+                                fontFamily: FontConstant.cairo,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: [
+                      _MetaBadge(icon: Icons.school_outlined, label: item.cycleName),
+                      _MetaBadge(icon: Icons.groups_2_outlined, label: item.className),
+                      if (item.roomName != null)
+                        _MetaBadge(icon: Icons.meeting_room_outlined, label: item.roomName!),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
                   Text(
-                    item.subjectName,
-                    style: getBoldStyle(
-                      color: AppColors.primaryDark,
-                      fontSize: FontSize.size18,
+                    item.lessonTitle,
+                    style: getRegularStyle(
+                      color: AppColors.primaryDark.withValues(alpha: 0.9),
+                      fontSize: FontSize.size12,
                       fontFamily: FontConstant.cairo,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
-                      const Icon(Iconsax.user, size: 16, color: AppColors.grey),
-                      const SizedBox(width: 8),
-                      Text(
-                        item.className,
-                        style: getRegularStyle(
-                          color: AppColors.grey,
-                          fontSize: FontSize.size12,
-                          fontFamily: FontConstant.cairo,
+                      Expanded(
+                        child: _ActionPill(
+                          label: item.needsAttendance ? 'أخذ الحضور' : 'مراجعة الحضور',
+                          icon: item.needsAttendance ? Icons.fact_check_outlined : Icons.check_circle_outline_rounded,
+                          color: item.needsAttendance ? AppColors.third : AppColors.green,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => AttendancePage(scheduleItem: item),
+                              ),
+                            );
+                          },
                         ),
                       ),
-                      if (item.roomName != null) ...[
-                        const SizedBox(width: 16),
-                        const Icon(
-                          Iconsax.location,
-                          size: 16,
-                          color: AppColors.grey,
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: _ActionPill(
+                          label: 'فتح الفصل',
+                          icon: Icons.open_in_new_rounded,
+                          color: AppColors.primary,
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              Routes.classroom,
+                              arguments: item,
+                            );
+                          },
                         ),
+                      ),
+                      if (item.hasHomework) ...[
                         const SizedBox(width: 8),
-                        Text(
-                          item.roomName!,
-                          style: getRegularStyle(
+                        Expanded(
+                          child: _ActionPill(
+                            label: 'الواجبات',
+                            icon: Icons.assignment_outlined,
                             color: AppColors.grey,
-                            fontSize: FontSize.size12,
-                            fontFamily: FontConstant.cairo,
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                Routes.classroom,
+                                arguments: item,
+                              );
+                            },
                           ),
                         ),
                       ],
                     ],
                   ),
-                  if (isCurrent) ...[
-                    const SizedBox(height: 16),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        gradient: AppColors.primaryGradient,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Iconsax.play_circle,
-                            color: AppColors.white,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'بدء الحصة الدراسية',
-                            style: getBoldStyle(
-                              color: AppColors.white,
-                              fontSize: FontSize.size14,
-                              fontFamily: FontConstant.cairo,
-                            ),
-                          ),
-                        ],
+                  if (item.notes != null && item.notes!.trim().isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      item.notes!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: getRegularStyle(
+                        color: AppColors.grey.withValues(alpha: 0.72),
+                        fontSize: FontSize.size11,
+                        fontFamily: FontConstant.cairo,
                       ),
                     ),
                   ],
@@ -238,4 +194,150 @@ class ScheduleItemCard extends StatelessWidget {
       ),
     );
   }
+
+  _ScheduleStatusConfig _statusConfig(ScheduleStatus status) {
+    switch (status) {
+      case ScheduleStatus.current:
+        return const _ScheduleStatusConfig(
+          label: 'الآن',
+          dotColor: AppColors.primary,
+          iconColor: AppColors.primary,
+          borderColor: AppColors.primary,
+          backgroundColor: Color(0xFFE7F7FA),
+        );
+      case ScheduleStatus.completed:
+        return const _ScheduleStatusConfig(
+          label: 'انتهت',
+          dotColor: AppColors.green,
+          iconColor: AppColors.green,
+          borderColor: AppColors.green,
+          backgroundColor: Color(0xFFEFFBF6),
+        );
+      case ScheduleStatus.upcoming:
+        return const _ScheduleStatusConfig(
+          label: 'قادمة',
+          dotColor: AppColors.third,
+          iconColor: AppColors.third,
+          borderColor: AppColors.third,
+          backgroundColor: Color(0xFFFFF6E8),
+        );
+    }
+  }
+}
+
+class _StatusBadge extends StatelessWidget {
+  final _ScheduleStatusConfig config;
+
+  const _StatusBadge({required this.config});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: config.backgroundColor,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        config.label,
+        style: getBoldStyle(
+          color: config.iconColor,
+          fontSize: FontSize.size10,
+          fontFamily: FontConstant.cairo,
+        ),
+      ),
+    );
+  }
+}
+
+class _MetaBadge extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _MetaBadge({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.lightGrey.withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: AppColors.primaryDark),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: getMediumStyle(
+              color: AppColors.primaryDark,
+              fontSize: FontSize.size10,
+              fontFamily: FontConstant.cairo,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActionPill extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _ActionPill({required this.label, required this.icon, required this.color, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 14, color: color),
+            const SizedBox(width: 4),
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: getMediumStyle(
+                  color: color,
+                  fontSize: FontSize.size10,
+                  fontFamily: FontConstant.cairo,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ScheduleStatusConfig {
+  final String label;
+  final Color dotColor;
+  final Color iconColor;
+  final Color borderColor;
+  final Color backgroundColor;
+
+  const _ScheduleStatusConfig({
+    required this.label,
+    required this.dotColor,
+    required this.iconColor,
+    required this.borderColor,
+    required this.backgroundColor,
+  });
 }
