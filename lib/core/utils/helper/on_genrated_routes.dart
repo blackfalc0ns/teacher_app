@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../di/injection_container.dart';
 import '../../../features/home/presentation/pages/main_page.dart';
 import '../../../features/home/presentation/cubits/home_cubit.dart';
+import '../../../features/schedule/presentation/pages/schedule_page.dart';
 
 class Routes {
   static const String home = '/';
+  static const String schedule = '/schedule';
 }
 
 class OnGeneratedRoutes {
@@ -17,6 +19,10 @@ class OnGeneratedRoutes {
             create: (context) => sl.get<HomeCubit>(),
             child: const MainPage(),
           ),
+        );
+      case Routes.schedule:
+        return MaterialPageRoute(
+          builder: (_) => const SchedulePage(),
         );
       default:
         return MaterialPageRoute(

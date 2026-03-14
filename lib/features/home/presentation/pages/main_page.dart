@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teacher_app/core/utils/navigation/custom_bottom_nav_bar.dart';
 import 'package:teacher_app/core/utils/theme/app_colors.dart';
 import 'home_page.dart';
+import '../../../schedule/presentation/pages/schedule_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -15,7 +16,7 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> _pages = [
     const HomePage(),
-    const Center(child: Text('الجدول الدراسي')),
+    const SchedulePage(),
     const Center(child: Text('الواجبات')),
     const Center(child: Text('الأداء والتقارير')),
     const Center(child: Text('الرسائل')),
@@ -34,7 +35,7 @@ class _MainPageState extends State<MainPage> {
           });
         },
       ),
-      floatingActionButton: _buildFab(),
+      floatingActionButton: _selectedIndex == 1 ? null : _buildFab(),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }

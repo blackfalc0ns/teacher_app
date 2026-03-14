@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import '../../features/home/data/di/home_di.dart';
+import '../../features/schedule/data/di/schedule_di.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../network/api_service.dart';
 import '../network/dio_client.dart';
@@ -22,4 +23,5 @@ Future<void> initDI() async {
 
   // Features
   initHomeDI();
+  initScheduleDI();
 }
