@@ -393,13 +393,17 @@ class _TeacherFocusCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isToday = DateUtils.isSameDay(selectedDate, DateTime.now());
+    final isLastClass = item != null &&
+        item!.status != ScheduleStatus.current &&
+        item!.status != ScheduleStatus.upcoming;
+
     final title = item == null
         ? 'لا توجد حصة ظاهرة الآن'
         : item!.status == ScheduleStatus.current
-        ? 'الحصة الحالية'
-        : item!.status == ScheduleStatus.upcoming
-        ? 'الحصة القادمة'
-        : 'آخر حصة في اليوم';
+            ? 'الحصة الحالية'
+            : item!.status == ScheduleStatus.upcoming
+                ? 'الحصة القادمة'
+                : 'حصص اليوم انتهت';
 
     final subtitle = item == null
         ? 'يمكنك تغيير اليوم أو توسيع الفلاتر لعرض حصص المدرس.'
@@ -409,16 +413,26 @@ class _TeacherFocusCard extends StatelessWidget {
         ? 'عدد الحصص الظاهرة: $filteredCount'
         : '${item!.className} • ${item!.startTime} - ${item!.endTime}';
 
+    if (isLastClass || item == null) {
+      return _MiniFocusCard(
+        title: title,
+        subtitle: subtitle,
+        footer: footer,
+        icon: isLastClass ? Icons.check_circle_outline_rounded : Icons.info_outline,
+        color: isLastClass ? AppColors.green : AppColors.primary,
+      );
+    }
+
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 18,
-            offset: const Offset(0, 10),
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -428,18 +442,18 @@ class _TeacherFocusCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
                   color: AppColors.primary.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
                   Icons.tips_and_updates_outlined,
                   color: AppColors.primary,
-                  size: 18,
+                  size: 16,
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -448,17 +462,17 @@ class _TeacherFocusCard extends StatelessWidget {
                       title,
                       style: getBoldStyle(
                         color: AppColors.primaryDark,
-                        fontSize: FontSize.size15,
+                        fontSize: FontSize.size14,
                         fontFamily: FontConstant.cairo,
                       ),
                     ),
                     Text(
                       isToday
-                          ? 'وصول سريع للحصة والحضور وفتح الفصل'
+                          ? 'وصول سريع للحصة والحضور والتحضير'
                           : 'عرض مختصر للحصص المجدولة',
                       style: getRegularStyle(
-                        color: AppColors.grey.withValues(alpha: 0.72),
-                        fontSize: FontSize.size11,
+                        color: AppColors.grey.withValues(alpha: 0.7),
+                        fontSize: FontSize.size10,
                         fontFamily: FontConstant.cairo,
                       ),
                     ),
@@ -472,35 +486,104 @@ class _TeacherFocusCard extends StatelessWidget {
             subtitle,
             style: getBoldStyle(
               color: AppColors.primaryDark,
-              fontSize: FontSize.size14,
+              fontSize: FontSize.size13,
               fontFamily: FontConstant.cairo,
             ),
           ),
-          const SizedBox(height: 6),
-          Text(
-            item == null
-                ? 'الجدول هنا مخصص للحصص والشعب المرتبطة بالمدرس فقط، بما يتوافق مع توزيع الجداول الأكاديمية.'
-                : item!.notes ??
-                    'ابدأ من أخذ الحضور أو فتح الفصل حسب سياق الحصة.',
-            style: getRegularStyle(
-              color: AppColors.grey.withValues(alpha: 0.84),
-              fontSize: FontSize.size12,
-              fontFamily: FontConstant.cairo,
-            ),
-          ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             decoration: BoxDecoration(
-              color: AppColors.lightGrey.withValues(alpha: 0.35),
-              borderRadius: BorderRadius.circular(12),
+              color: AppColors.lightGrey.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               footer,
               style: getMediumStyle(
                 color: AppColors.primaryDark,
-                fontSize: FontSize.size11,
+                fontSize: FontSize.size10,
+                fontFamily: FontConstant.cairo,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MiniFocusCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final String footer;
+  final IconData icon;
+  final Color color;
+
+  const _MiniFocusCard({
+    required this.title,
+    required this.subtitle,
+    required this.footer,
+    required this.icon,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: color.withValues(alpha: 0.1)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: getBoldStyle(
+                    color: AppColors.primaryDark,
+                    fontSize: FontSize.size13,
+                    fontFamily: FontConstant.cairo,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: getRegularStyle(
+                    color: AppColors.grey.withValues(alpha: 0.8),
+                    fontSize: FontSize.size11,
+                    fontFamily: FontConstant.cairo,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              footer.split(' • ').first,
+              style: getBoldStyle(
+                color: AppColors.primaryDark,
+                fontSize: FontSize.size10,
                 fontFamily: FontConstant.cairo,
               ),
             ),

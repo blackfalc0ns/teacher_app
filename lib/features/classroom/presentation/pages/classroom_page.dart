@@ -3,12 +3,15 @@
 import '../../../schedule/data/model/schedule_model.dart';
 import '../../data/mock/classroom_mock_data.dart';
 import '../../data/models/classroom_model.dart';
+import '../widgets/assignments/assignment_section.dart';
 import '../widgets/classroom_header_card.dart';
 import '../widgets/classroom_metrics_row.dart';
 import '../widgets/classroom_quick_actions_card.dart';
 import '../widgets/classroom_section.dart';
 import '../widgets/classroom_section_tabs.dart';
 import '../widgets/classroom_sections.dart';
+import 'assignment_create_page.dart';
+import 'assignment_tracking_page.dart';
 import 'attendance_page.dart';
 
 class ClassroomPage extends StatefulWidget {
@@ -24,7 +27,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
   ClassroomSection _selectedSection = ClassroomSection.overview;
 
   late List<ClassroomStudent> _students;
-  late final List<ClassroomAssignment> _assignments;
+  late List<ClassroomAssignment> _assignments;
 
   @override
   void initState() {
@@ -37,9 +40,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
   Widget build(BuildContext context) {
     final item = widget.scheduleItem;
     final attendance = _attendance;
-    final followUpCount = _students
-        .where((student) => student.needsFollowUp)
-        .length;
+    final followUpCount = _students.where((student) => student.needsFollowUp).length;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF6F9FC),
@@ -52,39 +53,19 @@ class _ClassroomPageState extends State<ClassroomPage> {
             ClassroomQuickActionsCard(
               item: item.copyWith(
                 needsAttendance: attendance.unmarkedCount > 0,
+                hasHomework: _assignments.isNotEmpty,
               ),
               onAttendanceTap: _openAttendance,
               onStudentsTap: () => _selectSection(ClassroomSection.students),
-              onAssignmentsTap: () =>
-                  _selectSection(ClassroomSection.assignments),
+              onAssignmentsTap: _openAssignmentTracking,
             ),
             const SizedBox(height: 12),
             ClassroomMetricsRow(
               items: [
-                ClassroomMetricItem(
-                  title: 'الطلاب',
-                  value: '${item.studentsCount}',
-                  icon: Icons.groups_rounded,
-                  color: const Color(0xFF006D82),
-                ),
-                ClassroomMetricItem(
-                  title: 'تم الحسم',
-                  value: '${attendance.resolvedCount}',
-                  icon: Icons.fact_check_outlined,
-                  color: const Color(0xFF10B981),
-                ),
-                ClassroomMetricItem(
-                  title: 'غير محسوم',
-                  value: '${attendance.unmarkedCount}',
-                  icon: Icons.pending_actions_rounded,
-                  color: const Color(0xFFF7A201),
-                ),
-                ClassroomMetricItem(
-                  title: 'واجبات',
-                  value: '${_assignments.length}',
-                  icon: Icons.assignment_outlined,
-                  color: const Color(0xFF13B3B0),
-                ),
+                ClassroomMetricItem(title: 'الطلاب', value: '${item.studentsCount}', icon: Icons.groups_rounded, color: const Color(0xFF006D82)),
+                ClassroomMetricItem(title: 'تم الحسم', value: '${attendance.resolvedCount}', icon: Icons.fact_check_outlined, color: const Color(0xFF10B981)),
+                ClassroomMetricItem(title: 'غير محسوم', value: '${attendance.unmarkedCount}', icon: Icons.pending_actions_rounded, color: const Color(0xFFF7A201)),
+                ClassroomMetricItem(title: 'واجبات', value: '${_assignments.length}', icon: Icons.assignment_outlined, color: const Color(0xFF13B3B0)),
               ],
             ),
             const SizedBox(height: 12),
@@ -107,9 +88,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
   ClassroomAttendanceSummary get _attendance {
     return ClassroomMockData.buildAttendanceSummary(
       students: _students,
-      attendancePending: _students.any(
-        (student) => student.attendanceMark == AttendanceMark.unmarked,
-      ),
+      attendancePending: _students.any((student) => student.attendanceMark == AttendanceMark.unmarked),
     );
   }
 
@@ -131,7 +110,11 @@ class _ClassroomPageState extends State<ClassroomPage> {
           onOpenAttendance: _openAttendance,
         );
       case ClassroomSection.assignments:
-        return ClassroomAssignmentsSection(assignments: _assignments);
+        return ClassroomAssignmentsSection(
+          assignments: _assignments,
+          onCreateAssignment: _openAssignmentCreate,
+          onTrackAssignments: _openAssignmentTracking,
+        );
     }
   }
 
@@ -139,6 +122,40 @@ class _ClassroomPageState extends State<ClassroomPage> {
     setState(() {
       _selectedSection = section;
     });
+  }
+
+  Future<void> _openAssignmentCreate() async {
+    final assignment = await Navigator.of(context).push<ClassroomAssignment>(
+      MaterialPageRoute(
+        builder: (_) => AssignmentCreatePage(item: widget.scheduleItem),
+      ),
+    );
+
+    if (!mounted || assignment == null) {
+      return;
+    }
+
+    setState(() {
+      _assignments = [assignment, ..._assignments];
+      _selectedSection = ClassroomSection.assignments;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(assignment.publishNow ? 'تم إنشاء الواجب ونشره.' : 'تم حفظ الواجب كمسودة.'),
+      ),
+    );
+  }
+
+  Future<void> _openAssignmentTracking() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => AssignmentTrackingPage(
+          item: widget.scheduleItem,
+          assignments: _assignments,
+        ),
+      ),
+    );
   }
 
   Future<void> _openAttendance() async {
@@ -161,12 +178,10 @@ class _ClassroomPageState extends State<ClassroomPage> {
     });
 
     final pendingCount = _attendance.unmarkedCount;
-    ScaffoldMessenger.of(this.context).showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          pendingCount == 0
-              ? 'تم تحديث الحضور واعتماد السجل.'
-              : 'تم تحديث الحضور، ويتبقى $pendingCount طالب يحتاج تحديد.',
+          pendingCount == 0 ? 'تم تحديث الحضور واعتماد السجل.' : 'تم تحديث الحضور، ويتبقى $pendingCount طالب يحتاج تحديد.',
         ),
       ),
     );

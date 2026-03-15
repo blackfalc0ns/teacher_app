@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
@@ -9,8 +9,15 @@ import '../../data/model/schedule_model.dart';
 
 class ScheduleItemCard extends StatelessWidget {
   final ScheduleModel item;
+  final bool showTopLine;
+  final bool showBottomLine;
 
-  const ScheduleItemCard({super.key, required this.item});
+  const ScheduleItemCard({
+    super.key,
+    required this.item,
+    this.showTopLine = true,
+    this.showBottomLine = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,22 +25,38 @@ class ScheduleItemCard extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: Container(
-              width: 12,
-              height: 12,
-              decoration: BoxDecoration(
-                color: statusConfig.dotColor,
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.white, width: 2),
-              ),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+          SizedBox(
+            width: 14,
+            child: Column(
+              children: [
+                Container(
+                  width: 2,
+                  height: 16,
+                  color: showTopLine ? statusConfig.lineColor : Colors.transparent,
+                ),
+                Container(
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: statusConfig.dotColor,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.white, width: 2),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    width: 2,
+                    color: showBottomLine ? statusConfig.lineColor : Colors.transparent,
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(12),
@@ -191,6 +214,7 @@ class ScheduleItemCard extends StatelessWidget {
             ),
           ),
         ],
+        ),
       ),
     );
   }
@@ -198,28 +222,31 @@ class ScheduleItemCard extends StatelessWidget {
   _ScheduleStatusConfig _statusConfig(ScheduleStatus status) {
     switch (status) {
       case ScheduleStatus.current:
-        return const _ScheduleStatusConfig(
+        return _ScheduleStatusConfig(
           label: 'الآن',
           dotColor: AppColors.primary,
+          lineColor: AppColors.primary.withValues(alpha: 0.3),
           iconColor: AppColors.primary,
           borderColor: AppColors.primary,
-          backgroundColor: Color(0xFFE7F7FA),
+          backgroundColor: const Color(0xFFE7F7FA),
         );
       case ScheduleStatus.completed:
         return const _ScheduleStatusConfig(
           label: 'انتهت',
           dotColor: AppColors.green,
+          lineColor: AppColors.green,
           iconColor: AppColors.green,
           borderColor: AppColors.green,
           backgroundColor: Color(0xFFEFFBF6),
         );
       case ScheduleStatus.upcoming:
-        return const _ScheduleStatusConfig(
+        return _ScheduleStatusConfig(
           label: 'قادمة',
           dotColor: AppColors.third,
+          lineColor: AppColors.lightGrey.withValues(alpha: 0.8),
           iconColor: AppColors.third,
           borderColor: AppColors.third,
-          backgroundColor: Color(0xFFFFF6E8),
+          backgroundColor: const Color(0xFFFFF6E8),
         );
     }
   }
@@ -329,6 +356,7 @@ class _ActionPill extends StatelessWidget {
 class _ScheduleStatusConfig {
   final String label;
   final Color dotColor;
+  final Color lineColor;
   final Color iconColor;
   final Color borderColor;
   final Color backgroundColor;
@@ -336,6 +364,7 @@ class _ScheduleStatusConfig {
   const _ScheduleStatusConfig({
     required this.label,
     required this.dotColor,
+    required this.lineColor,
     required this.iconColor,
     required this.borderColor,
     required this.backgroundColor,

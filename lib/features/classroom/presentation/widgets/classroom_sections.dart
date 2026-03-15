@@ -23,7 +23,10 @@ class ClassroomOverviewSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final followUp = students.where((student) => student.needsFollowUp).take(4).toList(growable: false);
+    final followUp = students
+        .where((student) => student.needsFollowUp)
+        .take(4)
+        .toList(growable: false);
 
     return Column(
       children: [
@@ -31,9 +34,21 @@ class ClassroomOverviewSection extends StatelessWidget {
           title: 'سير العمل',
           child: Column(
             children: [
-              _InfoRow(title: 'حالة الحضور', value: attendance.lastUpdatedLabel),
-              _InfoRow(title: 'التقدم', value: '${attendance.resolvedCount} من ${attendance.totalCount} طالب'),
-              _InfoRow(title: 'الواجب الحالي', value: assignments.first.title),
+              _InfoRow(
+                title: 'حالة الحضور',
+                value: attendance.lastUpdatedLabel,
+              ),
+              _InfoRow(
+                title: 'التقدم',
+                value:
+                    '${attendance.resolvedCount} من ${attendance.totalCount} طالب',
+              ),
+              _InfoRow(
+                title: 'الواجب الحالي',
+                value: assignments.isEmpty
+                    ? 'لا يوجد واجب مضاف'
+                    : assignments.first.title,
+              ),
               _InfoRow(
                 title: 'ملاحظة الحصة',
                 value: item.notes ?? 'لا توجد ملاحظات إضافية.',
@@ -46,7 +61,9 @@ class ClassroomOverviewSection extends StatelessWidget {
         ClassroomSectionCard(
           title: 'طلاب يحتاجون متابعة',
           child: followUp.isEmpty
-              ? const _EmptySectionState(message: 'لا توجد حالات متابعة في هذه الحصة.')
+              ? const _EmptySectionState(
+                  message: 'لا توجد حالات متابعة في هذه الحصة.',
+                )
               : Column(
                   children: followUp
                       .map((student) => ClassroomStudentRow(student: student))
@@ -61,10 +78,7 @@ class ClassroomOverviewSection extends StatelessWidget {
 class ClassroomStudentsSection extends StatelessWidget {
   final List<ClassroomStudent> students;
 
-  const ClassroomStudentsSection({
-    super.key,
-    required this.students,
-  });
+  const ClassroomStudentsSection({super.key, required this.students});
 
   @override
   Widget build(BuildContext context) {
@@ -76,10 +90,8 @@ class ClassroomStudentsSection extends StatelessWidget {
               children: students
                   .take(12)
                   .map(
-                    (student) => ClassroomStudentRow(
-                      student: student,
-                      expanded: true,
-                    ),
+                    (student) =>
+                        ClassroomStudentRow(student: student, expanded: true),
                   )
                   .toList(growable: false),
             ),
@@ -105,7 +117,11 @@ class ClassroomAttendanceSection extends StatelessWidget {
         .where((student) => student.attendanceMark == AttendanceMark.unmarked)
         .toList(growable: false);
     final actionStudents = students
-        .where((student) => student.attendanceMark == AttendanceMark.absent || student.attendanceMark == AttendanceMark.late)
+        .where(
+          (student) =>
+              student.attendanceMark == AttendanceMark.absent ||
+              student.attendanceMark == AttendanceMark.late,
+        )
         .take(5)
         .toList(growable: false);
 
@@ -118,9 +134,21 @@ class ClassroomAttendanceSection extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Expanded(child: _AttendanceCountTile(label: 'غير محسوم', count: attendance.unmarkedCount, color: AppColors.third)),
+                  Expanded(
+                    child: _AttendanceCountTile(
+                      label: 'غير محسوم',
+                      count: attendance.unmarkedCount,
+                      color: AppColors.third,
+                    ),
+                  ),
                   const SizedBox(width: 10),
-                  Expanded(child: _AttendanceCountTile(label: 'غياب/تأخر', count: attendance.actionableCount, color: AppColors.errorRed)),
+                  Expanded(
+                    child: _AttendanceCountTile(
+                      label: 'غياب/تأخر',
+                      count: attendance.actionableCount,
+                      color: AppColors.errorRed,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -130,7 +158,9 @@ class ClassroomAttendanceSection extends StatelessWidget {
                   value: attendance.completionProgress,
                   minHeight: 8,
                   backgroundColor: AppColors.lightGrey,
-                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                    AppColors.primary,
+                  ),
                 ),
               ),
               const SizedBox(height: 8),
@@ -150,10 +180,14 @@ class ClassroomAttendanceSection extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
                   ),
                   child: Text(
-                    pendingStudents.isEmpty ? 'مراجعة سجل الحضور' : 'استكمال أخذ الحضور',
+                    pendingStudents.isEmpty
+                        ? 'مراجعة سجل الحضور'
+                        : 'استكمال أخذ الحضور',
                     style: getBoldStyle(
                       color: AppColors.white,
                       fontSize: FontSize.size12,
@@ -167,45 +201,36 @@ class ClassroomAttendanceSection extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         ClassroomSectionCard(
-          title: pendingStudents.isNotEmpty ? 'طلاب بانتظار التحديد' : 'طلاب يحتاجون متابعة',
+          title: pendingStudents.isNotEmpty
+              ? 'طلاب بانتظار التحديد'
+              : 'طلاب يحتاجون متابعة',
           child: pendingStudents.isNotEmpty
               ? Column(
                   children: pendingStudents
-                      .map((student) => ClassroomStudentRow(student: student, expanded: true))
+                      .map(
+                        (student) => ClassroomStudentRow(
+                          student: student,
+                          expanded: true,
+                        ),
+                      )
                       .toList(growable: false),
                 )
               : actionStudents.isEmpty
-                  ? const _EmptySectionState(message: 'كل الطلاب حاضرون ولا توجد حالات تحتاج متابعة.')
-                  : Column(
-                      children: actionStudents
-                          .map((student) => ClassroomStudentRow(student: student, expanded: true))
-                          .toList(growable: false),
-                    ),
+              ? const _EmptySectionState(
+                  message: 'كل الطلاب حاضرون ولا توجد حالات تحتاج متابعة.',
+                )
+              : Column(
+                  children: actionStudents
+                      .map(
+                        (student) => ClassroomStudentRow(
+                          student: student,
+                          expanded: true,
+                        ),
+                      )
+                      .toList(growable: false),
+                ),
         ),
       ],
-    );
-  }
-}
-
-class ClassroomAssignmentsSection extends StatelessWidget {
-  final List<ClassroomAssignment> assignments;
-
-  const ClassroomAssignmentsSection({
-    super.key,
-    required this.assignments,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ClassroomSectionCard(
-      title: 'الواجبات والتكليفات',
-      child: assignments.isEmpty
-          ? const _EmptySectionState(message: 'لا توجد واجبات مرتبطة بهذه الحصة.')
-          : Column(
-              children: assignments
-                  .map((assignment) => ClassroomAssignmentRow(assignment: assignment))
-                  .toList(growable: false),
-            ),
     );
   }
 }
@@ -277,7 +302,9 @@ class ClassroomStudentRow extends StatelessWidget {
             ),
           ),
           _StatePill(
-            label: expanded ? student.statusLabel : (student.homeworkSubmitted ? 'سلّم' : 'لم يسلّم'),
+            label: expanded
+                ? student.statusLabel
+                : (student.homeworkSubmitted ? 'سلّم' : 'لم يسلّم'),
             background: _pillBackground(student, expanded),
             textColor: _pillColor(student, expanded),
           ),
@@ -312,79 +339,6 @@ class ClassroomStudentRow extends StatelessWidget {
       case AttendanceMark.excused:
         return AppColors.secondary;
     }
-  }
-}
-
-class ClassroomAssignmentRow extends StatelessWidget {
-  final ClassroomAssignment assignment;
-
-  const ClassroomAssignmentRow({
-    super.key,
-    required this.assignment,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final progress = assignment.totalCount == 0
-        ? 0.0
-        : assignment.submittedCount / assignment.totalCount;
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.lightGrey.withValues(alpha: 0.24),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  assignment.title,
-                  style: getBoldStyle(
-                    color: AppColors.primaryDark,
-                    fontSize: FontSize.size12,
-                    fontFamily: FontConstant.cairo,
-                  ),
-                ),
-              ),
-              _StatePill(label: assignment.statusLabel),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Text(
-            assignment.dueLabel,
-            style: getRegularStyle(
-              color: AppColors.grey,
-              fontSize: FontSize.size10,
-              fontFamily: FontConstant.cairo,
-            ),
-          ),
-          const SizedBox(height: 8),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(999),
-            child: LinearProgressIndicator(
-              value: progress,
-              minHeight: 7,
-              backgroundColor: AppColors.lightGrey,
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '${assignment.submittedCount} من ${assignment.totalCount} سلّموا',
-            style: getMediumStyle(
-              color: AppColors.primaryDark,
-              fontSize: FontSize.size10,
-              fontFamily: FontConstant.cairo,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
 
@@ -438,7 +392,11 @@ class _InfoRow extends StatelessWidget {
   final String value;
   final bool isLast;
 
-  const _InfoRow({required this.title, required this.value, this.isLast = false});
+  const _InfoRow({
+    required this.title,
+    required this.value,
+    this.isLast = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -478,11 +436,7 @@ class _StatePill extends StatelessWidget {
   final Color? background;
   final Color? textColor;
 
-  const _StatePill({
-    required this.label,
-    this.background,
-    this.textColor,
-  });
+  const _StatePill({required this.label, this.background, this.textColor});
 
   @override
   Widget build(BuildContext context) {

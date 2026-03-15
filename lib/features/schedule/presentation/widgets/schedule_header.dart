@@ -21,10 +21,10 @@ class ScheduleHeader extends StatelessWidget {
     final formattedDate = _formatDate(selectedDate);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 6),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           gradient: AppColors.primaryGradient,
           borderRadius: BorderRadius.circular(24),
@@ -62,21 +62,36 @@ class ScheduleHeader extends StatelessWidget {
                         'الجدول الدراسي',
                         style: getBoldStyle(
                           color: AppColors.white,
-                          fontSize: FontSize.size20,
+                          fontSize: FontSize.size18,
                           fontFamily: FontConstant.cairo,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 1),
                       Text(
                         formattedDate,
                         style: getRegularStyle(
                           color: AppColors.white.withValues(alpha: 0.86),
-                          fontSize: FontSize.size12,
+                          fontSize: FontSize.size11,
                           fontFamily: FontConstant.cairo,
                         ),
                       ),
                     ],
                   ),
+                ),
+                Row(
+                  children: [
+                    _HeaderMiniMetric(
+                      title: 'حصص',
+                      value: totalPeriods.toString(),
+                      icon: Icons.access_time_rounded,
+                    ),
+                    const SizedBox(width: 8),
+                    _HeaderMiniMetric(
+                      title: 'فصول',
+                      value: classCount.toString(),
+                      icon: Icons.groups_rounded,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -84,30 +99,10 @@ class ScheduleHeader extends StatelessWidget {
             Text(
               'فلترة سريعة بالمرحلة والصف والفصل مع متابعة التحضير والغياب.',
               style: getRegularStyle(
-                color: AppColors.white.withValues(alpha: 0.9),
-                fontSize: FontSize.size12,
+                color: AppColors.white.withValues(alpha: 0.85),
+                fontSize: FontSize.size11,
                 fontFamily: FontConstant.cairo,
               ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: _HeaderMetric(
-                    title: 'حصص اليوم',
-                    value: totalPeriods.toString(),
-                    icon: Icons.access_time_rounded,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _HeaderMetric(
-                    title: 'الفصول',
-                    value: classCount.toString(),
-                    icon: Icons.groups_rounded,
-                  ),
-                ),
-              ],
             ),
           ],
         ),
@@ -145,12 +140,12 @@ class ScheduleHeader extends StatelessWidget {
   }
 }
 
-class _HeaderMetric extends StatelessWidget {
+class _HeaderMiniMetric extends StatelessWidget {
   final String title;
   final String value;
   final IconData icon;
 
-  const _HeaderMetric({
+  const _HeaderMiniMetric({
     required this.title,
     required this.value,
     required this.icon,
@@ -159,37 +154,35 @@ class _HeaderMetric extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: AppColors.white.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppColors.white.withValues(alpha: 0.1)),
       ),
-      child: Row(
+      child: Column(
         children: [
-          Icon(icon, color: AppColors.white, size: 17),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: getRegularStyle(
-                    color: AppColors.white.withValues(alpha: 0.8),
-                    fontSize: FontSize.size10,
-                    fontFamily: FontConstant.cairo,
-                  ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, color: AppColors.white, size: 14),
+              const SizedBox(width: 4),
+              Text(
+                value,
+                style: getBoldStyle(
+                  color: AppColors.white,
+                  fontSize: FontSize.size16,
+                  fontFamily: FontConstant.cairo,
                 ),
-                Text(
-                  value,
-                  style: getBoldStyle(
-                    color: AppColors.white,
-                    fontSize: FontSize.size17,
-                    fontFamily: FontConstant.cairo,
-                  ),
-                ),
-              ],
+              ),
+            ],
+          ),
+          Text(
+            title,
+            style: getRegularStyle(
+              color: AppColors.white.withValues(alpha: 0.8),
+              fontSize: FontSize.size9,
+              fontFamily: FontConstant.cairo,
             ),
           ),
         ],

@@ -59,23 +59,14 @@ class ScheduleList extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        Stack(
-          children: [
-            Positioned(
-              right: 17,
-              top: 0,
-              bottom: 0,
-              child: Container(
-                width: 2,
-                color: AppColors.lightGrey.withValues(alpha: 0.8),
-              ),
-            ),
-            Column(
-              children: schedule
-                  .map((item) => ScheduleItemCard(item: item))
-                  .toList(growable: false),
-            ),
-          ],
+        Column(
+          children: List.generate(schedule.length, (index) {
+            return ScheduleItemCard(
+              item: schedule[index],
+              showTopLine: index != 0,
+              showBottomLine: index != schedule.length - 1,
+            );
+          }),
         ),
       ],
     );
