@@ -133,6 +133,25 @@ class StudentQuestionAnswer {
     required this.score,
     required this.maxScore,
   });
+
+  StudentQuestionAnswer copyWith({
+    String? questionId,
+    String? studentAnswer,
+    String? correctAnswer,
+    bool? isCorrect,
+    bool clearCorrectness = false,
+    int? score,
+    int? maxScore,
+  }) {
+    return StudentQuestionAnswer(
+      questionId: questionId ?? this.questionId,
+      studentAnswer: studentAnswer ?? this.studentAnswer,
+      correctAnswer: correctAnswer ?? this.correctAnswer,
+      isCorrect: clearCorrectness ? null : (isCorrect ?? this.isCorrect),
+      score: score ?? this.score,
+      maxScore: maxScore ?? this.maxScore,
+    );
+  }
 }
 
 class AssignmentSubmission {
@@ -167,6 +186,28 @@ class AssignmentSubmission {
       case AssignmentSubmissionStatus.late:
         return 'تسليم متأخر';
     }
+  }
+
+  AssignmentSubmission copyWith({
+    String? studentId,
+    String? studentName,
+    String? submittedAtLabel,
+    AssignmentSubmissionStatus? status,
+    int? score,
+    int? maxScore,
+    String? feedback,
+    List<StudentQuestionAnswer>? answers,
+  }) {
+    return AssignmentSubmission(
+      studentId: studentId ?? this.studentId,
+      studentName: studentName ?? this.studentName,
+      submittedAtLabel: submittedAtLabel ?? this.submittedAtLabel,
+      status: status ?? this.status,
+      score: score ?? this.score,
+      maxScore: maxScore ?? this.maxScore,
+      feedback: feedback ?? this.feedback,
+      answers: answers ?? this.answers,
+    );
   }
 }
 

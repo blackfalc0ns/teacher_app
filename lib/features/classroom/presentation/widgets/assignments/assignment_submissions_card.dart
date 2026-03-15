@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
@@ -21,7 +21,7 @@ class AssignmentSubmissionsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (assignments.isEmpty) {
-      return _EmptyCard(message: 'لا توجد واجبات منشأة بعد.');
+      return _EmptyCard(message: '?? ???? ?????? ????? ???.');
     }
 
     return Container(
@@ -34,7 +34,7 @@ class AssignmentSubmissionsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'الواجبات والتسليمات',
+            '???????? ??????????',
             style: getBoldStyle(
               color: AppColors.primaryDark,
               fontSize: FontSize.size14,
@@ -43,7 +43,7 @@ class AssignmentSubmissionsCard extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           Text(
-            'اطلع على من سلّم، من تأخر، ومن يحتاج مراجعة.',
+            '???? ?????? ???? ???? ?????? ??????????.',
             style: getRegularStyle(
               color: AppColors.grey,
               fontSize: FontSize.size10,
@@ -69,18 +69,22 @@ class AssignmentSubmissionsCard extends StatelessWidget {
 
 class AssignmentStudentSubmissionsCard extends StatelessWidget {
   final ClassroomAssignment assignment;
+  final List<AssignmentSubmission> submissions;
   final int selectedSubmissionIndex;
   final ValueChanged<int> onSubmissionSelected;
 
   const AssignmentStudentSubmissionsCard({
     super.key,
     required this.assignment,
+    required this.submissions,
     required this.selectedSubmissionIndex,
     required this.onSubmissionSelected,
   });
 
   @override
   Widget build(BuildContext context) {
+    final safeSelectedIndex = submissions.isEmpty ? 0 : selectedSubmissionIndex.clamp(0, submissions.length - 1).toInt();
+
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -94,7 +98,7 @@ class AssignmentStudentSubmissionsCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'أداء الطلاب',
+                  '???? ??????',
                   style: getBoldStyle(
                     color: AppColors.primaryDark,
                     fontSize: FontSize.size14,
@@ -102,30 +106,33 @@ class AssignmentStudentSubmissionsCard extends StatelessWidget {
                   ),
                 ),
               ),
-              AssignmentTag(label: '${assignment.submittedCount}/${assignment.totalCount}', color: AppColors.primary),
+              AssignmentTag(label: '${submissions.length}/${assignment.submissions.length}', color: AppColors.primary),
             ],
           ),
           const SizedBox(height: 10),
           Row(
             children: [
-              Expanded(child: _MetricBox(label: 'تم التسليم', value: '${assignment.submittedCount}', color: AppColors.green)),
+              Expanded(child: _MetricBox(label: '?? ???????', value: '${assignment.submittedCount}', color: AppColors.green)),
               const SizedBox(width: 8),
-              Expanded(child: _MetricBox(label: 'تم التصحيح', value: '${assignment.reviewedCount}', color: AppColors.primary)),
+              Expanded(child: _MetricBox(label: '?? ???????', value: '${assignment.reviewedCount}', color: AppColors.primary)),
               const SizedBox(width: 8),
-              Expanded(child: _MetricBox(label: 'لم يسلّم', value: '${assignment.totalCount - assignment.submittedCount}', color: AppColors.errorRed)),
+              Expanded(child: _MetricBox(label: '?? ?????', value: '${assignment.totalCount - assignment.submittedCount}', color: AppColors.errorRed)),
             ],
           ),
           const SizedBox(height: 12),
-          ...assignment.submissions.asMap().entries.map(
-            (entry) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: _SubmissionTile(
-                submission: entry.value,
-                selected: entry.key == selectedSubmissionIndex,
-                onTap: () => onSubmissionSelected(entry.key),
+          if (submissions.isEmpty)
+            const _EmptyCard(message: '?? ???? ????? ?????? ??????? ???????.')
+          else
+            ...submissions.asMap().entries.map(
+              (entry) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _SubmissionTile(
+                  submission: entry.value,
+                  selected: entry.key == safeSelectedIndex,
+                  onTap: () => onSubmissionSelected(entry.key),
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -137,11 +144,7 @@ class _AssignmentOverviewTile extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  const _AssignmentOverviewTile({
-    required this.assignment,
-    required this.selected,
-    required this.onTap,
-  });
+  const _AssignmentOverviewTile({required this.assignment, required this.selected, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -163,11 +166,7 @@ class _AssignmentOverviewTile extends StatelessWidget {
                 Expanded(
                   child: Text(
                     assignment.title,
-                    style: getBoldStyle(
-                      color: AppColors.primaryDark,
-                      fontSize: FontSize.size12,
-                      fontFamily: FontConstant.cairo,
-                    ),
+                    style: getBoldStyle(color: AppColors.primaryDark, fontSize: FontSize.size12, fontFamily: FontConstant.cairo),
                   ),
                 ),
                 AssignmentTag(label: assignment.statusLabel, color: selected ? AppColors.primary : AppColors.secondary),
@@ -175,21 +174,13 @@ class _AssignmentOverviewTile extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              '${assignment.modeLabel} • ${assignment.questionsCount} سؤال • ${assignment.totalMarks} درجة',
-              style: getRegularStyle(
-                color: AppColors.grey,
-                fontSize: FontSize.size10,
-                fontFamily: FontConstant.cairo,
-              ),
+              '${assignment.modeLabel} � ${assignment.questionsCount} ???? � ${assignment.totalMarks} ????',
+              style: getRegularStyle(color: AppColors.grey, fontSize: FontSize.size10, fontFamily: FontConstant.cairo),
             ),
             const SizedBox(height: 6),
             Text(
-              '${assignment.submittedCount} من ${assignment.totalCount} سلّموا',
-              style: getMediumStyle(
-                color: AppColors.primaryDark,
-                fontSize: FontSize.size10,
-                fontFamily: FontConstant.cairo,
-              ),
+              '${assignment.submittedCount} ?? ${assignment.totalCount} ??????',
+              style: getMediumStyle(color: AppColors.primaryDark, fontSize: FontSize.size10, fontFamily: FontConstant.cairo),
             ),
           ],
         ),
@@ -226,20 +217,12 @@ class _SubmissionTile extends StatelessWidget {
                 children: [
                   Text(
                     submission.studentName,
-                    style: getBoldStyle(
-                      color: AppColors.primaryDark,
-                      fontSize: FontSize.size12,
-                      fontFamily: FontConstant.cairo,
-                    ),
+                    style: getBoldStyle(color: AppColors.primaryDark, fontSize: FontSize.size12, fontFamily: FontConstant.cairo),
                   ),
                   const SizedBox(height: 3),
                   Text(
                     submission.submittedAtLabel,
-                    style: getRegularStyle(
-                      color: AppColors.grey,
-                      fontSize: FontSize.size10,
-                      fontFamily: FontConstant.cairo,
-                    ),
+                    style: getRegularStyle(color: AppColors.grey, fontSize: FontSize.size10, fontFamily: FontConstant.cairo),
                   ),
                 ],
               ),
@@ -251,11 +234,7 @@ class _SubmissionTile extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   '${submission.score}/${submission.maxScore}',
-                  style: getBoldStyle(
-                    color: AppColors.primaryDark,
-                    fontSize: FontSize.size11,
-                    fontFamily: FontConstant.cairo,
-                  ),
+                  style: getBoldStyle(color: AppColors.primaryDark, fontSize: FontSize.size11, fontFamily: FontConstant.cairo),
                 ),
               ],
             ),
@@ -285,20 +264,12 @@ class _MetricBox extends StatelessWidget {
         children: [
           Text(
             value,
-            style: getBoldStyle(
-              color: color,
-              fontSize: FontSize.size15,
-              fontFamily: FontConstant.cairo,
-            ),
+            style: getBoldStyle(color: color, fontSize: FontSize.size15, fontFamily: FontConstant.cairo),
           ),
           const SizedBox(height: 4),
           Text(
             label,
-            style: getMediumStyle(
-              color: AppColors.primaryDark,
-              fontSize: FontSize.size10,
-              fontFamily: FontConstant.cairo,
-            ),
+            style: getMediumStyle(color: AppColors.primaryDark, fontSize: FontSize.size10, fontFamily: FontConstant.cairo),
           ),
         ],
       ),
@@ -316,16 +287,12 @@ class _EmptyCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
+        color: AppColors.lightGrey.withValues(alpha: 0.16),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Text(
         message,
-        style: getRegularStyle(
-          color: AppColors.grey,
-          fontSize: FontSize.size11,
-          fontFamily: FontConstant.cairo,
-        ),
+        style: getRegularStyle(color: AppColors.grey, fontSize: FontSize.size11, fontFamily: FontConstant.cairo),
       ),
     );
   }

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
@@ -66,7 +66,7 @@ class AssignmentStudentDetailCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _SummaryTile(
-                  label: 'الدرجة',
+                  label: '??????',
                   value: '${submission.score}/${submission.maxScore}',
                   color: AppColors.primary,
                 ),
@@ -74,7 +74,7 @@ class AssignmentStudentDetailCard extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: _SummaryTile(
-                  label: 'وقت التسليم',
+                  label: '??? ???????',
                   value: submission.submittedAtLabel,
                   color: AppColors.secondary,
                 ),
@@ -90,7 +90,7 @@ class AssignmentStudentDetailCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
             ),
             child: Text(
-              submission.feedback,
+              submission.feedback.trim().isEmpty ? '?? ???? ??????? ????? ???.' : submission.feedback,
               style: getRegularStyle(
                 color: AppColors.primaryDark,
                 fontSize: FontSize.size11,
@@ -121,13 +121,7 @@ class _QuestionAnswerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final answerColor = answer == null
-        ? AppColors.grey
-        : answer!.isCorrect == null
-            ? AppColors.third
-            : answer!.isCorrect!
-                ? AppColors.green
-                : AppColors.errorRed;
+    final answerColor = _buildAnswerColor();
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -167,33 +161,27 @@ class _QuestionAnswerTile extends StatelessWidget {
                 color: AppColors.secondary,
               ),
               AssignmentTag(
-                label: answer == null
-                    ? 'بدون إجابة'
-                    : answer!.isCorrect == null
-                        ? 'يحتاج مراجعة'
-                        : answer!.isCorrect!
-                            ? 'إجابة صحيحة'
-                            : 'إجابة غير صحيحة',
+                label: _buildAnswerStateLabel(),
                 color: answerColor,
               ),
             ],
           ),
           const SizedBox(height: 10),
           _AnswerPanel(
-            title: 'إجابة الطالب',
-            value: answer?.studentAnswer ?? 'لا توجد إجابة مرفوعة',
+            title: '????? ??????',
+            value: answer?.studentAnswer.trim().isNotEmpty == true ? answer!.studentAnswer : '?? ???? ????? ??????',
             background: AppColors.white,
           ),
           const SizedBox(height: 8),
           _AnswerPanel(
-            title: 'الإجابة الصحيحة',
+            title: '??????? ???????',
             value: question.correctAnswerLabel,
             background: AppColors.green.withValues(alpha: 0.08),
           ),
           if (question.explanation.trim().isNotEmpty) ...[
             const SizedBox(height: 8),
             _AnswerPanel(
-              title: 'توضيح المعلم',
+              title: '????? ??????',
               value: question.explanation,
               background: AppColors.secondary.withValues(alpha: 0.08),
             ),
@@ -201,6 +189,41 @@ class _QuestionAnswerTile extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Color _buildAnswerColor() {
+    if (answer == null) {
+      return AppColors.grey;
+    }
+    if (_isManualQuestion() && answer!.score > 0 && answer!.score < question.points) {
+      return AppColors.third;
+    }
+    if (answer!.isCorrect == null) {
+      return AppColors.third;
+    }
+    return answer!.isCorrect! ? AppColors.green : AppColors.errorRed;
+  }
+
+  String _buildAnswerStateLabel() {
+    if (answer == null) {
+      return '???? ?????';
+    }
+    if (_isManualQuestion() && answer!.score > 0 && answer!.score < question.points) {
+      return '???? ??????';
+    }
+    if (_isManualQuestion() && answer!.score == question.points) {
+      return '???? ????';
+    }
+    if (answer!.isCorrect == null) {
+      return '????? ??????';
+    }
+    return answer!.isCorrect! ? '????? ?????' : '????? ??? ?????';
+  }
+
+  bool _isManualQuestion() {
+    return question.type == AssignmentQuestionType.essay ||
+        question.type == AssignmentQuestionType.shortAnswer ||
+        question.type == AssignmentQuestionType.fillInBlank;
   }
 }
 
