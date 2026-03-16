@@ -1,4 +1,4 @@
-﻿import '../../../../core/utils/constant/font_manger.dart';
+import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -93,6 +93,7 @@ class _AssignmentCreatePageState extends State<AssignmentCreatePage> {
               onQuestionChanged: _updateDraftQuestion,
               onQuestionDeleted: _deleteDraftQuestion,
               onAddQuestion: _addDraftQuestion,
+              onAddMedia: _addMediaItem,
             ),
             const SizedBox(height: 12),
             _CreatePreviewCard(
@@ -120,10 +121,12 @@ class _AssignmentCreatePageState extends State<AssignmentCreatePage> {
     return _titleController.text.trim().isNotEmpty &&
         _instructionsController.text.trim().isNotEmpty &&
         _draftQuestions.isNotEmpty &&
-        _draftQuestions.every(
-          (question) =>
-              question.prompt.trim().isNotEmpty && _isQuestionValid(question),
-        );
+        _draftQuestions.every((question) {
+          if (question.type == AssignmentQuestionType.media) {
+            return question.attachmentPath != null || question.prompt.isNotEmpty;
+          }
+          return question.prompt.trim().isNotEmpty && _isQuestionValid(question);
+        });
   }
 
   void _refresh() {
@@ -147,6 +150,18 @@ class _AssignmentCreatePageState extends State<AssignmentCreatePage> {
       _draftQuestions = [
         ..._draftQuestions,
         _newDraftQuestion(_draftQuestions.length + 1),
+      ];
+    });
+  }
+
+  void _addMediaItem() {
+    setState(() {
+      _draftQuestions = [
+        ..._draftQuestions,
+        _newDraftQuestion(
+          _draftQuestions.length + 1,
+          type: AssignmentQuestionType.media,
+        ),
       ];
     });
   }
@@ -203,6 +218,8 @@ class _AssignmentCreatePageState extends State<AssignmentCreatePage> {
             points: draft.points,
             options: options,
             expectedAnswer: expectedAnswer,
+            attachmentPath: draft.attachmentPath,
+            attachmentName: draft.attachmentName,
             explanation: draft.usesOptions
                 ? 'تم تحديد الإجابة الصحيحة ضمن الخيارات.'
                 : 'يمكن للمعلم مراجعة الإجابة بناء على النموذج.',
@@ -231,24 +248,30 @@ class _AssignmentCreatePageState extends State<AssignmentCreatePage> {
   }
 
   bool _isQuestionValid(AssignmentDraftQuestion question) {
+    if (question.type == AssignmentQuestionType.media) return true;
     if (question.usesOptions) {
       return question.options.every((option) => option.trim().isNotEmpty);
     }
     return question.expectedAnswer.trim().isNotEmpty;
   }
 
-  AssignmentDraftQuestion _newDraftQuestion(int order) {
+  AssignmentDraftQuestion _newDraftQuestion(
+    int order, {
+    AssignmentQuestionType type = AssignmentQuestionType.multipleChoice,
+  }) {
     return AssignmentDraftQuestion(
       id: 'draft-$order-${DateTime.now().microsecondsSinceEpoch}',
-      type: AssignmentQuestionType.multipleChoice,
+      type: type,
       prompt: '',
-      points: 2,
-      options: const [
-        'الخيار الأول',
-        'الخيار الثاني',
-        'الخيار الثالث',
-        'الخيار الرابع',
-      ],
+      points: type == AssignmentQuestionType.media ? 0 : 2,
+      options: type == AssignmentQuestionType.media
+          ? const []
+          : const [
+              'الخيار الأول',
+              'الخيار الثاني',
+              'الخيار الثالث',
+              'الخيار الرابع',
+            ],
       correctOptionIndex: 0,
       expectedAnswer: '',
     );

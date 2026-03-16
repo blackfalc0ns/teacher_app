@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
@@ -19,6 +19,8 @@ String assignmentQuestionTypeLabel(AssignmentQuestionType type) {
       return 'أكمل الفراغ';
     case AssignmentQuestionType.matching:
       return 'توصيل';
+    case AssignmentQuestionType.media:
+      return 'ملف / صورة';
   }
 }
 

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
@@ -12,6 +12,7 @@ class AssignmentQuestionsCard extends StatelessWidget {
   final ValueChanged<AssignmentDraftQuestion> onQuestionChanged;
   final ValueChanged<String> onQuestionDeleted;
   final VoidCallback onAddQuestion;
+  final VoidCallback onAddMedia;
 
   const AssignmentQuestionsCard({
     super.key,
@@ -19,6 +20,7 @@ class AssignmentQuestionsCard extends StatelessWidget {
     required this.onQuestionChanged,
     required this.onQuestionDeleted,
     required this.onAddQuestion,
+    required this.onAddMedia,
   });
 
   @override
@@ -61,26 +63,56 @@ class AssignmentQuestionsCard extends StatelessWidget {
               ),
             ),
           ),
-          InkWell(
-            onTap: onAddQuestion,
-            borderRadius: BorderRadius.circular(14),
-            child: _DashedContainer(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.add_rounded, color: AppColors.primary),
-                  const SizedBox(width: 6),
-                  Text(
-                    'إضافة سؤال جديد',
-                    style: getBoldStyle(
-                      color: AppColors.primary,
-                      fontSize: FontSize.size12,
-                      fontFamily: FontConstant.cairo,
+          Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: onAddQuestion,
+                  borderRadius: BorderRadius.circular(14),
+                  child: _DashedContainer(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.add_rounded, color: AppColors.primary),
+                        const SizedBox(width: 6),
+                        Text(
+                          'إضافة سؤال',
+                          style: getBoldStyle(
+                            color: AppColors.primary,
+                            fontSize: FontSize.size11,
+                            fontFamily: FontConstant.cairo,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: InkWell(
+                  onTap: onAddMedia,
+                  borderRadius: BorderRadius.circular(14),
+                  child: _DashedContainer(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.upload_file_rounded, color: AppColors.secondary),
+                        const SizedBox(width: 6),
+                        Text(
+                          'إرفاق ملف',
+                          style: getBoldStyle(
+                            color: AppColors.secondary,
+                            fontSize: FontSize.size11,
+                            fontFamily: FontConstant.cairo,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -108,14 +140,21 @@ class _QuestionEditor extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.lightGrey.withValues(alpha: 0.16),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _questionAccent(question.type).withValues(alpha: 0.25)),
+        border: Border.all(
+          color: _questionAccent(question.type).withValues(alpha: 0.25),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              AssignmentTag(label: 'سؤال ${index + 1}', color: _questionAccent(question.type)),
+              AssignmentTag(
+                label: question.type == AssignmentQuestionType.media
+                    ? 'مرفق / ملف'
+                    : 'سؤال ${index + 1}',
+                color: _questionAccent(question.type),
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: SingleChildScrollView(
@@ -145,22 +184,56 @@ class _QuestionEditor extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () => onDeleted(question.id),
-                icon: const Icon(Icons.delete_outline_rounded, color: AppColors.errorRed),
+                icon: const Icon(
+                  Icons.delete_outline_rounded,
+                  color: AppColors.errorRed,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 10),
-          AssignmentSectionLabel(label: 'نص السؤال'),
+          AssignmentSectionLabel(
+            label: question.type == AssignmentQuestionType.media
+                ? 'وصف المرفق (اختياري)'
+                : 'نص السؤال',
+          ),
           TextFormField(
             initialValue: question.prompt,
             onChanged: (value) => onChanged(question.copyWith(prompt: value)),
-            decoration: assignmentInputDecoration('اكتب نص السؤال هنا...'),
+            decoration: assignmentInputDecoration(
+              question.type == AssignmentQuestionType.media
+                  ? 'اكتب وصفاً أو تعليمات للملف...'
+                  : 'اكتب نص السؤال هنا...',
+            ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
+          _QuestionAttachment(
+            path: question.attachmentPath,
+            name: question.attachmentName,
+            onRemove: () => onChanged(question.copyWith(clearAttachment: true)),
+            onAdd: () {
+              // MIGRATION_TODO: Implement real file/image picker here
+              // For now, we mock it by updating the state with dummy data
+              onChanged(
+                question.copyWith(
+                  attachmentPath: 'assets/mock/image.png',
+                  attachmentName: 'صورة_توضيحية.png',
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
           AssignmentSectionLabel(label: 'الدرجة'),
           Row(
             children: [
-              _PointButton(icon: Icons.remove_rounded, onTap: () => onChanged(question.copyWith(points: question.points > 1 ? question.points - 1 : 1))),
+              _PointButton(
+                icon: Icons.remove_rounded,
+                onTap: () => onChanged(
+                  question.copyWith(
+                    points: question.points > 1 ? question.points - 1 : 1,
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
@@ -172,14 +245,19 @@ class _QuestionEditor extends StatelessWidget {
                   ),
                 ),
               ),
-              _PointButton(icon: Icons.add_rounded, onTap: () => onChanged(question.copyWith(points: question.points + 1))),
+              _PointButton(
+                icon: Icons.add_rounded,
+                onTap: () =>
+                    onChanged(question.copyWith(points: question.points + 1)),
+              ),
             ],
           ),
           const SizedBox(height: 10),
-          if (question.usesOptions)
-            _OptionsEditor(question: question, onChanged: onChanged)
-          else
-            _ExpectedAnswerEditor(question: question, onChanged: onChanged),
+          if (question.type != AssignmentQuestionType.media)
+            if (question.usesOptions)
+              _OptionsEditor(question: question, onChanged: onChanged)
+            else
+              _ExpectedAnswerEditor(question: question, onChanged: onChanged),
         ],
       ),
     );
@@ -202,7 +280,8 @@ class _OptionsEditor extends StatelessWidget {
           (entry) => Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: InkWell(
-              onTap: () => onChanged(question.copyWith(correctOptionIndex: entry.key)),
+              onTap: () =>
+                  onChanged(question.copyWith(correctOptionIndex: entry.key)),
               borderRadius: BorderRadius.circular(12),
               child: Container(
                 padding: const EdgeInsets.all(8),
@@ -223,12 +302,18 @@ class _OptionsEditor extends StatelessWidget {
                       width: 20,
                       height: 20,
                       decoration: BoxDecoration(
-                        color: question.correctOptionIndex == entry.key ? AppColors.primary : Colors.transparent,
+                        color: question.correctOptionIndex == entry.key
+                            ? AppColors.primary
+                            : Colors.transparent,
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.primary),
                       ),
                       child: question.correctOptionIndex == entry.key
-                          ? const Icon(Icons.check_rounded, size: 12, color: AppColors.white)
+                          ? const Icon(
+                              Icons.check_rounded,
+                              size: 12,
+                              color: AppColors.white,
+                            )
                           : null,
                     ),
                     const SizedBox(width: 10),
@@ -240,7 +325,9 @@ class _OptionsEditor extends StatelessWidget {
                           updated[entry.key] = value;
                           onChanged(question.copyWith(options: updated));
                         },
-                        decoration: assignmentInputDecoration('الخيار ${entry.key + 1}'),
+                        decoration: assignmentInputDecoration(
+                          'الخيار ${entry.key + 1}',
+                        ),
                       ),
                     ),
                   ],
@@ -258,7 +345,10 @@ class _ExpectedAnswerEditor extends StatelessWidget {
   final AssignmentDraftQuestion question;
   final ValueChanged<AssignmentDraftQuestion> onChanged;
 
-  const _ExpectedAnswerEditor({required this.question, required this.onChanged});
+  const _ExpectedAnswerEditor({
+    required this.question,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -268,9 +358,12 @@ class _ExpectedAnswerEditor extends StatelessWidget {
         AssignmentSectionLabel(label: 'الإجابة النموذجية'),
         TextFormField(
           initialValue: question.expectedAnswer,
-          onChanged: (value) => onChanged(question.copyWith(expectedAnswer: value)),
+          onChanged: (value) =>
+              onChanged(question.copyWith(expectedAnswer: value)),
           maxLines: question.type == AssignmentQuestionType.essay ? 3 : 1,
-          decoration: assignmentInputDecoration('اكتب الإجابة الصحيحة أو النموذجية هنا'),
+          decoration: assignmentInputDecoration(
+            'اكتب الإجابة الصحيحة أو النموذجية هنا',
+          ),
         ),
       ],
     );
@@ -334,6 +427,8 @@ Color _questionAccent(AssignmentQuestionType type) {
       return AppColors.green;
     case AssignmentQuestionType.matching:
       return AppColors.primaryDark;
+    case AssignmentQuestionType.media:
+      return AppColors.secondary;
   }
 }
 
@@ -361,4 +456,123 @@ String _defaultExpectedAnswer(AssignmentQuestionType type) {
     return 'الكلمة أو القيمة الصحيحة';
   }
   return '';
+}
+
+class _QuestionAttachment extends StatelessWidget {
+  final String? path;
+  final String? name;
+  final VoidCallback onAdd;
+  final VoidCallback onRemove;
+
+  const _QuestionAttachment({
+    this.path,
+    this.name,
+    required this.onAdd,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (path != null) {
+      final isImage = name?.toLowerCase().endsWith('.png') ?? false;
+
+      return Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.lightGrey),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                isImage
+                    ? Icons.image_outlined
+                    : Icons.insert_drive_file_outlined,
+                color: AppColors.primary,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name ?? 'ملف مرفق',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: getBoldStyle(
+                      color: AppColors.primaryDark,
+                      fontSize: FontSize.size11,
+                      fontFamily: FontConstant.cairo,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    isImage ? 'صورة' : 'ملف PDF',
+                    style: getRegularStyle(
+                      color: AppColors.grey,
+                      fontSize: FontSize.size9,
+                      fontFamily: FontConstant.cairo,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              onPressed: onRemove,
+              icon: const Icon(
+                Icons.close_rounded,
+                size: 18,
+                color: AppColors.grey,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return InkWell(
+      onTap: onAdd,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: AppColors.primary.withValues(alpha: 0.3),
+            style: BorderStyle.solid,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.upload_file_rounded,
+              size: 18,
+              color: AppColors.primary,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'إرفاق صورة أو ملف للسؤال',
+              style: getBoldStyle(
+                color: AppColors.primary,
+                fontSize: FontSize.size11,
+                fontFamily: FontConstant.cairo,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

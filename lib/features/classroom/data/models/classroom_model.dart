@@ -1,4 +1,4 @@
-﻿enum AttendanceMark { unmarked, present, absent, late, excused }
+enum AttendanceMark { unmarked, present, absent, late, excused }
 
 enum AssignmentQuestionType {
   multipleChoice,
@@ -7,6 +7,7 @@ enum AssignmentQuestionType {
   essay,
   fillInBlank,
   matching,
+  media,
 }
 
 enum AssignmentSubmissionStatus { notSubmitted, submitted, reviewed, late }
@@ -88,6 +89,8 @@ class ClassroomQuestion {
   final List<AssignmentOption> options;
   final String expectedAnswer;
   final String explanation;
+  final String? attachmentPath;
+  final String? attachmentName;
 
   const ClassroomQuestion({
     required this.id,
@@ -97,6 +100,8 @@ class ClassroomQuestion {
     this.options = const [],
     this.expectedAnswer = '',
     this.explanation = '',
+    this.attachmentPath,
+    this.attachmentName,
   });
 
   bool get usesOptions {

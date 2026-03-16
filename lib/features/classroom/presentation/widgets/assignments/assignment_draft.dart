@@ -1,4 +1,4 @@
-﻿import '../../../data/models/classroom_model.dart';
+import '../../../data/models/classroom_model.dart';
 
 class AssignmentDraftQuestion {
   final String id;
@@ -9,6 +9,9 @@ class AssignmentDraftQuestion {
   final int correctOptionIndex;
   final String expectedAnswer;
 
+  final String? attachmentPath;
+  final String? attachmentName;
+
   const AssignmentDraftQuestion({
     required this.id,
     required this.type,
@@ -17,6 +20,8 @@ class AssignmentDraftQuestion {
     required this.options,
     required this.correctOptionIndex,
     required this.expectedAnswer,
+    this.attachmentPath,
+    this.attachmentName,
   });
 
   bool get usesOptions {
@@ -33,6 +38,9 @@ class AssignmentDraftQuestion {
     List<String>? options,
     int? correctOptionIndex,
     String? expectedAnswer,
+    String? attachmentPath,
+    String? attachmentName,
+    bool clearAttachment = false,
   }) {
     return AssignmentDraftQuestion(
       id: id ?? this.id,
@@ -42,6 +50,8 @@ class AssignmentDraftQuestion {
       options: options ?? this.options,
       correctOptionIndex: correctOptionIndex ?? this.correctOptionIndex,
       expectedAnswer: expectedAnswer ?? this.expectedAnswer,
+      attachmentPath: clearAttachment ? null : (attachmentPath ?? this.attachmentPath),
+      attachmentName: clearAttachment ? null : (attachmentName ?? this.attachmentName),
     );
   }
 }
