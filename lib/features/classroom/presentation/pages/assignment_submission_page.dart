@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teacher_app/core/utils/common/custom_button.dart';
 import '../../../schedule/data/model/schedule_model.dart';
 import '../../data/models/classroom_model.dart';
 import '../widgets/submission/question_review_tile.dart';
@@ -31,8 +32,9 @@ class _AssignmentSubmissionPageState extends State<AssignmentSubmissionPage> {
   void initState() {
     super.initState();
     _submission = widget.submission;
-    _feedbackController =
-        TextEditingController(text: widget.submission.feedback);
+    _feedbackController = TextEditingController(
+      text: widget.submission.feedback,
+    );
   }
 
   @override
@@ -54,8 +56,7 @@ class _AssignmentSubmissionPageState extends State<AssignmentSubmissionPage> {
           children: [
             TrackingHeader(
               title: 'تصحيح حل الطالب',
-              subtitle:
-                  '${widget.item.className} • ${widget.assignment.title}',
+              subtitle: '${widget.item.className} • ${widget.assignment.title}',
             ),
             const SizedBox(height: 12),
             SubmissionHeaderCard(
@@ -92,7 +93,7 @@ class _AssignmentSubmissionPageState extends State<AssignmentSubmissionPage> {
                         answer: answer,
                         onScoreChanged: _isManualQuestion(question) && canGrade
                             ? (score) =>
-                                _updateQuestionScore(question, answer, score)
+                                  _updateQuestionScore(question, answer, score)
                             : null,
                       ),
                     );
@@ -102,22 +103,13 @@ class _AssignmentSubmissionPageState extends State<AssignmentSubmissionPage> {
             ),
             if (canGrade) ...[
               const SizedBox(height: 12),
-              SubmissionFeedbackCard(
-                feedbackController: _feedbackController,
-              ),
+              SubmissionFeedbackCard(feedbackController: _feedbackController),
               const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
+                child: CustomButton(
                   onPressed: _save,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0A7A96),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 13),
-                  ),
-                  child: const Text('حفظ التصحيح والملاحظات'),
+                  text: 'حفظ التصحيح والملاحظات',
                 ),
               ),
             ],
@@ -134,12 +126,18 @@ class _AssignmentSubmissionPageState extends State<AssignmentSubmissionPage> {
   }
 
   void _updateQuestionScore(
-      ClassroomQuestion question, StudentQuestionAnswer? answer, int score) {
-    final updatedAnswers =
-        List<StudentQuestionAnswer>.from(_submission.answers);
-    final index =
-        updatedAnswers.indexWhere((item) => item.questionId == question.id);
-    final baseAnswer = answer ??
+    ClassroomQuestion question,
+    StudentQuestionAnswer? answer,
+    int score,
+  ) {
+    final updatedAnswers = List<StudentQuestionAnswer>.from(
+      _submission.answers,
+    );
+    final index = updatedAnswers.indexWhere(
+      (item) => item.questionId == question.id,
+    );
+    final baseAnswer =
+        answer ??
         StudentQuestionAnswer(
           questionId: question.id,
           studentAnswer: '',
@@ -151,8 +149,7 @@ class _AssignmentSubmissionPageState extends State<AssignmentSubmissionPage> {
     final gradedAnswer = baseAnswer.copyWith(
       score: score,
       maxScore: question.points,
-      isCorrect:
-          score == question.points ? true : (score == 0 ? false : null),
+      isCorrect: score == question.points ? true : (score == 0 ? false : null),
     );
 
     if (index == -1) {
@@ -164,8 +161,7 @@ class _AssignmentSubmissionPageState extends State<AssignmentSubmissionPage> {
     setState(() {
       _submission = _submission.copyWith(
         answers: updatedAnswers,
-        score: updatedAnswers.fold<int>(
-            0, (sum, answer) => sum + answer.score),
+        score: updatedAnswers.fold<int>(0, (sum, answer) => sum + answer.score),
         status: AssignmentSubmissionStatus.reviewed,
       );
     });
