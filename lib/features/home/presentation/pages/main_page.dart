@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teacher_app/core/utils/navigation/custom_bottom_nav_bar.dart';
 import 'package:teacher_app/core/utils/theme/app_colors.dart';
 import 'package:teacher_app/features/home/presentation/pages/my_classes_tab_page.dart';
+import 'package:teacher_app/features/messages/presentation/pages/messages_screen.dart';
 
 import '../../../schedule/presentation/pages/schedule_page.dart';
 import 'home_page.dart';
@@ -23,7 +24,7 @@ class _MainPageState extends State<MainPage> {
     const SchedulePage(),
     const MyClassesTabPage(),
     const Center(child: Text('الإعدادات')),
-    const Center(child: Text('الملف الشخصي')),
+    const MessagesScreen(),
   ];
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teacher_app/features/home/presentation/pages/main_page.dart';
+import 'package:teacher_app/features/messages/presentation/pages/chat_details_screen.dart';
 
 import '../../di/injection_container.dart';
 import '../../../features/classroom/presentation/pages/classroom_page.dart';
@@ -13,6 +14,7 @@ class Routes {
   static const String schedule = '/schedule';
   static const String myClasses = '/my-classes';
   static const String classroom = '/classroom';
+  static const String chatDetails = '/chat_details';
 }
 
 class OnGeneratedRoutes {
@@ -47,6 +49,14 @@ class OnGeneratedRoutes {
         }
         return MaterialPageRoute(
           builder: (_) => ClassroomPage(scheduleItem: args),
+        );
+      case Routes.chatDetails:
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => ChatDetailsScreen(
+            peerName: args?['name'] ?? 'محادثة',
+            peerAvatarUrl: args?['avatarUrl'],
+          ),
         );
       default:
         return MaterialPageRoute(
