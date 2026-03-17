@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:teacher_app/core/utils/navigation/custom_bottom_nav_bar.dart';
 import 'package:teacher_app/core/utils/theme/app_colors.dart';
 import 'package:teacher_app/features/home/presentation/pages/my_classes_tab_page.dart';
+import 'package:teacher_app/features/homeworks/presentation/pages/homeworks_page.dart';
 import 'package:teacher_app/features/messages/presentation/pages/messages_screen.dart';
 
 import '../../../schedule/presentation/pages/schedule_page.dart';
@@ -23,7 +24,7 @@ class _MainPageState extends State<MainPage> {
     const HomePage(),
     const SchedulePage(),
     const MyClassesTabPage(),
-    const Center(child: Text('الإعدادات')),
+    const HomeworksPage(),
     const MessagesScreen(),
   ];
 
@@ -46,7 +47,7 @@ class _MainPageState extends State<MainPage> {
           });
         },
       ),
-      floatingActionButton: _selectedIndex == 1 ? null : _buildFab(),
+      floatingActionButton: _selectedIndex == 1 || _selectedIndex == 3 ? null : _buildFab(),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
@@ -75,3 +76,4 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
+

@@ -45,7 +45,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
     return Scaffold(
       body: Column(
         children: [
-          // Header Card خارج الـ scroll
+          // Header Card Ø®Ø§Ø±Ø¬ Ø§Ù„Ù€ scroll
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: ClassroomHeaderCard(
@@ -53,7 +53,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
               followUpCount: followUpCount,
             ),
           ),
-          // المحتوى القابل للتمرير
+          // Ø§Ù„Ù…Ø­ØªÙˆÙ‰ Ø§Ù„Ù‚Ø§Ø¨Ù„ Ù„Ù„ØªÙ…Ø±ÙŠØ±
           Expanded(
             child: CustomScrollView(
               slivers: [
@@ -74,25 +74,25 @@ class _ClassroomPageState extends State<ClassroomPage> {
                       ClassroomMetricsRow(
                         items: [
                           ClassroomMetricItem(
-                            title: 'الطلاب',
+                            title: 'Ø§Ù„Ø·Ù„Ø§Ø¨',
                             value: '${item.studentsCount}',
                             icon: Icons.groups_rounded,
                             color: const Color(0xFF006D82),
                           ),
                           ClassroomMetricItem(
-                            title: 'تم الحسم',
+                            title: 'ØªÙ… Ø§Ù„Ø­Ø³Ù…',
                             value: '${attendance.resolvedCount}',
                             icon: Icons.fact_check_outlined,
                             color: const Color(0xFF10B981),
                           ),
                           ClassroomMetricItem(
-                            title: 'غير محسوم',
+                            title: 'ØºÙŠØ± Ù…Ø­Ø³ÙˆÙ…',
                             value: '${attendance.unmarkedCount}',
                             icon: Icons.pending_actions_rounded,
                             color: const Color(0xFFF7A201),
                           ),
                           ClassroomMetricItem(
-                            title: 'واجبات',
+                            title: 'ÙˆØ§Ø¬Ø¨Ø§Øª',
                             value: '${_assignments.length}',
                             icon: Icons.assignment_outlined,
                             color: const Color(0xFF13B3B0),
@@ -185,15 +185,16 @@ class _ClassroomPageState extends State<ClassroomPage> {
       SnackBar(
         content: Text(
           assignment.publishNow
-              ? 'تم إنشاء الواجب ونشره.'
-              : 'تم حفظ الواجب كمسودة.',
+              ? 'ØªÙ… Ø¥Ù†Ø´Ø§Ø¡ Ø§Ù„ÙˆØ§Ø¬Ø¨ ÙˆÙ†Ø´Ø±Ù‡.'
+              : 'ØªÙ… Ø­ÙØ¸ Ø§Ù„ÙˆØ§Ø¬Ø¨ ÙƒÙ…Ø³ÙˆØ¯Ø©.',
         ),
       ),
     );
   }
 
   Future<void> _openAssignmentTracking() async {
-    await Navigator.of(context).push(
+    final updatedAssignments = await Navigator.of(context)
+        .push<List<ClassroomAssignment>>(
       MaterialPageRoute(
         builder: (_) => AssignmentTrackingPage(
           item: widget.scheduleItem,
@@ -201,6 +202,14 @@ class _ClassroomPageState extends State<ClassroomPage> {
         ),
       ),
     );
+
+    if (!mounted || updatedAssignments == null) {
+      return;
+    }
+
+    setState(() {
+      _assignments = updatedAssignments;
+    });
   }
 
   Future<void> _openAttendance() async {
@@ -230,8 +239,8 @@ class _ClassroomPageState extends State<ClassroomPage> {
       SnackBar(
         content: Text(
           pendingCount == 0
-              ? 'تم تحديث الحضور واعتماد السجل.'
-              : 'تم تحديث الحضور، ويتبقى $pendingCount طالب يحتاج تحديد.',
+              ? 'ØªÙ… ØªØ­Ø¯ÙŠØ« Ø§Ù„Ø­Ø¶ÙˆØ± ÙˆØ§Ø¹ØªÙ…Ø§Ø¯ Ø§Ù„Ø³Ø¬Ù„.'
+              : 'ØªÙ… ØªØ­Ø¯ÙŠØ« Ø§Ù„Ø­Ø¶ÙˆØ±ØŒ ÙˆÙŠØªØ¨Ù‚Ù‰ $pendingCount Ø·Ø§Ù„Ø¨ ÙŠØ­ØªØ§Ø¬ ØªØ­Ø¯ÙŠØ¯.',
         ),
       ),
     );

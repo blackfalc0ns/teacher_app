@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+
 import '../../../schedule/data/model/schedule_model.dart';
 import '../../data/models/classroom_model.dart';
 import '../widgets/assignments/assignment_analytics_card.dart';
@@ -20,8 +21,7 @@ class AssignmentTrackingPage extends StatefulWidget {
   });
 
   @override
-  State<AssignmentTrackingPage> createState() =>
-      _AssignmentTrackingPageState();
+  State<AssignmentTrackingPage> createState() => _AssignmentTrackingPageState();
 }
 
 class _AssignmentTrackingPageState extends State<AssignmentTrackingPage> {
@@ -54,7 +54,8 @@ class _AssignmentTrackingPageState extends State<AssignmentTrackingPage> {
     final safeSelectedSubmission = visibleSubmissions.isEmpty
         ? null
         : visibleSubmissions[
-            _selectedSubmissionIndex.clamp(0, visibleSubmissions.length - 1).toInt()];
+            _selectedSubmissionIndex.clamp(0, visibleSubmissions.length - 1).toInt()
+          ];
 
     return Scaffold(
       backgroundColor: const Color(0xFFF6F9FC),
@@ -65,6 +66,7 @@ class _AssignmentTrackingPageState extends State<AssignmentTrackingPage> {
             TrackingHeader(
               title: 'متابعة الواجبات',
               subtitle: '${widget.item.className} • ${widget.item.subjectName}',
+              onBack: () => Navigator.of(context).pop(_assignments),
             ),
             const SizedBox(height: 12),
             AssignmentsOverviewCard(assignments: _assignments),
@@ -144,20 +146,19 @@ class _AssignmentTrackingPageState extends State<AssignmentTrackingPage> {
     if (_assignments.isEmpty) {
       return null;
     }
-    final safeIndex =
-        _selectedAssignmentIndex.clamp(0, _assignments.length - 1).toInt();
+    final safeIndex = _selectedAssignmentIndex.clamp(0, _assignments.length - 1).toInt();
     return _assignments[safeIndex];
   }
 
   List<AssignmentSubmission> _buildVisibleSubmissions(
-      ClassroomAssignment assignment) {
+    ClassroomAssignment assignment,
+  ) {
     final query = _searchController.text.trim();
     return assignment.submissions.where((submission) {
       if (!_matchesTab(submission)) {
         return false;
       }
-      if (_lateOnly &&
-          submission.status != AssignmentSubmissionStatus.late) {
+      if (_lateOnly && submission.status != AssignmentSubmissionStatus.late) {
         return false;
       }
       if (!_matchesScoreFilter(submission)) {
@@ -221,8 +222,7 @@ class _AssignmentTrackingPageState extends State<AssignmentTrackingPage> {
       return submission;
     }).toList(growable: false);
 
-    final updatedAssignment =
-        assignment.copyWith(submissions: updatedSubmissions);
+    final updatedAssignment = assignment.copyWith(submissions: updatedSubmissions);
     setState(() {
       _assignments = _assignments.map((item) {
         if (item.id == assignment.id) {

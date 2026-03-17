@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class TrackingHeader extends StatelessWidget {
   final String title;
   final String subtitle;
+  final VoidCallback? onBack;
 
   const TrackingHeader({
     super.key,
     required this.title,
     required this.subtitle,
+    this.onBack,
   });
 
   @override
@@ -15,7 +17,7 @@ class TrackingHeader extends StatelessWidget {
     return Row(
       children: [
         InkWell(
-          onTap: () => Navigator.of(context).pop(),
+          onTap: onBack ?? () => Navigator.of(context).maybePop(),
           borderRadius: BorderRadius.circular(12),
           child: Container(
             padding: const EdgeInsets.all(8),
