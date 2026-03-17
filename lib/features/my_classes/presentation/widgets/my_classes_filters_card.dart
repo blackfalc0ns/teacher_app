@@ -37,45 +37,46 @@ class MyClassesFiltersCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Text(
-                'فلترة وبحث الفصول',
-                style: getBoldStyle(
-                  color: AppColors.primaryDark,
-                  fontSize: FontSize.size14,
-                  fontFamily: FontConstant.cairo,
-                ),
-              ),
-              const Spacer(),
-              if (hasActiveFilters)
-                TextButton(
-                  onPressed: onReset,
-                  child: Text(
-                    'إعادة تعيين',
-                    style: getBoldStyle(
-                      color: AppColors.primary,
-                      fontSize: FontSize.size11,
-                      fontFamily: FontConstant.cairo,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          TextField(
-            controller: searchController,
-            decoration: InputDecoration(
-              hintText: 'ابحث بالصف أو الشعبة أو المادة',
-              prefixIcon: const Icon(Icons.search_rounded),
-              filled: true,
-              fillColor: AppColors.lightGrey.withValues(alpha: 0.22),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
+          // Row(
+          //   children: [
+          //     Text(
+          //       'فلترة وبحث الفصول',
+          //       style: getBoldStyle(
+          //         color: AppColors.primaryDark,
+          //         fontSize: FontSize.size14,
+          //         fontFamily: FontConstant.cairo,
+          //       ),
+          //     ),
+          //     const Spacer(),
+          //     if (hasActiveFilters)
+          //       TextButton(
+          //         onPressed: onReset,
+          //         child: Text(
+          //           'إعادة تعيين',
+          //           style: getBoldStyle(
+          //             color: AppColors.primary,
+          //             fontSize: FontSize.size11,
+          //             fontFamily: FontConstant.cairo,
+          //           ),
+          //         ),
+          //       ),
+          //   ],
+          // ),
+          // const SizedBox(height: 8),
+          // TextField(
+          //   controller: searchController,
+          //   decoration: InputDecoration(
+          //     hintText: 'ابحث بالصف أو الشعبة أو المادة',
+          //     prefixIcon: const Icon(Icons.search_rounded),
+          //     filled: true,
+          //     fillColor: AppColors.lightGrey.withValues(alpha: 0.22),
+          //     border: OutlineInputBorder(
+          //       borderRadius: BorderRadius.circular(16),
+          //       borderSide: BorderSide.none,
+          //     ),
+          //   ),
+          // ),
+          // const SizedBox(height: 12),
           Wrap(
             spacing: 8,
             runSpacing: 8,

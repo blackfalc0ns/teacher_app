@@ -23,7 +23,7 @@ class DayDateSelector extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         itemCount: days.length,
         itemBuilder: (context, index) {
           final day = days[index];
@@ -36,21 +36,23 @@ class DayDateSelector extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               decoration: BoxDecoration(
                 color: isSelected ? AppColors.primary : AppColors.white,
-                borderRadius: BorderRadius.circular(18),
-                boxShadow: isSelected
-                    ? [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.3),
-                          blurRadius: 14,
-                          offset: const Offset(0, 6),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  isSelected
+                      ? BoxShadow(
+                          color: AppColors.secondary,
+                          blurRadius: 3,
+                          offset: Offset(0, 2),
                         )
-                      ]
-                    : [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.02),
-                          blurRadius: 8,
-                        )
-                      ],
+                      : const BoxShadow(
+                          color: Colors.transparent,
+                          blurRadius: 0,
+                          offset: Offset(0, 0),
+                        ),
+                ],
+                border: isSelected
+                    ? Border.all(width: 2, color: AppColors.secondary)
+                    : Border.all(color: AppColors.lightGray),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -67,7 +69,9 @@ class DayDateSelector extends StatelessWidget {
                   Text(
                     day.date.day.toString(),
                     style: getBoldStyle(
-                      color: isSelected ? AppColors.white : AppColors.primaryDark,
+                      color: isSelected
+                          ? AppColors.white
+                          : AppColors.primaryDark,
                       fontSize: FontSize.size18,
                       fontFamily: FontConstant.cairo,
                     ),

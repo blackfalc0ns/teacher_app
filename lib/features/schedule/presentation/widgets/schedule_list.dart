@@ -66,8 +66,12 @@ class ScheduleList extends StatelessWidget {
               showTopLine: index != 0,
               showBottomLine: index != schedule.length - 1,
             );
-          }),
+          }
+          
+          ),
+          
         ),
+        const SizedBox(height: 120),
       ],
     );
   }

@@ -6,7 +6,6 @@ import '../../../my_classes/data/models/teacher_class_model.dart';
 import '../../../my_classes/presentation/widgets/my_class_card.dart';
 import '../../../my_classes/presentation/widgets/my_classes_filters_card.dart';
 import '../../../my_classes/presentation/widgets/my_classes_header.dart';
-import '../../../my_classes/presentation/widgets/my_classes_summary_card.dart';
 import '../../../my_classes/data/repositories/my_classes_repo.dart';
 
 class MyClassesTabPage extends StatefulWidget {
@@ -45,19 +44,36 @@ class _MyClassesTabPageState extends State<MyClassesTabPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F9FC),
-      body: Column(
-        children: [
-          const MyClassesHeader(),
-          Expanded(
-            child: FutureBuilder<List<TeacherClassModel>>(
-              future: _future,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+      body: FutureBuilder<List<TeacherClassModel>>(
+        future: _future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Column(
+              children: [
+                MyClassesHeader(
+                  classesCount: 0,
+                  studentsCount: 0,
+                  attentionCount: 0,
+                  todayCount: 0,
+                ),
+                const Expanded(
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+              ],
+            );
+          }
 
-                if (snapshot.hasError) {
-                  return Center(
+          if (snapshot.hasError) {
+            return Column(
+              children: [
+                MyClassesHeader(
+                  classesCount: 0,
+                  studentsCount: 0,
+                  attentionCount: 0,
+                  todayCount: 0,
+                ),
+                Expanded(
+                  child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(24),
                       child: Text(
@@ -69,27 +85,39 @@ class _MyClassesTabPageState extends State<MyClassesTabPage> {
                         ),
                       ),
                     ),
-                  );
-                }
+                  ),
+                ),
+              ],
+            );
+          }
 
-                final classes = snapshot.data ?? <TeacherClassModel>[];
-                final cycleOptions = <String>[
-                  _allFilter,
-                  ...classes.map((item) => item.cycleName).toSet(),
-                ];
-                final filteredClasses = _applyFilters(classes);
-                final studentsCount = filteredClasses.fold<int>(
-                  0,
-                  (sum, item) => sum + item.studentsCount,
-                );
-                final attentionCount = filteredClasses
-                    .where((item) => item.needsAttention)
-                    .length;
-                final todayCount = filteredClasses
-                    .where((item) => item.todayPeriods > 0)
-                    .length;
+          final classes = snapshot.data ?? <TeacherClassModel>[];
+          final cycleOptions = <String>[
+            _allFilter,
+            ...classes.map((item) => item.cycleName).toSet(),
+          ];
+          final filteredClasses = _applyFilters(classes);
+          final studentsCount = filteredClasses.fold<int>(
+            0,
+            (sum, item) => sum + item.studentsCount,
+          );
+          final attentionCount = filteredClasses
+              .where((item) => item.needsAttention)
+              .length;
+          final todayCount = filteredClasses
+              .where((item) => item.todayPeriods > 0)
+              .length;
 
-                return RefreshIndicator(
+          return Column(
+            children: [
+              MyClassesHeader(
+                classesCount: filteredClasses.length,
+                studentsCount: studentsCount,
+                attentionCount: attentionCount,
+                todayCount: todayCount,
+              ),
+              Expanded(
+                child: RefreshIndicator(
                   onRefresh: () async {
                     final future = _repo.getTeacherClasses();
                     setState(() {
@@ -98,15 +126,8 @@ class _MyClassesTabPageState extends State<MyClassesTabPage> {
                     await future;
                   },
                   child: ListView(
-                    padding: const EdgeInsets.fromLTRB(8, 14, 8, 80),
+                    padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
                     children: [
-                      MyClassesSummaryCard(
-                        classesCount: filteredClasses.length,
-                        studentsCount: studentsCount,
-                        attentionCount: attentionCount,
-                        todayCount: todayCount,
-                      ),
-                      const SizedBox(height: 12),
                       MyClassesFiltersCard(
                         searchController: _searchController,
                         cycleOptions: cycleOptions,
@@ -137,11 +158,11 @@ class _MyClassesTabPageState extends State<MyClassesTabPage> {
                       const SizedBox(height: 56),
                     ],
                   ),
-                );
-              },
-            ),
-          ),
-        ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

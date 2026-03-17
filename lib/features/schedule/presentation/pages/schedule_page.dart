@@ -140,99 +140,101 @@ class _SchedulePageState extends State<SchedulePage> {
     return BlocProvider(
       create: (context) => sl<ScheduleCubit>()..fetchSchedule(_selectedDate),
       child: Scaffold(
-        backgroundColor: const Color(0xFFF6F9FC),
-        body: SafeArea(
-          child: BlocBuilder<ScheduleCubit, ScheduleState>(
-            builder: (context, state) {
-              final allSchedule = state is ScheduleSuccess
-                  ? (List<ScheduleModel>.from(state.schedule)
-                    ..sort((a, b) => a.periodIndex.compareTo(b.periodIndex)))
-                  : <ScheduleModel>[];
-
-              final cycleOptions =
-                  _withAllOption(allSchedule.map((item) => item.cycleName));
-              final effectiveCycle = cycleOptions.contains(_selectedCycle)
-                  ? _selectedCycle
-                  : _allFilter;
-
-              final cycleScoped = effectiveCycle == _allFilter
-                  ? allSchedule
-                  : allSchedule
-                        .where((item) => item.cycleName == effectiveCycle)
-                        .toList();
-
-              final gradeOptions =
-                  _withAllOption(cycleScoped.map((item) => item.gradeName));
-              final effectiveGrade = gradeOptions.contains(_selectedGrade)
-                  ? _selectedGrade
-                  : _allFilter;
-
-              final gradeScoped = effectiveGrade == _allFilter
-                  ? cycleScoped
-                  : cycleScoped
-                        .where((item) => item.gradeName == effectiveGrade)
-                        .toList();
-
-              final sectionOptions =
-                  _withAllOption(gradeScoped.map((item) => item.sectionName));
-              final effectiveSection =
-                  sectionOptions.contains(_selectedSection)
-                  ? _selectedSection
-                  : _allFilter;
-
-              final filteredSchedule = _applyFilters(
-                allSchedule,
-                cycle: effectiveCycle,
-                grade: effectiveGrade,
-                section: effectiveSection,
-                attentionOnly: _showAttentionOnly,
-              );
-
-              final focusItem = _pickFocusItem(filteredSchedule);
-              final totalClasses =
-                  allSchedule.map((item) => item.className).toSet().length;
-
-              return Column(
-                children: [
-                  ScheduleHeader(
-                    selectedDate: _selectedDate,
-                    totalPeriods: allSchedule.length,
-                    classCount: totalClasses,
+        body: BlocBuilder<ScheduleCubit, ScheduleState>(
+          builder: (context, state) {
+            final allSchedule = state is ScheduleSuccess
+                ? (List<ScheduleModel>.from(state.schedule)
+                  ..sort((a, b) => a.periodIndex.compareTo(b.periodIndex)))
+                : <ScheduleModel>[];
+        
+            final cycleOptions =
+                _withAllOption(allSchedule.map((item) => item.cycleName));
+            final effectiveCycle = cycleOptions.contains(_selectedCycle)
+                ? _selectedCycle
+                : _allFilter;
+        
+            final cycleScoped = effectiveCycle == _allFilter
+                ? allSchedule
+                : allSchedule
+                      .where((item) => item.cycleName == effectiveCycle)
+                      .toList();
+        
+            final gradeOptions =
+                _withAllOption(cycleScoped.map((item) => item.gradeName));
+            final effectiveGrade = gradeOptions.contains(_selectedGrade)
+                ? _selectedGrade
+                : _allFilter;
+        
+            final gradeScoped = effectiveGrade == _allFilter
+                ? cycleScoped
+                : cycleScoped
+                      .where((item) => item.gradeName == effectiveGrade)
+                      .toList();
+        
+            final sectionOptions =
+                _withAllOption(gradeScoped.map((item) => item.sectionName));
+            final effectiveSection =
+                sectionOptions.contains(_selectedSection)
+                ? _selectedSection
+                : _allFilter;
+        
+            final filteredSchedule = _applyFilters(
+              allSchedule,
+              cycle: effectiveCycle,
+              grade: effectiveGrade,
+              section: effectiveSection,
+              attentionOnly: _showAttentionOnly,
+            );
+        
+            final focusItem = _pickFocusItem(filteredSchedule);
+            final totalClasses =
+                allSchedule.map((item) => item.className).toSet().length;
+        
+            return Column(
+              children: [
+                // Fixed Header outside scroll view
+                ScheduleHeader(
+                  selectedDate: _selectedDate,
+                  totalPeriods: allSchedule.length,
+                  classCount: totalClasses,
+                ),
+                
+                // Fixed Day Selector outside scroll view
+                DayDateSelector(
+                  days: _days,
+                  selectedDate: _selectedDate,
+                  onDateSelected: (date) {
+                    setState(() {
+                      _selectedDate = date;
+                      _generateDays();
+                    });
+                    context.read<ScheduleCubit>().fetchSchedule(date);
+                  },
+                ),
+                
+                // Scrollable content using CustomScrollView
+                Expanded(
+                  child: _buildScrollableContent(
+                    state: state,
+                    filteredSchedule: filteredSchedule,
+                    focusItem: focusItem,
+                    cycleOptions: cycleOptions,
+                    gradeOptions: gradeOptions,
+                    sectionOptions: sectionOptions,
+                    effectiveCycle: effectiveCycle,
+                    effectiveGrade: effectiveGrade,
+                    effectiveSection: effectiveSection,
                   ),
-                  DayDateSelector(
-                    days: _days,
-                    selectedDate: _selectedDate,
-                    onDateSelected: (date) {
-                      setState(() {
-                        _selectedDate = date;
-                        _generateDays();
-                      });
-                      context.read<ScheduleCubit>().fetchSchedule(date);
-                    },
-                  ),
-                  Expanded(
-                    child: _buildBody(
-                      state: state,
-                      filteredSchedule: filteredSchedule,
-                      focusItem: focusItem,
-                      cycleOptions: cycleOptions,
-                      gradeOptions: gradeOptions,
-                      sectionOptions: sectionOptions,
-                      effectiveCycle: effectiveCycle,
-                      effectiveGrade: effectiveGrade,
-                      effectiveSection: effectiveSection,
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildBody({
+  Widget _buildScrollableContent({
     required ScheduleState state,
     required List<ScheduleModel> filteredSchedule,
     required ScheduleModel? focusItem,
@@ -283,96 +285,119 @@ class _SchedulePageState extends State<SchedulePage> {
     final homeworkCount =
         filteredSchedule.where((item) => item.hasHomework).length;
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 6, 16, 24),
-      children: [
-        _TeacherFocusCard(
-          item: focusItem,
-          selectedDate: _selectedDate,
-          filteredCount: filteredSchedule.length,
-        ),
-        const SizedBox(height: 12),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              _StatCard(
-                title: 'حصص اليوم',
-                value: filteredSchedule.length.toString(),
-                icon: Icons.view_agenda_outlined,
-                color: AppColors.primary,
-              ),
-              const SizedBox(width: 10),
-              _StatCard(
-                title: 'الشعب',
-                value: classCount.toString(),
-                icon: Icons.groups_rounded,
-                color: AppColors.secondary,
-              ),
-              const SizedBox(width: 10),
-              _StatCard(
-                title: 'حضور مطلوب',
-                value: attendanceCount.toString(),
-                icon: Icons.fact_check_outlined,
-                color: AppColors.third,
-              ),
-              const SizedBox(width: 10),
-              _StatCard(
-                title: 'متابعة',
-                value: attentionCount.toString(),
-                icon: Icons.priority_high_rounded,
-                color: AppColors.errorRed,
-              ),
-              const SizedBox(width: 10),
-              _StatCard(
-                title: 'واجبات',
-                value: homeworkCount.toString(),
-                icon: Icons.assignment_outlined,
-                color: AppColors.green,
-              ),
-            ],
+    return CustomScrollView(
+      slivers: [
+        // Focus Card Section
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+            child: _TeacherFocusCard(
+              item: focusItem,
+              selectedDate: _selectedDate,
+              filteredCount: filteredSchedule.length,
+            ),
           ),
         ),
-        const SizedBox(height: 12),
-        _FiltersCard(
-          cycleOptions: cycleOptions,
-          gradeOptions: gradeOptions,
-          sectionOptions: sectionOptions,
-          selectedCycle: effectiveCycle,
-          selectedGrade: effectiveGrade,
-          selectedSection: effectiveSection,
-          showAttentionOnly: _showAttentionOnly,
-          hasActiveFilters: hasActiveFilters,
-          onCycleSelected: (value) {
-            setState(() {
-              _selectedCycle = value;
-              _selectedGrade = _allFilter;
-              _selectedSection = _allFilter;
-            });
-          },
-          onGradeSelected: (value) {
-            setState(() {
-              _selectedGrade = value;
-              _selectedSection = _allFilter;
-            });
-          },
-          onSectionSelected: (value) {
-            setState(() {
-              _selectedSection = value;
-            });
-          },
-          onAttentionToggle: (value) {
-            setState(() {
-              _showAttentionOnly = value;
-            });
-          },
-          onReset: _resetFilters,
+        
+        // Stats Cards Section
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _StatCard(
+                    title: 'حصص اليوم',
+                    value: filteredSchedule.length.toString(),
+                    icon: Icons.view_agenda_outlined,
+                    color: AppColors.primary,
+                  ),
+                  const SizedBox(width: 10),
+                  _StatCard(
+                    title: 'الشعب',
+                    value: classCount.toString(),
+                    icon: Icons.groups_rounded,
+                    color: AppColors.secondary,
+                  ),
+                  const SizedBox(width: 10),
+                  _StatCard(
+                    title: 'حضور مطلوب',
+                    value: attendanceCount.toString(),
+                    icon: Icons.fact_check_outlined,
+                    color: AppColors.third,
+                  ),
+                  const SizedBox(width: 10),
+                  _StatCard(
+                    title: 'متابعة',
+                    value: attentionCount.toString(),
+                    icon: Icons.priority_high_rounded,
+                    color: AppColors.errorRed,
+                  ),
+                  const SizedBox(width: 10),
+                  _StatCard(
+                    title: 'واجبات',
+                    value: homeworkCount.toString(),
+                    icon: Icons.assignment_outlined,
+                    color: AppColors.green,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
-        const SizedBox(height: 14),
-        ScheduleList(
-          schedule: filteredSchedule,
-          hasActiveFilters: hasActiveFilters,
-          onClearFilters: _resetFilters,
+        
+        // Filters Section
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            child: _FiltersCard(
+              cycleOptions: cycleOptions,
+              gradeOptions: gradeOptions,
+              sectionOptions: sectionOptions,
+              selectedCycle: effectiveCycle,
+              selectedGrade: effectiveGrade,
+              selectedSection: effectiveSection,
+              showAttentionOnly: _showAttentionOnly,
+              hasActiveFilters: hasActiveFilters,
+              onCycleSelected: (value) {
+                setState(() {
+                  _selectedCycle = value;
+                  _selectedGrade = _allFilter;
+                  _selectedSection = _allFilter;
+                });
+              },
+              onGradeSelected: (value) {
+                setState(() {
+                  _selectedGrade = value;
+                  _selectedSection = _allFilter;
+                });
+              },
+              onSectionSelected: (value) {
+                setState(() {
+                  _selectedSection = value;
+                });
+              },
+              onAttentionToggle: (value) {
+                setState(() {
+                  _showAttentionOnly = value;
+                });
+              },
+              onReset: _resetFilters,
+            ),
+          ),
+        ),
+        
+        // Schedule List Section
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
+          sliver: SliverToBoxAdapter(
+            child: ScheduleList(
+              schedule: filteredSchedule,
+              hasActiveFilters: hasActiveFilters,
+              onClearFilters: _resetFilters,
+            ),
+          ),
         ),
       ],
     );
@@ -426,6 +451,7 @@ class _TeacherFocusCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
+        border: Border.all(width: 1 , color: AppColors.lightGrey),
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [

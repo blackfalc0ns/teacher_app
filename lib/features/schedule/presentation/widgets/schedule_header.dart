@@ -21,13 +21,13 @@ class ScheduleHeader extends StatelessWidget {
     final formattedDate = _formatDate(selectedDate);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 6),
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 6),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           gradient: AppColors.primaryGradient,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(32) , bottomRight: Radius.circular(32)),
           boxShadow: [
             BoxShadow(
               color: AppColors.primary.withValues(alpha: 0.18),
@@ -39,6 +39,7 @@ class ScheduleHeader extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 16),
             Row(
               children: [
                 Container(
