@@ -21,35 +21,40 @@ class ClassroomHeaderCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: AppColors.primaryGradient,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(32) , bottomRight: Radius.circular(32)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
-            onTap: () => Navigator.of(context).pop(),
-            borderRadius: BorderRadius.circular(12),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppColors.white.withValues(alpha: 0.12),
+          SizedBox(height: 16),
+          Row(
+            children: [
+              InkWell(
+                onTap: () => Navigator.of(context).pop(),
                 borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColors.white.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.arrow_back_rounded,
+                    color: AppColors.white,
+                    size: 18,
+                  ),
+                ),
               ),
-              child: const Icon(
-                Icons.arrow_back_rounded,
-                color: AppColors.white,
-                size: 18,
+              const SizedBox(width: 10),
+              Text(
+                item.className,
+                style: getBoldStyle(
+                  color: AppColors.white,
+                  fontSize: FontSize.size22,
+                  fontFamily: FontConstant.cairo,
+                ),
               ),
-            ),
-          ),
-          const SizedBox(height: 14),
-          Text(
-            item.className,
-            style: getBoldStyle(
-              color: AppColors.white,
-              fontSize: FontSize.size22,
-              fontFamily: FontConstant.cairo,
-            ),
+            ],
           ),
           const SizedBox(height: 4),
           Text(

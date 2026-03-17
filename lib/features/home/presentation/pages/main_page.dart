@@ -1,31 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:teacher_app/core/utils/navigation/custom_bottom_nav_bar.dart';
 import 'package:teacher_app/core/utils/theme/app_colors.dart';
-import 'home_page.dart';
+import 'package:teacher_app/features/home/presentation/pages/my_classes_tab_page.dart';
+
 import '../../../schedule/presentation/pages/schedule_page.dart';
+import 'home_page.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final int initialIndex;
+
+  const MainPage({super.key, this.initialIndex = 0});
 
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   final List<Widget> _pages = [
     const HomePage(),
     const SchedulePage(),
-    const Center(child: Text('الواجبات')),
-    const Center(child: Text('الأداء والتقارير')),
-    const Center(child: Text('الرسائل')),
+    const MyClassesTabPage(),
+    const Center(child: Text('الإعدادات')),
+    const Center(child: Text('الملف الشخصي')),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex.clamp(0, _pages.length - 1);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true, // For the floating look of the bottom bar
+      extendBody: true,
       body: IndexedStack(index: _selectedIndex, children: _pages),
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
@@ -57,8 +67,7 @@ class _MainPageState extends State<MainPage> {
       child: FloatingActionButton(
         onPressed: () {},
         backgroundColor: Colors.white,
-        elevation:
-            0, // Elevation is handled by the Container box shadow for better control
+        elevation: 0,
         shape: const CircleBorder(),
         child: const Icon(Icons.add, color: AppColors.primary, size: 35),
       ),

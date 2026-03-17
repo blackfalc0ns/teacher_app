@@ -43,67 +43,80 @@ class _ClassroomPageState extends State<ClassroomPage> {
         _students.where((student) => student.needsFollowUp).length;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F9FC),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-          children: [
-            ClassroomHeaderCard(
+      body: Column(
+        children: [
+          // Header Card خارج الـ scroll
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: ClassroomHeaderCard(
               item: item,
               followUpCount: followUpCount,
             ),
-            const SizedBox(height: 12),
-            ClassroomQuickActionsCard(
-              item: item.copyWith(
-                needsAttendance: attendance.unmarkedCount > 0,
-                hasHomework: _assignments.isNotEmpty,
-              ),
-              onAttendanceTap: _openAttendance,
-              onStudentsTap: () => _selectSection(ClassroomSection.students),
-              onAssignmentsTap: _openAssignmentTracking,
-            ),
-            const SizedBox(height: 12),
-            ClassroomMetricsRow(
-              items: [
-                ClassroomMetricItem(
-                  title: 'الطلاب',
-                  value: '${item.studentsCount}',
-                  icon: Icons.groups_rounded,
-                  color: const Color(0xFF006D82),
-                ),
-                ClassroomMetricItem(
-                  title: 'تم الحسم',
-                  value: '${attendance.resolvedCount}',
-                  icon: Icons.fact_check_outlined,
-                  color: const Color(0xFF10B981),
-                ),
-                ClassroomMetricItem(
-                  title: 'غير محسوم',
-                  value: '${attendance.unmarkedCount}',
-                  icon: Icons.pending_actions_rounded,
-                  color: const Color(0xFFF7A201),
-                ),
-                ClassroomMetricItem(
-                  title: 'واجبات',
-                  value: '${_assignments.length}',
-                  icon: Icons.assignment_outlined,
-                  color: const Color(0xFF13B3B0),
+          ),
+          // المحتوى القابل للتمرير
+          Expanded(
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate([
+                      ClassroomQuickActionsCard(
+                        item: item.copyWith(
+                          needsAttendance: attendance.unmarkedCount > 0,
+                          hasHomework: _assignments.isNotEmpty,
+                        ),
+                        onAttendanceTap: _openAttendance,
+                        onStudentsTap: () => _selectSection(ClassroomSection.students),
+                        onAssignmentsTap: _openAssignmentTracking,
+                      ),
+                      const SizedBox(height: 12),
+                      ClassroomMetricsRow(
+                        items: [
+                          ClassroomMetricItem(
+                            title: 'الطلاب',
+                            value: '${item.studentsCount}',
+                            icon: Icons.groups_rounded,
+                            color: const Color(0xFF006D82),
+                          ),
+                          ClassroomMetricItem(
+                            title: 'تم الحسم',
+                            value: '${attendance.resolvedCount}',
+                            icon: Icons.fact_check_outlined,
+                            color: const Color(0xFF10B981),
+                          ),
+                          ClassroomMetricItem(
+                            title: 'غير محسوم',
+                            value: '${attendance.unmarkedCount}',
+                            icon: Icons.pending_actions_rounded,
+                            color: const Color(0xFFF7A201),
+                          ),
+                          ClassroomMetricItem(
+                            title: 'واجبات',
+                            value: '${_assignments.length}',
+                            icon: Icons.assignment_outlined,
+                            color: const Color(0xFF13B3B0),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      ClassroomSectionTabs(
+                        selected: _selectedSection,
+                        onChanged: (section) {
+                          setState(() {
+                            _selectedSection = section;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 2),
+                      _buildSection(attendance),
+                    ]),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
-            ClassroomSectionTabs(
-              selected: _selectedSection,
-              onChanged: (section) {
-                setState(() {
-                  _selectedSection = section;
-                });
-              },
-            ),
-            const SizedBox(height: 12),
-            _buildSection(attendance),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

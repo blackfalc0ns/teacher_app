@@ -19,7 +19,7 @@ class ClassroomMetricsRow extends StatelessWidget {
       child: Row(
         children: items.map((item) {
           return Padding(
-            padding: const EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 8),
             child: Container(
               width: 112,
               padding: const EdgeInsets.all(12),
