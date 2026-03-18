@@ -230,7 +230,7 @@ class AssignmentAnalyticsCard extends StatelessWidget {
                     lineBarsData: [
                       LineChartBarData(
                         isCurved: true,
-                        color: AppColors.primary,
+                        color: AppColors.secondary,
                         barWidth: 3,
                         dotData: FlDotData(show: true),
                         belowBarData: BarAreaData(show: true, color: AppColors.primary.withValues(alpha: 0.12)),

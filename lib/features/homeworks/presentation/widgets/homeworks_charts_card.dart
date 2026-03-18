@@ -149,7 +149,7 @@ class HomeworksChartsCard extends StatelessWidget {
                     barRods: [
                       BarChartRodData(
                         toY: entry.value.pendingReviewCount.toDouble(),
-                        color: AppColors.primary,
+                        color: AppColors.secondary,
                         width: 14,
                         borderRadius: BorderRadius.circular(8),
                       ),

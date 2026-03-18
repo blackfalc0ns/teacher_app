@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 
+import '../../../../core/utils/common/compact_button.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
@@ -150,46 +151,26 @@ class HomeworkAssignmentCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: FilledButton.icon(
+                child: CompactButton(
+                  text: 'متابعة الواجب',
+                  backgroundColor: AppColors.primary,
+                  width: double.infinity,
+                  height: 36,
+                  prefix: const Icon(Icons.analytics_outlined, size: 16, color: Colors.white),
                   onPressed: onTrackPressed,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                  icon: const Icon(Icons.analytics_outlined, size: 18),
-                  label: Text(
-                    'متابعة الواجب',
-                    style: getBoldStyle(
-                      fontFamily: FontConstant.cairo,
-                      fontSize: FontSize.size11,
-                      color: AppColors.white,
-                    ),
-                  ),
                 ),
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: OutlinedButton.icon(
+                child: CompactButton(
+                  text: 'واجب جديد',
+                  isOutlined: true,
+                  borderColor: AppColors.secondary,
+                  textColor: AppColors.secondary,
+                  width: double.infinity,
+                  height: 36,
+                  prefix: const Icon(Icons.addchart_rounded, size: 16, color: AppColors.secondary),
                   onPressed: onCreatePressed,
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppColors.secondary),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                  icon: const Icon(Icons.addchart_rounded, size: 18),
-                  label: Text(
-                    'واجب جديد',
-                    style: getBoldStyle(
-                      fontFamily: FontConstant.cairo,
-                      fontSize: FontSize.size11,
-                      color: AppColors.secondary,
-                    ),
-                  ),
                 ),
               ),
             ],

@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 
+import '../../../../core/utils/common/compact_button.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
@@ -34,7 +35,7 @@ class HomeworkClassesStrip extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         SizedBox(
-          height: 168,
+          height: 180,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: classes.length,
@@ -136,26 +137,15 @@ class HomeworkClassesStrip extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    SizedBox(
+                    CompactButton(
+                      text: 'واجب جديد للفصل',
+                      isOutlined: true,
+                      borderColor: AppColors.primary,
+                      textColor: AppColors.primary,
                       width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: () => onCreateForClass(item),
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: AppColors.primary),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                        ),
-                        icon: const Icon(Icons.add_circle_outline_rounded, size: 18),
-                        label: Text(
-                          'واجب جديد للفصل',
-                          style: getBoldStyle(
-                            fontFamily: FontConstant.cairo,
-                            fontSize: FontSize.size11,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ),
+                      height: 38,
+                      prefix: const Icon(Icons.add_circle_outline_rounded, size: 16, color: AppColors.primary),
+                      onPressed: () => onCreateForClass(item),
                     ),
                   ],
                 ),
