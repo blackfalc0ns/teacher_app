@@ -13,83 +13,96 @@ class HomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(25),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16,32, 8, 16),
+      decoration: const BoxDecoration(
+        gradient: AppColors.primaryGradient,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(32),
+          bottomRight: Radius.circular(32),
+        ),
       ),
-      child: Row(
+      child: Column(
         children: [
-          // Profile Image
-          _buildProfileImage(),
-          const SizedBox(width: 15),
-          // User Info
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  userInfo.date,
-                  style: getRegularStyle(
-                    color: AppColors.grey.withValues(alpha: 0.6),
-                    fontSize: FontSize.size12,
-                    fontFamily: FontConstant.cairo,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  userInfo.name,
-                  style: getBoldStyle(
-                    color: AppColors.primary,
-                    fontSize: FontSize.size18,
-                    fontFamily: FontConstant.cairo,
-                  ),
-                ),
-                const SizedBox(height: 4),
-              ],
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+          // Top Row: Drawer Icon, Profile, User Info, Points, Notification
+          Row(
             children: [
-              const SizedBox(width: 8),
-              Row(
-                children: [
-                  const Icon(Icons.bolt, color: AppColors.primary, size: 18),
-
-                  Text(
-                    userInfo.points.toString(),
-                    style: getBoldStyle(
-                      color: AppColors.primary,
-                      fontSize: FontSize.size16,
-                      fontFamily: FontConstant.cairo,
-                    ),
-                  ),
-                ],
+              // Drawer Icon
+              IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                icon: const Icon(
+                  Icons.menu_rounded,
+                  color: AppColors.white,
+                  size: 28,
+                ),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
               ),
-              Text(
-                'نقاط المدرسة',
-                style: getRegularStyle(
-                  color: AppColors.grey.withValues(alpha: 0.6),
-                  fontSize: FontSize.size12,
-                  fontFamily: FontConstant.cairo,
+              const SizedBox(width: 12),
+              
+              // Profile Image
+              _buildProfileImage(),
+              const SizedBox(width: 12),
+              
+              // User Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      userInfo.name,
+                      style: getBoldStyle(
+                        color: AppColors.white,
+                        fontSize: FontSize.size16,
+                        fontFamily: FontConstant.cairo,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      userInfo.date,
+                      style: getRegularStyle(
+                        color: AppColors.white.withValues(alpha: 0.85),
+                        fontSize: FontSize.size11,
+                        fontFamily: FontConstant.cairo,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(width: 4),
+              
+              // Points
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: AppColors.white.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.bolt, color: AppColors.third, size: 16),
+                    const SizedBox(width: 4),
+                    Text(
+                      userInfo.points.toString(),
+                      style: getBoldStyle(
+                        color: AppColors.white,
+                        fontSize: FontSize.size14,
+                        fontFamily: FontConstant.cairo,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              
+              // Notification Bell
+              _buildNotificationBell(),
             ],
           ),
-          const Divider(color: AppColors.grey),
-          const SizedBox(width: 15),
-          // Notification Bell
-          _buildNotificationBell(),
         ],
       ),
     );
@@ -99,26 +112,20 @@ class HomeHeader extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          width: 60,
-          height: 60,
+          width: 48,
+          height: 48,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(color: AppColors.white, width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 8,
-              ),
-            ],
           ),
-          child: OptimizedCircularImage(imageUrl: userInfo.avatarUrl, size: 60),
+          child: OptimizedCircularImage(imageUrl: userInfo.avatarUrl, size: 48),
         ),
         Positioned(
           right: 0,
           top: 0,
           child: Container(
-            width: 14,
-            height: 14,
+            width: 12,
+            height: 12,
             decoration: BoxDecoration(
               color: AppColors.green,
               shape: BoxShape.circle,
@@ -132,16 +139,16 @@ class HomeHeader extends StatelessWidget {
 
   Widget _buildNotificationBell() {
     return Container(
-      width: 45,
-      height: 45,
+      width: 40,
+      height: 40,
       decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.05),
+        color: AppColors.white.withValues(alpha: 0.15),
         shape: BoxShape.circle,
       ),
       child: const Icon(
         Icons.notifications_active_rounded,
-        color: AppColors.primary,
-        size: 24,
+        color: AppColors.white,
+        size: 20,
       ),
     );
   }

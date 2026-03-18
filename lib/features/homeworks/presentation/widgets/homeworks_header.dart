@@ -25,7 +25,7 @@ class HomeworksHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 18, 16, 20),
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 8),
       decoration: const BoxDecoration(
         gradient: AppColors.primaryGradient,
         borderRadius: BorderRadius.only(

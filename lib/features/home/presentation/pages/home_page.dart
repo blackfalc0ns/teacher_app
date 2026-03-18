@@ -43,52 +43,50 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildContent(dynamic data) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            // Header
-            HomeHeader(userInfo: data.userInfo),
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          // Header
+          HomeHeader(userInfo: data.userInfo),
+          SizedBox(height: 16),
 
-            // Horizontal Stats
-            SizedBox(
-              height: 85,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                itemCount: data.stats.length,
-                itemBuilder: (context, index) {
-                  return StatCard(stat: data.stats[index]);
-                },
-              ),
+          // Horizontal Stats
+          SizedBox(
+            height: 85,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              itemCount: data.stats.length,
+              itemBuilder: (context, index) {
+                return StatCard(stat: data.stats[index]);
+              },
             ),
+          ),
 
-            // Weekly Schedule
-            WeeklyScheduleWidget(weeklySchedule: data.weeklySchedule),
+          // Weekly Schedule
+          WeeklyScheduleWidget(weeklySchedule: data.weeklySchedule),
 
-            // Bottom Action Cards
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SummaryActionCard(
-                    summary: data.actionSummaries[1],
-                    iconColor: AppColors.primary,
-                  ),
-                  SummaryActionCard(
-                    summary: data.actionSummaries[0],
-                    iconColor: AppColors.secondary,
-                  ),
-                ],
-              ),
+          // Bottom Action Cards
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SummaryActionCard(
+                  summary: data.actionSummaries[1],
+                  iconColor: AppColors.primary,
+                ),
+                SummaryActionCard(
+                  summary: data.actionSummaries[0],
+                  iconColor: AppColors.secondary,
+                ),
+              ],
+              
             ),
-            const SizedBox(
-              height: 56,
-            ), // Extra space for the floating bottom bar
-          ],
-        ),
+          ),
+          const SizedBox(height: 56), // Extra space for the floating bottom bar
+        ],
       ),
     );
   }
