@@ -37,13 +37,13 @@ class TeacherDrawer extends StatelessWidget {
                     icon: Icons.person_outline_rounded,
                     title: 'الملف الشخصي',
                     subtitle: 'البيانات الشخصية والمهنية',
-                    onTap: () => _openProfile(context),
+                    onTap: () => _openRoute(context, Routes.profile),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.badge_outlined,
                     title: 'البيانات الوظيفية',
                     subtitle: 'المرحلة والمواد والفصول المسندة',
-                    onTap: () => _showComingSoon(context, 'البيانات الوظيفية'),
+                    onTap: () => _openRoute(context, Routes.employment),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.notifications_none_rounded,
@@ -131,12 +131,9 @@ class TeacherDrawer extends StatelessWidget {
     );
   }
 
-  void _openProfile(BuildContext context) {
+  void _openRoute(BuildContext context, String route) {
     Navigator.of(context).pop();
-    Navigator.of(context).pushNamed(
-      Routes.profile,
-      arguments: data,
-    );
+    Navigator.of(context).pushNamed(route, arguments: data);
   }
 
   void _showComingSoon(BuildContext context, String title) {
