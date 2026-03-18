@@ -4,6 +4,7 @@ import 'package:teacher_app/features/home/presentation/pages/main_page.dart';
 import 'package:teacher_app/features/messages/presentation/pages/chat_details_screen.dart';
 import 'package:teacher_app/features/profile/presentation/pages/teacher_employment_page.dart';
 import 'package:teacher_app/features/profile/presentation/pages/teacher_profile_page.dart';
+import 'package:teacher_app/features/settings/presentation/pages/privacy_security_page.dart';
 import 'package:teacher_app/features/settings/presentation/pages/settings_page.dart';
 
 import '../../di/injection_container.dart';
@@ -25,6 +26,7 @@ class Routes {
   static const String profile = '/profile';
   static const String employment = '/employment';
   static const String settings = '/settings';
+  static const String privacySecurity = '/privacy-security';
 }
 
 class OnGeneratedRoutes {
@@ -106,6 +108,10 @@ class OnGeneratedRoutes {
       case Routes.settings:
         return MaterialPageRoute(
           builder: (_) => const SettingsPage(),
+        );
+      case Routes.privacySecurity:
+        return MaterialPageRoute(
+          builder: (_) => const PrivacySecurityPage(),
         );
       default:
         return MaterialPageRoute(

@@ -2,6 +2,7 @@
 
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
+import '../../../../core/utils/helper/on_genrated_routes.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../widgets/settings_choice_card.dart';
 import '../widgets/settings_navigation_card.dart';
@@ -200,6 +201,12 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             const SizedBox(height: 10),
             SettingsNavigationCard(
+              title: 'الخصوصية والأمان',
+              subtitle: 'إدارة الحماية، الجلسات، وأذونات البيانات.',
+              icon: Icons.shield_outlined,
+              onTap: _openPrivacySecurity,
+            ),
+            SettingsNavigationCard(
               title: 'إدارة الجلسات',
               subtitle: 'مراجعة الأجهزة التي تم تسجيل الدخول منها.',
               icon: Icons.devices_outlined,
@@ -228,6 +235,10 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
+  }
+
+  void _openPrivacySecurity() {
+    Navigator.of(context).pushNamed(Routes.privacySecurity);
   }
 
   void _showComingSoon() {

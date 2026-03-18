@@ -64,7 +64,7 @@ class TeacherDrawer extends StatelessWidget {
                     icon: Icons.security_rounded,
                     title: 'الخصوصية والأمان',
                     subtitle: 'التحكم في الأذونات وحماية الحساب',
-                    onTap: () => _showComingSoon(context, 'الخصوصية والأمان'),
+                    onTap: () => _openRoute(context, Routes.privacySecurity),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.privacy_tip_outlined,
@@ -370,4 +370,5 @@ class _SectionTitle extends StatelessWidget {
     );
   }
 }
+
 
