@@ -58,7 +58,7 @@ class TeacherDrawer extends StatelessWidget {
                     icon: Icons.settings_outlined,
                     title: 'الإعدادات',
                     subtitle: 'اللغة والتنبيهات وتفضيلات العرض',
-                    onTap: () => _showComingSoon(context, 'الإعدادات'),
+                    onTap: () => _openRoute(context, Routes.settings),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.security_rounded,
@@ -370,3 +370,4 @@ class _SectionTitle extends StatelessWidget {
     );
   }
 }
+

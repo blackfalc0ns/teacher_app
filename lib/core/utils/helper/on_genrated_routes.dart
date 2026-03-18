@@ -4,6 +4,7 @@ import 'package:teacher_app/features/home/presentation/pages/main_page.dart';
 import 'package:teacher_app/features/messages/presentation/pages/chat_details_screen.dart';
 import 'package:teacher_app/features/profile/presentation/pages/teacher_employment_page.dart';
 import 'package:teacher_app/features/profile/presentation/pages/teacher_profile_page.dart';
+import 'package:teacher_app/features/settings/presentation/pages/settings_page.dart';
 
 import '../../di/injection_container.dart';
 import '../../../features/classroom/presentation/pages/classroom_page.dart';
@@ -23,6 +24,7 @@ class Routes {
   static const String chatDetails = '/chat_details';
   static const String profile = '/profile';
   static const String employment = '/employment';
+  static const String settings = '/settings';
 }
 
 class OnGeneratedRoutes {
@@ -100,6 +102,10 @@ class OnGeneratedRoutes {
           builder: (_) => TeacherEmploymentPage(
             employment: TeacherEmploymentModel.fromHomeData(args),
           ),
+        );
+      case Routes.settings:
+        return MaterialPageRoute(
+          builder: (_) => const SettingsPage(),
         );
       default:
         return MaterialPageRoute(

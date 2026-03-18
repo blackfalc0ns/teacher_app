@@ -128,7 +128,7 @@ class _ChatDetailsScreenState extends State<ChatDetailsScreen> {
                 textAlign: TextAlign.right,
                 style: getBoldStyle(
                   fontFamily: FontConstant.cairo,
-                  fontSize: FontSize.size18,
+                  fontSize: FontSize.size16,
                   color: AppColors.black,
                 ),
                 maxLines: 1,

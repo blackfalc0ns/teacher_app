@@ -274,7 +274,7 @@ class _MetricCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.lightGrey.withValues(alpha: 0.22),
+        color: AppColors.lightGrey.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Column(
