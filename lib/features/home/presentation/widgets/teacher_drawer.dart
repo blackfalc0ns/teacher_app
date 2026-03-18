@@ -70,13 +70,13 @@ class TeacherDrawer extends StatelessWidget {
                     icon: Icons.privacy_tip_outlined,
                     title: 'سياسة الخصوصية',
                     subtitle: 'كيفية جمع البيانات واستخدامها',
-                    onTap: () => _showComingSoon(context, 'سياسة الخصوصية'),
+                    onTap: () => _openRoute(context, Routes.privacyPolicy),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.gavel_rounded,
                     title: 'الشروط والأحكام',
                     subtitle: 'بنود استخدام التطبيق والخدمات',
-                    onTap: () => _showComingSoon(context, 'الشروط والأحكام'),
+                    onTap: () => _openRoute(context, Routes.termsConditions),
                   ),
                   const SizedBox(height: 8),
                   const _SectionTitle(title: 'المساعدة'),
@@ -370,5 +370,6 @@ class _SectionTitle extends StatelessWidget {
     );
   }
 }
+
 
 

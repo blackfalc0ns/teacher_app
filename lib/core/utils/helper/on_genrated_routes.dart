@@ -4,8 +4,10 @@ import 'package:teacher_app/features/home/presentation/pages/main_page.dart';
 import 'package:teacher_app/features/messages/presentation/pages/chat_details_screen.dart';
 import 'package:teacher_app/features/profile/presentation/pages/teacher_employment_page.dart';
 import 'package:teacher_app/features/profile/presentation/pages/teacher_profile_page.dart';
+import 'package:teacher_app/features/settings/presentation/pages/privacy_policy_page.dart';
 import 'package:teacher_app/features/settings/presentation/pages/privacy_security_page.dart';
 import 'package:teacher_app/features/settings/presentation/pages/settings_page.dart';
+import 'package:teacher_app/features/settings/presentation/pages/terms_conditions_page.dart';
 
 import '../../di/injection_container.dart';
 import '../../../features/classroom/presentation/pages/classroom_page.dart';
@@ -27,6 +29,8 @@ class Routes {
   static const String employment = '/employment';
   static const String settings = '/settings';
   static const String privacySecurity = '/privacy-security';
+  static const String privacyPolicy = '/privacy-policy';
+  static const String termsConditions = '/terms-conditions';
 }
 
 class OnGeneratedRoutes {
@@ -112,6 +116,14 @@ class OnGeneratedRoutes {
       case Routes.privacySecurity:
         return MaterialPageRoute(
           builder: (_) => const PrivacySecurityPage(),
+        );
+      case Routes.privacyPolicy:
+        return MaterialPageRoute(
+          builder: (_) => const PrivacyPolicyPage(),
+        );
+      case Routes.termsConditions:
+        return MaterialPageRoute(
+          builder: (_) => const TermsConditionsPage(),
         );
       default:
         return MaterialPageRoute(
