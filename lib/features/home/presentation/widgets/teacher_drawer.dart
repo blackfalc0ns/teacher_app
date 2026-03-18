@@ -3,6 +3,7 @@ import 'package:teacher_app/core/widgets/optimized_image.dart';
 
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
+import '../../../../core/utils/helper/on_genrated_routes.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../data/models/home_data_model.dart';
 
@@ -29,83 +30,96 @@ class TeacherDrawer extends StatelessWidget {
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
-                children: const [
-                  _SectionTitle(title: 'الحساب'),
-                  SizedBox(height: 8),
+                children: [
+                  const _SectionTitle(title: 'الحساب'),
+                  const SizedBox(height: 8),
                   _DrawerMenuTile(
                     icon: Icons.person_outline_rounded,
                     title: 'الملف الشخصي',
                     subtitle: 'البيانات الشخصية والمهنية',
+                    onTap: () => _openProfile(context),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.badge_outlined,
                     title: 'البيانات الوظيفية',
                     subtitle: 'المرحلة والمواد والفصول المسندة',
+                    onTap: () => _showComingSoon(context, 'البيانات الوظيفية'),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.notifications_none_rounded,
                     title: 'الإشعارات',
                     subtitle: 'تنبيهات الحضور والواجبات والرسائل',
+                    onTap: () => _showComingSoon(context, 'الإشعارات'),
                   ),
-                  SizedBox(height: 8),
-                  _SectionTitle(title: 'التطبيق'),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
+                  const _SectionTitle(title: 'التطبيق'),
+                  const SizedBox(height: 8),
                   _DrawerMenuTile(
                     icon: Icons.settings_outlined,
                     title: 'الإعدادات',
                     subtitle: 'اللغة والتنبيهات وتفضيلات العرض',
+                    onTap: () => _showComingSoon(context, 'الإعدادات'),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.security_rounded,
                     title: 'الخصوصية والأمان',
                     subtitle: 'التحكم في الأذونات وحماية الحساب',
+                    onTap: () => _showComingSoon(context, 'الخصوصية والأمان'),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.privacy_tip_outlined,
                     title: 'سياسة الخصوصية',
                     subtitle: 'كيفية جمع البيانات واستخدامها',
+                    onTap: () => _showComingSoon(context, 'سياسة الخصوصية'),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.gavel_rounded,
                     title: 'الشروط والأحكام',
                     subtitle: 'بنود استخدام التطبيق والخدمات',
+                    onTap: () => _showComingSoon(context, 'الشروط والأحكام'),
                   ),
-                  SizedBox(height: 8),
-                  _SectionTitle(title: 'المساعدة'),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
+                  const _SectionTitle(title: 'المساعدة'),
+                  const SizedBox(height: 8),
                   _DrawerMenuTile(
                     icon: Icons.support_agent_outlined,
                     title: 'الدعم الفني',
                     subtitle: 'الإبلاغ عن مشكلة أو طلب مساعدة',
+                    onTap: () => _showComingSoon(context, 'الدعم الفني'),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.help_outline_rounded,
                     title: 'مركز المساعدة',
                     subtitle: 'إجابات سريعة للأسئلة الشائعة',
+                    onTap: () => _showComingSoon(context, 'مركز المساعدة'),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.contact_support_outlined,
                     title: 'تواصل معنا',
                     subtitle: 'قنوات التواصل مع فريق المنصة',
+                    onTap: () => _showComingSoon(context, 'تواصل معنا'),
                   ),
-                  SizedBox(height: 8),
-                  _SectionTitle(title: 'أخرى'),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
+                  const _SectionTitle(title: 'أخرى'),
+                  const SizedBox(height: 8),
                   _DrawerMenuTile(
                     icon: Icons.info_outline_rounded,
                     title: 'عن التطبيق',
                     subtitle: 'نبذة مختصرة عن المنصة والإصدار',
+                    onTap: () => _showComingSoon(context, 'عن التطبيق'),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.star_border_rounded,
                     title: 'تقييم التطبيق',
                     subtitle: 'شاركنا رأيك لتطوير التجربة',
+                    onTap: () => _showComingSoon(context, 'تقييم التطبيق'),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.logout_rounded,
                     title: 'تسجيل الخروج',
                     subtitle: 'الخروج من حساب المعلم الحالي',
                     isDestructive: true,
+                    onTap: () => _showComingSoon(context, 'تسجيل الخروج'),
                   ),
                 ],
               ),
@@ -114,6 +128,21 @@ class TeacherDrawer extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _openProfile(BuildContext context) {
+    Navigator.of(context).pop();
+    Navigator.of(context).pushNamed(
+      Routes.profile,
+      arguments: data,
+    );
+  }
+
+  void _showComingSoon(BuildContext context, String title) {
+    Navigator.of(context).pop();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('سيتم إضافة $title قريبًا.')),
     );
   }
 }
@@ -209,11 +238,13 @@ class _DrawerMenuTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final bool isDestructive;
+  final VoidCallback onTap;
 
   const _DrawerMenuTile({
     required this.icon,
     required this.title,
     required this.subtitle,
+    required this.onTap,
     this.isDestructive = false,
   });
 
@@ -269,12 +300,7 @@ class _DrawerMenuTile extends StatelessWidget {
           size: 14,
           color: isDestructive ? AppColors.error : AppColors.grey,
         ),
-        onTap: () {
-          Navigator.of(context).pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('سيتم إضافة $title قريبًا.')),
-          );
-        },
+        onTap: onTap,
       ),
     );
   }
@@ -299,10 +325,8 @@ class _DrawerFooter extends StatelessWidget {
       child: Column(
         children: [
           Image.asset(
-            "assets/images/chat_3.png"
-            ,
+            'assets/images/chat_3.png',
             width: 120,
-
             height: 40,
           ),
           Text(

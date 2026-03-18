@@ -70,6 +70,8 @@ class ClassroomOverviewSection extends StatelessWidget {
                       .toList(growable: false),
                 ),
         ),
+                const SizedBox(height: 32),
+
       ],
     );
   }
@@ -251,7 +253,7 @@ class ClassroomStudentRow extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.lightGrey.withValues(alpha: 0.24),
+        color: AppColors.lightGrey.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(

@@ -45,7 +45,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
     return Scaffold(
       body: Column(
         children: [
-          // Header Card Ø®Ø§Ø±Ø¬ Ø§Ù„Ù€ scroll
+          // Header Card خارج الـ scroll
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: ClassroomHeaderCard(
@@ -53,7 +53,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
               followUpCount: followUpCount,
             ),
           ),
-          // Ø§Ù„Ù…Ø­ØªÙˆÙ‰ Ø§Ù„Ù‚Ø§Ø¨Ù„ Ù„Ù„ØªÙ…Ø±ÙŠØ±
+          // المحتوى القابل للتمرير
           Expanded(
             child: CustomScrollView(
               slivers: [
@@ -74,25 +74,25 @@ class _ClassroomPageState extends State<ClassroomPage> {
                       ClassroomMetricsRow(
                         items: [
                           ClassroomMetricItem(
-                            title: 'Ø§Ù„Ø·Ù„Ø§Ø¨',
+                            title: 'الطلاب',
                             value: '${item.studentsCount}',
                             icon: Icons.groups_rounded,
                             color: const Color(0xFF006D82),
                           ),
                           ClassroomMetricItem(
-                            title: 'ØªÙ… Ø§Ù„Ø­Ø³Ù…',
+                            title: 'تم الحسم',
                             value: '${attendance.resolvedCount}',
                             icon: Icons.fact_check_outlined,
                             color: const Color(0xFF10B981),
                           ),
                           ClassroomMetricItem(
-                            title: 'ØºÙŠØ± Ù…Ø­Ø³ÙˆÙ…',
+                            title: 'غير محسوم',
                             value: '${attendance.unmarkedCount}',
                             icon: Icons.pending_actions_rounded,
                             color: const Color(0xFFF7A201),
                           ),
                           ClassroomMetricItem(
-                            title: 'ÙˆØ§Ø¬Ø¨Ø§Øª',
+                            title: 'واجبات',
                             value: '${_assignments.length}',
                             icon: Icons.assignment_outlined,
                             color: const Color(0xFF13B3B0),
@@ -185,8 +185,8 @@ class _ClassroomPageState extends State<ClassroomPage> {
       SnackBar(
         content: Text(
           assignment.publishNow
-              ? 'ØªÙ… Ø¥Ù†Ø´Ø§Ø¡ Ø§Ù„ÙˆØ§Ø¬Ø¨ ÙˆÙ†Ø´Ø±Ù‡.'
-              : 'ØªÙ… Ø­ÙØ¸ Ø§Ù„ÙˆØ§Ø¬Ø¨ ÙƒÙ…Ø³ÙˆØ¯Ø©.',
+              ? 'تم إنشاء الواجب ونشره.'
+              : 'تم حفظ الواجب كمسودة.',
         ),
       ),
     );
@@ -239,8 +239,8 @@ class _ClassroomPageState extends State<ClassroomPage> {
       SnackBar(
         content: Text(
           pendingCount == 0
-              ? 'ØªÙ… ØªØ­Ø¯ÙŠØ« Ø§Ù„Ø­Ø¶ÙˆØ± ÙˆØ§Ø¹ØªÙ…Ø§Ø¯ Ø§Ù„Ø³Ø¬Ù„.'
-              : 'ØªÙ… ØªØ­Ø¯ÙŠØ« Ø§Ù„Ø­Ø¶ÙˆØ±ØŒ ÙˆÙŠØªØ¨Ù‚Ù‰ $pendingCount Ø·Ø§Ù„Ø¨ ÙŠØ­ØªØ§Ø¬ ØªØ­Ø¯ÙŠØ¯.',
+              ? 'تم تحديث الحضور واعتماد السجل.'
+              : 'تم تحديث الحضور، ويتبقى $pendingCount طالب يحتاج تحديد.',
         ),
       ),
     );

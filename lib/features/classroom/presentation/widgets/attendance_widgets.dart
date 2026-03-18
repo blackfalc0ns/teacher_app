@@ -296,7 +296,7 @@ class AttendanceStudentsCard extends StatelessWidget {
               ),
             )
           : Column(
-              children: students
+              children:  students
                   .map(
                     (student) => _AttendanceStudentRow(
                       student: student,
@@ -305,6 +305,8 @@ class AttendanceStudentsCard extends StatelessWidget {
                   )
                   .toList(growable: false),
             ),
+            // ignore: prefer_const_constructors
+      
     );
   }
 }
