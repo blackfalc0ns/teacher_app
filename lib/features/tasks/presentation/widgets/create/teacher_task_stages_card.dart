@@ -232,4 +232,3 @@ class TeacherTaskStagesCard extends StatelessWidget {
     );
   }
 }
-

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:teacher_app/core/utils/constant/font_manger.dart';
 import 'package:teacher_app/core/utils/constant/styles_manger.dart';
 import 'package:teacher_app/core/utils/theme/app_colors.dart';
@@ -22,7 +22,8 @@ class _TeacherTaskCreatePageState extends State<TeacherTaskCreatePage> {
   final _rewardController = TextEditingController();
 
   String? _selectedClassId;
-  String? _selectedStudentId;
+  List<String> _selectedStudentIds = [];
+  bool _isClassTask = false;
   DateTime _dueDate = DateTime.now().add(const Duration(days: 3));
   TeacherTaskRewardType _rewardType = TeacherTaskRewardType.moral;
   late List<TeacherTaskStageModel> _stages;
@@ -83,7 +84,9 @@ class _TeacherTaskCreatePageState extends State<TeacherTaskCreatePage> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'أنشئ مهمة فردية لطالب محدد، ثم قسّمها إلى مراحل واضحة مع إثبات مناسب لكل مرحلة ومكافأة محفزة.',
+                      _isClassTask
+                          ? 'أنشئ مهمة جماعية للفصل بالكامل، وسيتم إسناد نسخة منها لكل طالب في الفصل المختار.'
+                          : 'أنشئ مهمة فردية لطالب محدد، ثم قسّمها إلى مراحل واضحة مع إثبات مناسب لكل مرحلة ومكافأة محفزة.',
                       style: getMediumStyle(
                         fontFamily: FontConstant.cairo,
                         fontSize: FontSize.size12,
@@ -102,14 +105,19 @@ class _TeacherTaskCreatePageState extends State<TeacherTaskCreatePage> {
               classes: widget.dashboard.assignedClasses,
               students: widget.dashboard.students,
               selectedClassId: _selectedClassId,
-              selectedStudentId: _selectedStudentId,
+              selectedStudentIds: _selectedStudentIds,
+              isClassTask: _isClassTask,
               rewardType: _rewardType,
               onClassChanged: (value) => setState(() {
                 _selectedClassId = value;
-                _selectedStudentId = null;
+                _selectedStudentIds = [];
               }),
-              onStudentChanged: (value) =>
-                  setState(() => _selectedStudentId = value),
+              onStudentsChanged: (value) =>
+                  setState(() => _selectedStudentIds = value),
+              onTypeChanged: (value) => setState(() {
+                _isClassTask = value;
+                _selectedStudentIds = [];
+              }),
               onRewardTypeChanged: (value) => setState(
                 () => _rewardType = value ?? TeacherTaskRewardType.moral,
               ),
@@ -192,21 +200,13 @@ class _TeacherTaskCreatePageState extends State<TeacherTaskCreatePage> {
       }
     }
 
-    TeacherTaskStudentModel? selectedStudent;
-    for (final item in widget.dashboard.students) {
-      if (item.id == _selectedStudentId) {
-        selectedStudent = item;
-        break;
-      }
-    }
-
     final validStages = _stages
         .where((stage) => stage.title.trim().isNotEmpty)
         .toList();
 
     if (_titleController.text.trim().isEmpty ||
         selectedClass == null ||
-        selectedStudent == null ||
+        (!_isClassTask && _selectedStudentIds.isEmpty) ||
         _rewardController.text.trim().isEmpty ||
         validStages.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -217,30 +217,87 @@ class _TeacherTaskCreatePageState extends State<TeacherTaskCreatePage> {
       return;
     }
 
-    final createdTask = TeacherStudentTaskModel(
-      id: 'task-${DateTime.now().millisecondsSinceEpoch}',
-      title: _titleController.text.trim(),
-      description: _descriptionController.text.trim().isEmpty
-          ? null
-          : _descriptionController.text.trim(),
-      source: TeacherTaskSource.teacher,
-      status: TeacherTaskStatus.pending,
-      rewardType: _rewardType,
-      rewardValue: _rewardController.text.trim(),
-      progress: 0,
-      dueDate: _dueDate,
-      subjectName: selectedClass.subjectName,
-      classId: selectedClass.id,
-      cycleName: selectedClass.cycleName,
-      gradeName: selectedClass.gradeName,
-      sectionName: selectedClass.sectionName,
-      studentId: selectedStudent.id,
-      studentName: selectedStudent.name,
-      stages: validStages.asMap().entries.map((entry) {
-        return entry.value.copyWith(id: 'stage-${entry.key + 1}');
-      }).toList(),
-    );
+    if (_isClassTask) {
+      // Create tasks for all students in the class
+      final classStudents = widget.dashboard.students
+          .where((s) => s.classId == _selectedClassId)
+          .toList();
 
-    Navigator.of(context).pop(createdTask);
+      if (classStudents.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('لا يوجد طلاب في هذا الفصل حالياً.')),
+        );
+        return;
+      }
+
+      final tasks = classStudents.map((student) {
+        final timestamp = DateTime.now().millisecondsSinceEpoch;
+        return TeacherStudentTaskModel(
+          id: 'task-$timestamp-${student.id}',
+          title: _titleController.text.trim(),
+          description: _descriptionController.text.trim().isEmpty
+              ? null
+              : _descriptionController.text.trim(),
+          source: TeacherTaskSource.teacher,
+          status: TeacherTaskStatus.pending,
+          rewardType: _rewardType,
+          rewardValue: _rewardController.text.trim(),
+          progress: 0,
+          dueDate: _dueDate,
+          subjectName: selectedClass!.subjectName,
+          classId: selectedClass.id,
+          cycleName: selectedClass.cycleName,
+          gradeName: selectedClass.gradeName,
+          sectionName: selectedClass.sectionName,
+          studentId: student.id,
+          studentName: student.name,
+          stages: validStages.asMap().entries.map((entry) {
+            return entry.value.copyWith(id: 'stage-${entry.key + 1}');
+          }).toList(),
+        );
+      }).toList();
+
+      Navigator.of(context).pop(tasks);
+    } else {
+      // Create tasks for selected students
+      final selectedStudents = widget.dashboard.students
+          .where((s) => _selectedStudentIds.contains(s.id))
+          .toList();
+
+      final tasks = selectedStudents.map((student) {
+        final timestamp = DateTime.now().millisecondsSinceEpoch;
+        return TeacherStudentTaskModel(
+          id: 'task-$timestamp-${student.id}',
+          title: _titleController.text.trim(),
+          description: _descriptionController.text.trim().isEmpty
+              ? null
+              : _descriptionController.text.trim(),
+          source: TeacherTaskSource.teacher,
+          status: TeacherTaskStatus.pending,
+          rewardType: _rewardType,
+          rewardValue: _rewardController.text.trim(),
+          progress: 0,
+          dueDate: _dueDate,
+          subjectName: selectedClass!.subjectName,
+          classId: selectedClass.id,
+          cycleName: selectedClass.cycleName,
+          gradeName: selectedClass.gradeName,
+          sectionName: selectedClass.sectionName,
+          studentId: student.id,
+          studentName: student.name,
+          stages: validStages.asMap().entries.map((entry) {
+            return entry.value.copyWith(id: 'stage-${entry.key + 1}');
+          }).toList(),
+        );
+      }).toList();
+
+      // If only one student is selected, return a single task object
+      // (though handling it as a list is also fine in the page)
+      if (tasks.length == 1) {
+        Navigator.of(context).pop(tasks.first);
+      } else {
+        Navigator.of(context).pop(tasks);
+      }
+    }
   }
 }

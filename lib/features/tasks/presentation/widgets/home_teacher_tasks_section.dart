@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:teacher_app/core/utils/constant/font_manger.dart';
 import 'package:teacher_app/core/utils/constant/styles_manger.dart';
 import 'package:teacher_app/core/utils/helper/on_genrated_routes.dart';
@@ -178,10 +178,17 @@ class _HomeTeacherTasksSectionState extends State<HomeTeacherTasksSection> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: FilledButton.icon(
-                            onPressed: () => Navigator.of(context).pushNamed(
-                              Routes.teacherTaskCreate,
-                              arguments: dashboard,
-                            ),
+                            onPressed: () async {
+                              final result = await Navigator.of(context).pushNamed(
+                                Routes.teacherTaskCreate,
+                                arguments: dashboard,
+                              );
+                              if (result != null) {
+                                setState(() {
+                                  _future = _repo.getDashboard();
+                                });
+                              }
+                            },
                             style: FilledButton.styleFrom(
                               backgroundColor: AppColors.primary,
                               foregroundColor: AppColors.white,

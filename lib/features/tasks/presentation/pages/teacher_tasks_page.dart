@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:teacher_app/core/utils/constant/font_manger.dart';
 import 'package:teacher_app/core/utils/constant/styles_manger.dart';
 import 'package:teacher_app/core/utils/helper/on_genrated_routes.dart';
@@ -280,6 +280,11 @@ class _TeacherTasksPageState extends State<TeacherTasksPage> {
     if (createdTask is TeacherStudentTaskModel) {
       setState(() {
         _tasks = [createdTask, ..._tasks];
+        _selectedFilter = _TasksViewFilter.active;
+      });
+    } else if (createdTask is List<TeacherStudentTaskModel>) {
+      setState(() {
+        _tasks = [...createdTask, ..._tasks];
         _selectedFilter = _TasksViewFilter.active;
       });
     }
