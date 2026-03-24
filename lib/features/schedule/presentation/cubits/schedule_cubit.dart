@@ -8,8 +8,10 @@ class ScheduleCubit extends Cubit<ScheduleState> {
   ScheduleCubit(this._scheduleRepo) : super(ScheduleInitial());
 
   Future<void> fetchSchedule(DateTime date) async {
+    if (isClosed) return;
     emit(ScheduleLoading());
     final result = await _scheduleRepo.getScheduleByDate(date);
+    if (isClosed) return;
     result.when(
       success: (data) => emit(ScheduleSuccess(data, date)),
       failure: (error) => emit(ScheduleError(error)),

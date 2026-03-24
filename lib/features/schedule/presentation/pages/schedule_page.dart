@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/di/injection_container.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
@@ -137,99 +136,90 @@ class _SchedulePageState extends State<SchedulePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<ScheduleCubit>()..fetchSchedule(_selectedDate),
-      child: Scaffold(
-        body: BlocBuilder<ScheduleCubit, ScheduleState>(
-          builder: (context, state) {
-            final allSchedule = state is ScheduleSuccess
-                ? (List<ScheduleModel>.from(state.schedule)
-                  ..sort((a, b) => a.periodIndex.compareTo(b.periodIndex)))
-                : <ScheduleModel>[];
-        
-            final cycleOptions =
-                _withAllOption(allSchedule.map((item) => item.cycleName));
-            final effectiveCycle = cycleOptions.contains(_selectedCycle)
-                ? _selectedCycle
-                : _allFilter;
-        
-            final cycleScoped = effectiveCycle == _allFilter
-                ? allSchedule
-                : allSchedule
-                      .where((item) => item.cycleName == effectiveCycle)
-                      .toList();
-        
-            final gradeOptions =
-                _withAllOption(cycleScoped.map((item) => item.gradeName));
-            final effectiveGrade = gradeOptions.contains(_selectedGrade)
-                ? _selectedGrade
-                : _allFilter;
-        
-            final gradeScoped = effectiveGrade == _allFilter
-                ? cycleScoped
-                : cycleScoped
-                      .where((item) => item.gradeName == effectiveGrade)
-                      .toList();
-        
-            final sectionOptions =
-                _withAllOption(gradeScoped.map((item) => item.sectionName));
-            final effectiveSection =
-                sectionOptions.contains(_selectedSection)
-                ? _selectedSection
-                : _allFilter;
-        
-            final filteredSchedule = _applyFilters(
-              allSchedule,
-              cycle: effectiveCycle,
-              grade: effectiveGrade,
-              section: effectiveSection,
-              attentionOnly: _showAttentionOnly,
-            );
-        
-            final focusItem = _pickFocusItem(filteredSchedule);
-            final totalClasses =
-                allSchedule.map((item) => item.className).toSet().length;
-        
-            return Column(
-              children: [
-                // Fixed Header outside scroll view
-                ScheduleHeader(
-                  selectedDate: _selectedDate,
-                  totalPeriods: allSchedule.length,
-                  classCount: totalClasses,
+    return Scaffold(
+      body: BlocBuilder<ScheduleCubit, ScheduleState>(
+        builder: (context, state) {
+          final allSchedule = state is ScheduleSuccess
+              ? (List<ScheduleModel>.from(state.schedule)
+                ..sort((a, b) => a.periodIndex.compareTo(b.periodIndex)))
+              : <ScheduleModel>[];
+
+          final cycleOptions =
+              _withAllOption(allSchedule.map((item) => item.cycleName));
+          final effectiveCycle = cycleOptions.contains(_selectedCycle)
+              ? _selectedCycle
+              : _allFilter;
+
+          final cycleScoped = effectiveCycle == _allFilter
+              ? allSchedule
+              : allSchedule
+                    .where((item) => item.cycleName == effectiveCycle)
+                    .toList();
+
+          final gradeOptions =
+              _withAllOption(cycleScoped.map((item) => item.gradeName));
+          final effectiveGrade = gradeOptions.contains(_selectedGrade)
+              ? _selectedGrade
+              : _allFilter;
+
+          final gradeScoped = effectiveGrade == _allFilter
+              ? cycleScoped
+              : cycleScoped
+                    .where((item) => item.gradeName == effectiveGrade)
+                    .toList();
+
+          final sectionOptions =
+              _withAllOption(gradeScoped.map((item) => item.sectionName));
+          final effectiveSection = sectionOptions.contains(_selectedSection)
+              ? _selectedSection
+              : _allFilter;
+
+          final filteredSchedule = _applyFilters(
+            allSchedule,
+            cycle: effectiveCycle,
+            grade: effectiveGrade,
+            section: effectiveSection,
+            attentionOnly: _showAttentionOnly,
+          );
+
+          final focusItem = _pickFocusItem(filteredSchedule);
+          final totalClasses =
+              allSchedule.map((item) => item.className).toSet().length;
+
+          return Column(
+            children: [
+              ScheduleHeader(
+                selectedDate: _selectedDate,
+                totalPeriods: allSchedule.length,
+                classCount: totalClasses,
+              ),
+              DayDateSelector(
+                days: _days,
+                selectedDate: _selectedDate,
+                onDateSelected: (date) {
+                  setState(() {
+                    _selectedDate = date;
+                    _generateDays();
+                  });
+                  context.read<ScheduleCubit>().fetchSchedule(date);
+                },
+              ),
+              Expanded(
+                child: _buildScrollableContent(
+                  state: state,
+                  filteredSchedule: filteredSchedule,
+                  focusItem: focusItem,
+                  cycleOptions: cycleOptions,
+                  gradeOptions: gradeOptions,
+                  sectionOptions: sectionOptions,
+                  effectiveCycle: effectiveCycle,
+                  effectiveGrade: effectiveGrade,
+                  effectiveSection: effectiveSection,
                 ),
-                
-                // Fixed Day Selector outside scroll view
-                DayDateSelector(
-                  days: _days,
-                  selectedDate: _selectedDate,
-                  onDateSelected: (date) {
-                    setState(() {
-                      _selectedDate = date;
-                      _generateDays();
-                    });
-                    context.read<ScheduleCubit>().fetchSchedule(date);
-                  },
-                ),
-                
-                // Scrollable content using CustomScrollView
-                Expanded(
-                  child: _buildScrollableContent(
-                    state: state,
-                    filteredSchedule: filteredSchedule,
-                    focusItem: focusItem,
-                    cycleOptions: cycleOptions,
-                    gradeOptions: gradeOptions,
-                    sectionOptions: sectionOptions,
-                    effectiveCycle: effectiveCycle,
-                    effectiveGrade: effectiveGrade,
-                    effectiveSection: effectiveSection,
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

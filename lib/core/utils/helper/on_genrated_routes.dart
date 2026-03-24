@@ -25,6 +25,7 @@ import '../../../features/home/presentation/cubits/home_cubit.dart';
 import '../../../features/profile/data/models/teacher_employment_model.dart';
 import '../../../features/profile/data/models/teacher_profile_model.dart';
 import '../../../features/schedule/data/model/schedule_model.dart';
+import '../../../features/schedule/presentation/cubits/schedule_cubit.dart';
 import '../../../features/schedule/presentation/pages/schedule_page.dart';
 
 class Routes {
@@ -62,7 +63,10 @@ class OnGeneratedRoutes {
         );
       case Routes.schedule:
         return MaterialPageRoute(
-          builder: (_) => const SchedulePage(),
+          builder: (_) => BlocProvider(
+            create: (_) => sl<ScheduleCubit>()..fetchSchedule(DateTime.now()),
+            child: const SchedulePage(),
+          ),
         );
       case Routes.myClasses:
         return MaterialPageRoute(

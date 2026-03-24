@@ -1,5 +1,6 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teacher_app/core/di/injection_container.dart';
 import 'package:teacher_app/core/utils/navigation/custom_bottom_nav_bar.dart';
 import 'package:teacher_app/core/utils/theme/app_colors.dart';
 import 'package:teacher_app/features/home/presentation/cubits/home_cubit.dart';
@@ -8,6 +9,7 @@ import 'package:teacher_app/features/home/presentation/pages/my_classes_tab_page
 import 'package:teacher_app/features/home/presentation/widgets/teacher_drawer.dart';
 import 'package:teacher_app/features/homeworks/presentation/pages/homeworks_page.dart';
 import 'package:teacher_app/features/messages/presentation/pages/messages_screen.dart';
+import 'package:teacher_app/features/schedule/presentation/cubits/schedule_cubit.dart';
 
 import '../../../schedule/presentation/pages/schedule_page.dart';
 import 'home_page.dart';
@@ -23,41 +25,37 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late int _selectedIndex;
-  late PageController _pageController;
-
-  final List<Widget> _pages = [
-    const HomePage(),
-    const SchedulePage(),
-    const MyClassesTabPage(),
-    const HomeworksPage(),
-    const MessagesScreen(),
-  ];
+  late final ScheduleCubit _scheduleCubit;
+  late final List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
+    _scheduleCubit = sl<ScheduleCubit>()..fetchSchedule(DateTime.now());
+    _pages = [
+      const HomePage(),
+      BlocProvider.value(
+        value: _scheduleCubit,
+        child: const SchedulePage(),
+      ),
+      const MyClassesTabPage(),
+      const HomeworksPage(),
+      const MessagesScreen(),
+    ];
     _selectedIndex = widget.initialIndex.clamp(0, _pages.length - 1);
-    _pageController = PageController(initialPage: _selectedIndex);
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _scheduleCubit.close();
     super.dispose();
   }
 
   void _onTabChanged(int index) {
     if (_selectedIndex == index) return;
-
     setState(() {
       _selectedIndex = index;
     });
-
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 350),
-      curve: Curves.easeOutCubic,
-    );
   }
 
   @override
@@ -71,15 +69,9 @@ class _MainPageState extends State<MainPage> {
           drawer: _selectedIndex == 0 && state is HomeSuccess
               ? TeacherDrawer(data: state.data)
               : null,
-          body: PageView(
-            controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(),
+          body: IndexedStack(
+            index: _selectedIndex,
             children: _pages,
-            onPageChanged: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
           ),
           bottomNavigationBar: CustomBottomNavBar(
             selectedIndex: _selectedIndex,

@@ -39,8 +39,9 @@ class _ClassroomPageState extends State<ClassroomPage> {
   Widget build(BuildContext context) {
     final item = widget.scheduleItem;
     final attendance = _attendance;
-    final followUpCount =
-        _students.where((student) => student.needsFollowUp).length;
+    final followUpCount = _students
+        .where((student) => student.needsFollowUp)
+        .length;
 
     return Scaffold(
       body: Column(
@@ -67,7 +68,8 @@ class _ClassroomPageState extends State<ClassroomPage> {
                           hasHomework: _assignments.isNotEmpty,
                         ),
                         onAttendanceTap: _openAttendance,
-                        onStudentsTap: () => _selectSection(ClassroomSection.students),
+                        onStudentsTap: () =>
+                            _selectSection(ClassroomSection.students),
                         onAssignmentsTap: _openAssignmentTracking,
                       ),
                       const SizedBox(height: 12),
@@ -108,7 +110,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
                           });
                         },
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 12),
                       _buildSection(attendance),
                     ]),
                   ),
@@ -163,8 +165,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
   }
 
   Future<void> _openAssignmentCreate() async {
-    final assignment =
-        await Navigator.of(context).push<ClassroomAssignment>(
+    final assignment = await Navigator.of(context).push<ClassroomAssignment>(
       MaterialPageRoute(
         builder: (_) => AssignmentCreatePage(item: widget.scheduleItem),
       ),
@@ -195,13 +196,13 @@ class _ClassroomPageState extends State<ClassroomPage> {
   Future<void> _openAssignmentTracking() async {
     final updatedAssignments = await Navigator.of(context)
         .push<List<ClassroomAssignment>>(
-      MaterialPageRoute(
-        builder: (_) => AssignmentTrackingPage(
-          item: widget.scheduleItem,
-          assignments: _assignments,
-        ),
-      ),
-    );
+          MaterialPageRoute(
+            builder: (_) => AssignmentTrackingPage(
+              item: widget.scheduleItem,
+              assignments: _assignments,
+            ),
+          ),
+        );
 
     if (!mounted || updatedAssignments == null) {
       return;

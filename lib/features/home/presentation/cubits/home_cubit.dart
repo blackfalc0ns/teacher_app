@@ -8,8 +8,10 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit(this._homeRepo) : super(HomeInitial());
 
   Future<void> getHomeData() async {
+    if (isClosed) return;
     emit(HomeLoading());
     final result = await _homeRepo.getHomeData();
+    if (isClosed) return;
     result.when(
       success: (data) => emit(HomeSuccess(data)),
       failure: (error) => emit(HomeError(error)),
