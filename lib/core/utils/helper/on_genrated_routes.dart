@@ -4,9 +4,14 @@ import 'package:teacher_app/features/home/presentation/pages/main_page.dart';
 import 'package:teacher_app/features/messages/presentation/pages/chat_details_screen.dart';
 import 'package:teacher_app/features/profile/presentation/pages/teacher_employment_page.dart';
 import 'package:teacher_app/features/profile/presentation/pages/teacher_profile_page.dart';
+import 'package:teacher_app/features/settings/presentation/pages/about_app_page.dart';
+import 'package:teacher_app/features/settings/presentation/pages/app_rating_page.dart';
+import 'package:teacher_app/features/settings/presentation/pages/contact_us_page.dart';
+import 'package:teacher_app/features/settings/presentation/pages/help_center_page.dart';
 import 'package:teacher_app/features/settings/presentation/pages/privacy_policy_page.dart';
 import 'package:teacher_app/features/settings/presentation/pages/privacy_security_page.dart';
 import 'package:teacher_app/features/settings/presentation/pages/settings_page.dart';
+import 'package:teacher_app/features/settings/presentation/pages/support_page.dart';
 import 'package:teacher_app/features/settings/presentation/pages/terms_conditions_page.dart';
 
 import '../../di/injection_container.dart';
@@ -31,6 +36,11 @@ class Routes {
   static const String privacySecurity = '/privacy-security';
   static const String privacyPolicy = '/privacy-policy';
   static const String termsConditions = '/terms-conditions';
+  static const String support = '/support';
+  static const String helpCenter = '/help-center';
+  static const String contactUs = '/contact-us';
+  static const String aboutApp = '/about-app';
+  static const String appRating = '/app-rating';
 }
 
 class OnGeneratedRoutes {
@@ -124,6 +134,26 @@ class OnGeneratedRoutes {
       case Routes.termsConditions:
         return MaterialPageRoute(
           builder: (_) => const TermsConditionsPage(),
+        );
+      case Routes.support:
+        return MaterialPageRoute(
+          builder: (_) => const SupportPage(),
+        );
+      case Routes.helpCenter:
+        return MaterialPageRoute(
+          builder: (_) => const HelpCenterPage(),
+        );
+      case Routes.contactUs:
+        return MaterialPageRoute(
+          builder: (_) => const ContactUsPage(),
+        );
+      case Routes.aboutApp:
+        return MaterialPageRoute(
+          builder: (_) => const AboutAppPage(),
+        );
+      case Routes.appRating:
+        return MaterialPageRoute(
+          builder: (_) => const AppRatingPage(),
         );
       default:
         return MaterialPageRoute(

@@ -85,19 +85,19 @@ class TeacherDrawer extends StatelessWidget {
                     icon: Icons.support_agent_outlined,
                     title: 'الدعم الفني',
                     subtitle: 'الإبلاغ عن مشكلة أو طلب مساعدة',
-                    onTap: () => _showComingSoon(context, 'الدعم الفني'),
+                    onTap: () => _openRoute(context, Routes.support),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.help_outline_rounded,
                     title: 'مركز المساعدة',
                     subtitle: 'إجابات سريعة للأسئلة الشائعة',
-                    onTap: () => _showComingSoon(context, 'مركز المساعدة'),
+                    onTap: () => _openRoute(context, Routes.helpCenter),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.contact_support_outlined,
                     title: 'تواصل معنا',
                     subtitle: 'قنوات التواصل مع فريق المنصة',
-                    onTap: () => _showComingSoon(context, 'تواصل معنا'),
+                    onTap: () => _openRoute(context, Routes.contactUs),
                   ),
                   const SizedBox(height: 8),
                   const _SectionTitle(title: 'أخرى'),
@@ -106,13 +106,13 @@ class TeacherDrawer extends StatelessWidget {
                     icon: Icons.info_outline_rounded,
                     title: 'عن التطبيق',
                     subtitle: 'نبذة مختصرة عن المنصة والإصدار',
-                    onTap: () => _showComingSoon(context, 'عن التطبيق'),
+                    onTap: () => _openRoute(context, Routes.aboutApp),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.star_border_rounded,
                     title: 'تقييم التطبيق',
                     subtitle: 'شاركنا رأيك لتطوير التجربة',
-                    onTap: () => _showComingSoon(context, 'تقييم التطبيق'),
+                    onTap: () => _openRoute(context, Routes.appRating),
                   ),
                   _DrawerMenuTile(
                     icon: Icons.logout_rounded,
@@ -370,6 +370,8 @@ class _SectionTitle extends StatelessWidget {
     );
   }
 }
+
+
 
 
 
