@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:teacher_app/core/utils/constant/font_manger.dart';
 import 'package:teacher_app/core/utils/constant/styles_manger.dart';
 import 'package:teacher_app/core/utils/theme/app_colors.dart';
@@ -48,6 +48,7 @@ class TeacherTaskCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Column(

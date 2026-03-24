@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:teacher_app/core/utils/constant/font_manger.dart';
 import 'package:teacher_app/core/utils/constant/styles_manger.dart';
 import 'package:teacher_app/core/utils/theme/app_colors.dart';
@@ -6,10 +6,7 @@ import 'package:teacher_app/core/utils/theme/app_colors.dart';
 class TeacherTasksHeader extends StatelessWidget {
   final VoidCallback onCreateTap;
 
-  const TeacherTasksHeader({
-    super.key,
-    required this.onCreateTap,
-  });
+  const TeacherTasksHeader({super.key, required this.onCreateTap});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +17,7 @@ class TeacherTasksHeader extends StatelessWidget {
         borderRadius: BorderRadius.circular(28),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Column(
@@ -36,9 +34,9 @@ class TeacherTasksHeader extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   'إسناد مهام فردية للطلاب ومتابعة المراحل والاعتمادات حسب الفصول المسندة.',
-                  style: getRegularStyle(
+                  style: getMediumStyle(
                     fontFamily: FontConstant.cairo,
-                    fontSize: FontSize.size10,
+                    fontSize: FontSize.size12,
                     color: AppColors.white.withValues(alpha: 0.9),
                   ),
                 ),

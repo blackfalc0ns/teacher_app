@@ -9,6 +9,7 @@ import 'package:teacher_app/features/tasks/presentation/widgets/teacher_task_car
 import 'package:teacher_app/features/tasks/presentation/widgets/teacher_task_summary_card.dart';
 import 'package:teacher_app/features/tasks/presentation/widgets/teacher_tasks_filters_card.dart';
 import 'package:teacher_app/features/tasks/presentation/widgets/teacher_tasks_header.dart';
+import 'package:teacher_app/features/tasks/presentation/widgets/teacher_tasks_scroll_configuration.dart';
 
 class TeacherTasksPage extends StatefulWidget {
   const TeacherTasksPage({super.key});
@@ -67,81 +68,85 @@ class _TeacherTasksPageState extends State<TeacherTasksPage> {
           ),
         ),
       ),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : _dashboard == null
-          ? const SizedBox.shrink()
-          : RefreshIndicator(
-              onRefresh: _load,
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
-                children: [
-                  TeacherTasksHeader(onCreateTap: _openCreatePage),
-                  const SizedBox(height: 14),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TeacherTaskSummaryCard(
-                          title: 'نشطة',
-                          value: _tasks
-                              .where(
-                                (task) =>
-                                    task.isActive && !task.hasPendingApprovals,
-                              )
-                              .length
-                              .toString(),
-                          subtitle: 'قيد التنفيذ أو لم تبدأ',
-                          icon: Icons.play_circle_outline_rounded,
-                          color: AppColors.primary,
+      body: TeacherTasksScrollConfiguration(
+        child: _loading
+            ? const Center(child: CircularProgressIndicator())
+            : _dashboard == null
+            ? const SizedBox.shrink()
+            : RefreshIndicator(
+                onRefresh: _load,
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+                  children: [
+                    TeacherTasksHeader(onCreateTap: _openCreatePage),
+                    const SizedBox(height: 14),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TeacherTaskSummaryCard(
+                            title: 'نشطة',
+                            value: _tasks
+                                .where(
+                                  (task) =>
+                                      task.isActive &&
+                                      !task.hasPendingApprovals,
+                                )
+                                .length
+                                .toString(),
+                            subtitle: 'قيد التنفيذ أو لم تبدأ',
+                            icon: Icons.play_circle_outline_rounded,
+                            color: AppColors.primary,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: TeacherTaskSummaryCard(
-                          title: 'بانتظار اعتماد',
-                          value: _tasks
-                              .where((task) => task.hasPendingApprovals)
-                              .length
-                              .toString(),
-                          subtitle: 'مراحل مرفوعة من الطلاب',
-                          icon: Icons.approval_outlined,
-                          color: AppColors.info,
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: TeacherTaskSummaryCard(
+                            title: 'بانتظار اعتماد',
+                            value: _tasks
+                                .where((task) => task.hasPendingApprovals)
+                                .length
+                                .toString(),
+                            subtitle: 'مراحل مرفوعة من الطلاب',
+                            icon: Icons.approval_outlined,
+                            color: AppColors.info,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: TeacherTaskSummaryCard(
-                          title: 'منفذة',
-                          value: _tasks
-                              .where(
-                                (task) =>
-                                    task.status == TeacherTaskStatus.completed,
-                              )
-                              .length
-                              .toString(),
-                          subtitle: 'تم إنهاؤها واعتمادها',
-                          icon: Icons.check_circle_outline_rounded,
-                          color: AppColors.green,
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: TeacherTaskSummaryCard(
+                            title: 'منفذة',
+                            value: _tasks
+                                .where(
+                                  (task) =>
+                                      task.status ==
+                                      TeacherTaskStatus.completed,
+                                )
+                                .length
+                                .toString(),
+                            subtitle: 'تم إنهاؤها واعتمادها',
+                            icon: Icons.check_circle_outline_rounded,
+                            color: AppColors.green,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  TeacherTasksFiltersCard(
-                    searchController: _searchController,
-                    selectedClassId: _selectedClassId,
-                    classes: _dashboard!.assignedClasses,
-                    onClassChanged: (value) =>
-                        setState(() => _selectedClassId = value),
-                    onSearchChanged: (_) => setState(() {}),
-                  ),
-                  const SizedBox(height: 12),
-                  _buildStatusTabs(),
-                  const SizedBox(height: 14),
-                  ..._buildGroupedTaskSections(),
-                ],
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    TeacherTasksFiltersCard(
+                      searchController: _searchController,
+                      selectedClassId: _selectedClassId,
+                      classes: _dashboard!.assignedClasses,
+                      onClassChanged: (value) =>
+                          setState(() => _selectedClassId = value),
+                      onSearchChanged: (_) => setState(() {}),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildStatusTabs(),
+                    const SizedBox(height: 14),
+                    ..._buildGroupedTaskSections(),
+                  ],
+                ),
               ),
-            ),
+      ),
     );
   }
 

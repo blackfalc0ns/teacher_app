@@ -40,7 +40,9 @@ class TeacherTaskBasicsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final availableStudents = selectedClassId == null
         ? const <TeacherTaskStudentModel>[]
-        : students.where((student) => student.classId == selectedClassId).toList();
+        : students
+              .where((student) => student.classId == selectedClassId)
+              .toList();
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -61,13 +63,17 @@ class TeacherTaskBasicsCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.info_outline_rounded, color: AppColors.primary, size: 18),
+              const Icon(
+                Icons.info_outline_rounded,
+                color: AppColors.primary,
+                size: 18,
+              ),
               const SizedBox(width: 8),
               Text(
                 'بيانات المهمة الأساسية',
                 style: getBoldStyle(
                   fontFamily: FontConstant.cairo,
-                  fontSize: FontSize.size11,
+                  fontSize: FontSize.size14,
                   color: AppColors.primaryDark,
                 ),
               ),
@@ -76,27 +82,60 @@ class TeacherTaskBasicsCard extends StatelessWidget {
           const SizedBox(height: 14),
           TextField(
             controller: titleController,
-            style: getMediumStyle(fontFamily: FontConstant.cairo, fontSize: FontSize.size11),
+            style: getMediumStyle(
+              fontFamily: FontConstant.cairo,
+              fontSize: FontSize.size11,
+            ),
             decoration: _inputDecoration('عنوان المهمة', Icons.title_rounded),
           ),
           const SizedBox(height: 10),
           TextField(
             controller: descriptionController,
             maxLines: 3,
-            style: getMediumStyle(fontFamily: FontConstant.cairo, fontSize: FontSize.size10),
-            decoration: _inputDecoration('وصف المهمة (اختياري)', Icons.description_outlined),
+            style: getMediumStyle(
+              fontFamily: FontConstant.cairo,
+              fontSize: FontSize.size10,
+            ),
+            decoration: _inputDecoration(
+              'وصف المهمة (اختياري)',
+              Icons.description_outlined,
+            ),
           ),
           const SizedBox(height: 10),
           DropdownButtonFormField<String>(
-            value: selectedClassId,
-            style: getMediumStyle(fontFamily: FontConstant.cairo, fontSize: FontSize.size11, color: AppColors.primaryDark),
-            decoration: _inputDecoration('الفصل أو الشعبة', Icons.class_outlined),
+            initialValue: selectedClassId,
+            style: getMediumStyle(
+              fontFamily: FontConstant.cairo,
+              fontSize: FontSize.size11,
+              color: AppColors.primaryDark,
+            ),
+            decoration: _inputDecoration(
+              'الفصل أو الشعبة',
+              Icons.class_outlined,
+            ),
             items: [
-              const DropdownMenuItem(value: null, child: Text('اختر الشعبة')),
+              DropdownMenuItem(
+                value: null,
+                child: Text(
+                  'اختر الشعبة',
+                  style: getMediumStyle(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: FontSize.size11,
+                    color: AppColors.grey,
+                  ),
+                ),
+              ),
               ...classes.map(
                 (item) => DropdownMenuItem(
                   value: item.id,
-                  child: Text(item.label),
+                  child: Text(
+                    item.label,
+                    style: getSemiBoldStyle(
+                      fontFamily: FontConstant.cairo,
+                      fontSize: FontSize.size12,
+                      color: AppColors.primaryDark,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -104,15 +143,39 @@ class TeacherTaskBasicsCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           DropdownButtonFormField<String>(
-            value: selectedStudentId,
-            style: getMediumStyle(fontFamily: FontConstant.cairo, fontSize: FontSize.size11, color: AppColors.primaryDark),
-            decoration: _inputDecoration('الطالب المستهدف', Icons.person_outline_rounded),
+            initialValue: selectedStudentId,
+            style: getMediumStyle(
+              fontFamily: FontConstant.cairo,
+              fontSize: FontSize.size11,
+              color: AppColors.primaryDark,
+            ),
+            decoration: _inputDecoration(
+              'الطالب المستهدف',
+              Icons.person_outline_rounded,
+            ),
             items: [
-              const DropdownMenuItem(value: null, child: Text('اختر الطالب')),
+              DropdownMenuItem(
+                value: null,
+                child: Text(
+                  'اختر الطالب',
+                  style: getSemiBoldStyle(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: FontSize.size12,
+                    color: AppColors.grey,
+                  ),
+                ),
+              ),
               ...availableStudents.map(
                 (item) => DropdownMenuItem(
                   value: item.id,
-                  child: Text(item.name),
+                  child: Text(
+                    item.name,
+                    style: getSemiBoldStyle(
+                      fontFamily: FontConstant.cairo,
+                      fontSize: FontSize.size12,
+                      color: AppColors.primaryDark,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -134,17 +197,38 @@ class TeacherTaskBasicsCard extends StatelessWidget {
             children: [
               Expanded(
                 child: DropdownButtonFormField<TeacherTaskRewardType>(
-                  value: rewardType,
-                  style: getMediumStyle(fontFamily: FontConstant.cairo, fontSize: FontSize.size10, color: AppColors.primaryDark),
-                  decoration: _inputDecoration('نوع المكافأة', Icons.workspace_premium_outlined),
-                  items: const [
+                  initialValue: rewardType,
+                  style: getMediumStyle(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: FontSize.size10,
+                    color: AppColors.primaryDark,
+                  ),
+                  decoration: _inputDecoration(
+                    'نوع المكافأة',
+                    Icons.workspace_premium_outlined,
+                  ),
+                  items: [
                     DropdownMenuItem(
                       value: TeacherTaskRewardType.financial,
-                      child: Text('مادية'),
+                      child: Text(
+                        'مادية',
+                        style: getSemiBoldStyle(
+                          fontFamily: FontConstant.cairo,
+                          fontSize: FontSize.size12,
+                          color: AppColors.primaryDark,
+                        ),
+                      ),
                     ),
                     DropdownMenuItem(
                       value: TeacherTaskRewardType.moral,
-                      child: Text('معنوية'),
+                      child: Text(
+                        'معنوية',
+                        style: getSemiBoldStyle(
+                          fontFamily: FontConstant.cairo,
+                          fontSize: FontSize.size12,
+                          color: AppColors.primaryDark,
+                        ),
+                      ),
                     ),
                   ],
                   onChanged: onRewardTypeChanged,
@@ -154,9 +238,14 @@ class TeacherTaskBasicsCard extends StatelessWidget {
               Expanded(
                 child: TextField(
                   controller: rewardController,
-                  style: getMediumStyle(fontFamily: FontConstant.cairo, fontSize: FontSize.size10),
+                  style: getMediumStyle(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: FontSize.size13,
+                  ),
                   decoration: _inputDecoration(
-                    rewardType == TeacherTaskRewardType.financial ? 'القيمة' : 'الوصف',
+                    rewardType == TeacherTaskRewardType.financial
+                        ? 'القيمة'
+                        : 'الوصف',
                     null,
                   ),
                 ),
@@ -172,11 +261,17 @@ class TeacherTaskBasicsCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFFF6F9FC),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.3)),
+                border: Border.all(
+                  color: AppColors.lightGrey.withValues(alpha: 0.3),
+                ),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.calendar_today_outlined, color: AppColors.primary, size: 16),
+                  const Icon(
+                    Icons.calendar_today_outlined,
+                    color: AppColors.primary,
+                    size: 16,
+                  ),
                   const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +280,7 @@ class TeacherTaskBasicsCard extends StatelessWidget {
                         'تاريخ الاستحقاق',
                         style: getRegularStyle(
                           fontFamily: FontConstant.cairo,
-                          fontSize: FontSize.size8,
+                          fontSize: FontSize.size12,
                           color: AppColors.grey,
                         ),
                       ),
@@ -193,14 +288,18 @@ class TeacherTaskBasicsCard extends StatelessWidget {
                         '${dueDate.day}/${dueDate.month}/${dueDate.year}',
                         style: getBoldStyle(
                           fontFamily: FontConstant.cairo,
-                          fontSize: FontSize.size10,
+                          fontSize: FontSize.size11,
                           color: AppColors.primaryDark,
                         ),
                       ),
                     ],
                   ),
                   const Spacer(),
-                  const Icon(Icons.edit_outlined, color: AppColors.grey, size: 14),
+                  const Icon(
+                    Icons.edit_outlined,
+                    color: AppColors.grey,
+                    size: 14,
+                  ),
                 ],
               ),
             ),
@@ -213,8 +312,18 @@ class TeacherTaskBasicsCard extends StatelessWidget {
   InputDecoration _inputDecoration(String hint, IconData? icon) {
     return InputDecoration(
       hintText: hint,
-      prefixIcon: icon != null ? Icon(icon, size: 18, color: AppColors.primary.withValues(alpha: 0.7)) : null,
-      hintStyle: getRegularStyle(fontFamily: FontConstant.cairo, fontSize: FontSize.size10, color: AppColors.grey),
+      prefixIcon: icon != null
+          ? Icon(
+              icon,
+              size: 18,
+              color: AppColors.primary.withValues(alpha: 0.7),
+            )
+          : null,
+      hintStyle: getSemiBoldStyle(
+        fontFamily: FontConstant.cairo,
+        fontSize: FontSize.size11,
+        color: AppColors.grey,
+      ),
       filled: true,
       fillColor: const Color(0xFFF6F9FC),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -233,4 +342,3 @@ class TeacherTaskBasicsCard extends StatelessWidget {
     );
   }
 }
-

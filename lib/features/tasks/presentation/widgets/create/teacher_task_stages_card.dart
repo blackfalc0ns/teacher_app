@@ -39,14 +39,18 @@ class TeacherTaskStagesCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.list_alt_rounded, color: AppColors.primary, size: 18),
+              const Icon(
+                Icons.list_alt_rounded,
+                color: AppColors.primary,
+                size: 18,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   'مراحل تنفيذ المهمة',
                   style: getBoldStyle(
                     fontFamily: FontConstant.cairo,
-                    fontSize: FontSize.size11,
+                    fontSize: FontSize.size14,
                     color: AppColors.primaryDark,
                   ),
                 ),
@@ -55,20 +59,27 @@ class TeacherTaskStagesCard extends StatelessWidget {
                 onTap: onAddStage,
                 borderRadius: BorderRadius.circular(10),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.add_rounded, color: AppColors.primary, size: 14),
+                      const Icon(
+                        Icons.add_rounded,
+                        color: AppColors.primary,
+                        size: 14,
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         'إضافة',
                         style: getBoldStyle(
                           fontFamily: FontConstant.cairo,
-                          fontSize: FontSize.size9,
+                          fontSize: FontSize.size11,
                           color: AppColors.primary,
                         ),
                       ),
@@ -88,7 +99,9 @@ class TeacherTaskStagesCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFFF6F9FC),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.3)),
+                  border: Border.all(
+                    color: AppColors.lightGrey.withValues(alpha: 0.3),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,29 +140,47 @@ class TeacherTaskStagesCard extends StatelessWidget {
                         if (stages.length > 1)
                           InkWell(
                             onTap: () => onRemoveStage(index),
-                            child: const Icon(Icons.delete_outline_rounded, color: AppColors.errorRed, size: 18),
+                            child: const Icon(
+                              Icons.delete_outline_rounded,
+                              color: AppColors.errorRed,
+                              size: 18,
+                            ),
                           ),
                       ],
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
                       initialValue: stages[index].title,
-                      style: getMediumStyle(fontFamily: FontConstant.cairo, fontSize: FontSize.size10),
+                      style: getMediumStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: FontSize.size12,
+                      ),
                       onChanged: (value) => onStageChanged(
                         index,
                         stages[index].copyWith(title: value),
                       ),
-                      decoration: _inputDecoration('عنوان المرحلة (مثلاً: التحضير، التنفيذ...)'),
+                      decoration: _inputDecoration(
+                        'عنوان المرحلة (مثلاً: التحضير، التنفيذ...)',
+                      ),
                     ),
                     const SizedBox(height: 10),
                     DropdownButtonFormField<TeacherTaskProofType>(
-                      value: stages[index].proofType,
-                      style: getMediumStyle(fontFamily: FontConstant.cairo, fontSize: FontSize.size10, color: AppColors.primaryDark),
+                      initialValue: stages[index].proofType,
+                      style: getMediumStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: FontSize.size12,
+                        color: AppColors.primaryDark,
+                      ),
                       onChanged: (value) {
                         if (value == null) return;
-                        onStageChanged(index, stages[index].copyWith(proofType: value));
+                        onStageChanged(
+                          index,
+                          stages[index].copyWith(proofType: value),
+                        );
                       },
-                      decoration: _inputDecoration('نوع الإثبات المطلوب من الطالب'),
+                      decoration: _inputDecoration(
+                        'نوع الإثبات المطلوب من الطالب',
+                      ),
                       items: const [
                         DropdownMenuItem(
                           value: TeacherTaskProofType.image,
@@ -178,7 +209,11 @@ class TeacherTaskStagesCard extends StatelessWidget {
   InputDecoration _inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: getRegularStyle(fontFamily: FontConstant.cairo, fontSize: FontSize.size9, color: AppColors.grey),
+      hintStyle: getRegularStyle(
+        fontFamily: FontConstant.cairo,
+        fontSize: FontSize.size11,
+        color: AppColors.grey,
+      ),
       filled: true,
       fillColor: AppColors.white,
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),

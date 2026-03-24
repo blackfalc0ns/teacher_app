@@ -35,14 +35,15 @@ class TeacherTaskSummaryCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
                   value,
                   style: getBoldStyle(
                     fontFamily: FontConstant.cairo,
@@ -50,36 +51,37 @@ class TeacherTaskSummaryCard extends StatelessWidget {
                     color: AppColors.primaryDark,
                   ),
                 ),
-                Text(
-                  title,
-                  style: getBoldStyle(
-                    fontFamily: FontConstant.cairo,
-                    fontSize: FontSize.size11,
-                    color: AppColors.primaryDark,
-                  ),
+              ),
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: getRegularStyle(
-                    fontFamily: FontConstant.cairo,
-                    fontSize: FontSize.size8,
-                    color: AppColors.grey,
-                  ),
-                ),
-              ],
+                child: Icon(icon, color: color, size: 16),
+              ),
+            ],
+          ),
+          const SizedBox(height: 2),
+          Text(
+            title,
+            style: getBoldStyle(
+              fontFamily: FontConstant.cairo,
+              fontSize: FontSize.size11,
+              color: AppColors.primaryDark,
             ),
           ),
-          Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(12),
+          const SizedBox(height: 2),
+          Text(
+            subtitle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: getSemiBoldStyle(
+              fontFamily: FontConstant.cairo,
+              fontSize: FontSize.size9,
+              color: AppColors.grey,
             ),
-            child: Icon(icon, color: color, size: 18),
           ),
         ],
       ),

@@ -11,7 +11,8 @@ class HomeTeacherTasksSection extends StatefulWidget {
   const HomeTeacherTasksSection({super.key});
 
   @override
-  State<HomeTeacherTasksSection> createState() => _HomeTeacherTasksSectionState();
+  State<HomeTeacherTasksSection> createState() =>
+      _HomeTeacherTasksSectionState();
 }
 
 class _HomeTeacherTasksSectionState extends State<HomeTeacherTasksSection> {
@@ -41,8 +42,13 @@ class _HomeTeacherTasksSectionState extends State<HomeTeacherTasksSection> {
         }
 
         final dashboard = snapshot.data!;
-        final previewTasks = dashboard.tasks.where((task) => task.hasPendingApprovals).take(2).toList();
-        final fallbackTasks = previewTasks.isEmpty ? dashboard.tasks.take(2).toList() : previewTasks;
+        final previewTasks = dashboard.tasks
+            .where((task) => task.hasPendingApprovals)
+            .take(2)
+            .toList();
+        final fallbackTasks = previewTasks.isEmpty
+            ? dashboard.tasks.take(2).toList()
+            : previewTasks;
 
         return Padding(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
@@ -66,7 +72,7 @@ class _HomeTeacherTasksSectionState extends State<HomeTeacherTasksSection> {
                         const SizedBox(height: 2),
                         Text(
                           'إسناد مهام فردية ومتابعة مراحل التنفيذ والاعتمادات.',
-                          style: getRegularStyle(
+                          style: getMediumStyle(
                             fontFamily: FontConstant.cairo,
                             fontSize: FontSize.size10,
                             color: AppColors.grey,
@@ -76,8 +82,15 @@ class _HomeTeacherTasksSectionState extends State<HomeTeacherTasksSection> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () => Navigator.of(context).pushNamed(Routes.teacherTasks),
-                    child: const Text('إدارة المهام'),
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(Routes.teacherTasks),
+                    child: Text(
+                      'إدارة المهام',
+                      style: getBoldStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: FontSize.size12,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -87,7 +100,9 @@ class _HomeTeacherTasksSectionState extends State<HomeTeacherTasksSection> {
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: AppColors.lightGrey.withValues(alpha: 0.5)),
+                  border: Border.all(
+                    color: AppColors.lightGrey.withValues(alpha: 0.5),
+                  ),
                 ),
                 child: Column(
                   children: [
@@ -131,16 +146,25 @@ class _HomeTeacherTasksSectionState extends State<HomeTeacherTasksSection> {
                       children: [
                         Expanded(
                           child: OutlinedButton.icon(
-                            onPressed: () => Navigator.of(context).pushNamed(Routes.teacherTasks),
+                            onPressed: () => Navigator.of(
+                              context,
+                            ).pushNamed(Routes.teacherTasks),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppColors.primaryDark,
-                              side: BorderSide(color: AppColors.lightGrey.withValues(alpha: 0.6)),
+                              side: BorderSide(
+                                color: AppColors.lightGrey.withValues(
+                                  alpha: 0.6,
+                                ),
+                              ),
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            icon: const Icon(Icons.dashboard_customize_outlined, size: 18),
+                            icon: const Icon(
+                              Icons.dashboard_customize_outlined,
+                              size: 18,
+                            ),
                             label: Text(
                               'لوحة المهام',
                               style: getBoldStyle(

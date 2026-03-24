@@ -1,17 +1,15 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:teacher_app/core/utils/constant/font_manger.dart';
 import 'package:teacher_app/core/utils/constant/styles_manger.dart';
 import 'package:teacher_app/core/utils/theme/app_colors.dart';
 import 'package:teacher_app/features/tasks/data/models/teacher_task_model.dart';
 import 'package:teacher_app/features/tasks/presentation/widgets/teacher_task_stage_card.dart';
+import 'package:teacher_app/features/tasks/presentation/widgets/teacher_tasks_scroll_configuration.dart';
 
 class TeacherTaskDetailsPage extends StatefulWidget {
   final TeacherStudentTaskModel task;
 
-  const TeacherTaskDetailsPage({
-    super.key,
-    required this.task,
-  });
+  const TeacherTaskDetailsPage({super.key, required this.task});
 
   @override
   State<TeacherTaskDetailsPage> createState() => _TeacherTaskDetailsPageState();
@@ -52,38 +50,42 @@ class _TeacherTaskDetailsPageState extends State<TeacherTaskDetailsPage> {
             ),
           ),
         ),
-        body: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-          children: [
-            _buildHeroCard(),
-            const SizedBox(height: 14),
-            _buildRewardCard(),
-            const SizedBox(height: 14),
-            _buildDescriptionCard(),
-            const SizedBox(height: 14),
-            Text(
-              'مراحل التنفيذ والاعتماد',
-              style: getBoldStyle(
-                fontFamily: FontConstant.cairo,
-                fontSize: FontSize.size13,
-                color: AppColors.primaryDark,
+        body: TeacherTasksScrollConfiguration(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+            children: [
+              _buildHeroCard(),
+              const SizedBox(height: 14),
+              _buildRewardCard(),
+              const SizedBox(height: 14),
+              _buildDescriptionCard(),
+              const SizedBox(height: 14),
+              Text(
+                'مراحل التنفيذ والاعتماد',
+                style: getBoldStyle(
+                  fontFamily: FontConstant.cairo,
+                  fontSize: FontSize.size13,
+                  color: AppColors.primaryDark,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            ...List.generate(
-              _task.stages.length,
-              (index) => TeacherTaskStageCard(
-                index: index,
-                stage: _task.stages[index],
-                onViewProof: _task.stages[index].proofPath == null
-                    ? null
-                    : () => _showProofDialog(_task.stages[index]),
-                onApprove: _task.stages[index].isCompleted && !_task.stages[index].isApproved
-                    ? () => _approveStage(index)
-                    : null,
+              const SizedBox(height: 10),
+              ...List.generate(
+                _task.stages.length,
+                (index) => TeacherTaskStageCard(
+                  index: index,
+                  stage: _task.stages[index],
+                  onViewProof: _task.stages[index].proofPath == null
+                      ? null
+                      : () => _showProofDialog(_task.stages[index]),
+                  onApprove:
+                      _task.stages[index].isCompleted &&
+                          !_task.stages[index].isApproved
+                      ? () => _approveStage(index)
+                      : null,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -126,7 +128,9 @@ class _TeacherTaskDetailsPageState extends State<TeacherTaskDetailsPage> {
                     value: _task.progress,
                     minHeight: 8,
                     backgroundColor: AppColors.white.withValues(alpha: 0.15),
-                    valueColor: const AlwaysStoppedAnimation<Color>(AppColors.white),
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      AppColors.white,
+                    ),
                   ),
                 ),
               ),
@@ -146,9 +150,19 @@ class _TeacherTaskDetailsPageState extends State<TeacherTaskDetailsPage> {
             children: [
               Expanded(child: _heroMeta('المادة', _task.subjectName)),
               const SizedBox(width: 10),
-              Expanded(child: _heroMeta('مراحل مكتملة', '${_task.completedStagesCount}/${_task.stages.length}')),
+              Expanded(
+                child: _heroMeta(
+                  'مراحل مكتملة',
+                  '${_task.completedStagesCount}/${_task.stages.length}',
+                ),
+              ),
               const SizedBox(width: 10),
-              Expanded(child: _heroMeta('بانتظار اعتماد', _task.pendingApprovalsCount.toString())),
+              Expanded(
+                child: _heroMeta(
+                  'بانتظار اعتماد',
+                  _task.pendingApprovalsCount.toString(),
+                ),
+              ),
             ],
           ),
         ],
@@ -220,7 +234,9 @@ class _TeacherTaskDetailsPageState extends State<TeacherTaskDetailsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _task.rewardType == TeacherTaskRewardType.financial ? 'مكافأة مادية' : 'مكافأة معنوية',
+                  _task.rewardType == TeacherTaskRewardType.financial
+                      ? 'مكافأة مادية'
+                      : 'مكافأة معنوية',
                   style: getRegularStyle(
                     fontFamily: FontConstant.cairo,
                     fontSize: FontSize.size10,
@@ -295,13 +311,14 @@ class _TeacherTaskDetailsPageState extends State<TeacherTaskDetailsPage> {
         status: status,
         progress: updatedStages.isEmpty
             ? 0
-            : updatedStages.where((stage) => stage.isCompleted).length / updatedStages.length,
+            : updatedStages.where((stage) => stage.isCompleted).length /
+                  updatedStages.length,
       );
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('تم اعتماد المرحلة بنجاح.')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('تم اعتماد المرحلة بنجاح.')));
 
     if (approved == updatedStages.length && updatedStages.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -313,10 +330,13 @@ class _TeacherTaskDetailsPageState extends State<TeacherTaskDetailsPage> {
   TeacherTaskStatus _deriveStatus(List<TeacherTaskStageModel> stages) {
     if (stages.isEmpty) return TeacherTaskStatus.pending;
     final allCompleted = stages.every((stage) => stage.isCompleted);
-    final allApproved = stages.every((stage) => !stage.requiresApproval || stage.isApproved);
+    final allApproved = stages.every(
+      (stage) => !stage.requiresApproval || stage.isApproved,
+    );
     final anyCompleted = stages.any((stage) => stage.isCompleted);
     final hasPendingApprovals = stages.any(
-      (stage) => stage.isCompleted && stage.requiresApproval && !stage.isApproved,
+      (stage) =>
+          stage.isCompleted && stage.requiresApproval && !stage.isApproved,
     );
 
     if (allCompleted && allApproved) return TeacherTaskStatus.completed;

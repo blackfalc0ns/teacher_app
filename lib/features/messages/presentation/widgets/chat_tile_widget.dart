@@ -72,7 +72,7 @@ class ChatTileWidget extends StatelessWidget {
                       contact.name,
                       style: getBoldStyle(
                         fontFamily: FontConstant.cairo,
-                        fontSize: FontSize.size16,
+                        fontSize: FontSize.size14,
                         color: AppColors.black,
                       ),
                       maxLines: 1,
@@ -125,7 +125,7 @@ class ChatTileWidget extends StatelessWidget {
                   contact.message,
                   style: getMediumStyle(
                     fontFamily: FontConstant.cairo,
-                    fontSize: FontSize.size14,
+                    fontSize: FontSize.size12,
                     color: hasUnread ? AppColors.primary : AppColors.grey,
                   ),
                   maxLines: 1,
