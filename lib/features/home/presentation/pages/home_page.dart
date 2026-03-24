@@ -1,16 +1,16 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:teacher_app/core/error_widgets/api_error_widget.dart';
+import 'package:teacher_app/features/tasks/presentation/widgets/home_teacher_tasks_section.dart';
 
 import '../../../../core/utils/theme/app_colors.dart';
+import '../../data/models/home_data_model.dart';
 import '../cubits/home_cubit.dart';
 import '../cubits/home_state.dart';
 import '../widgets/home_header.dart';
 import '../widgets/stat_card.dart';
 import '../widgets/summary_action_card.dart';
 import '../widgets/weekly_schedule_widget.dart';
-import '../../data/models/home_data_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -49,7 +49,6 @@ class _HomePageState extends State<HomePage> {
     return Container(
       color: const Color(0xFFF6F9FC),
       child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             HomeHeader(userInfo: data.userInfo),
@@ -66,6 +65,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             WeeklyScheduleWidget(weeklySchedule: data.weeklySchedule),
+            const HomeTeacherTasksSection(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            const SizedBox(height: 56),
+            const SizedBox(height: 120),
           ],
         ),
       ),

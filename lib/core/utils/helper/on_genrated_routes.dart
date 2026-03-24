@@ -13,6 +13,10 @@ import 'package:teacher_app/features/settings/presentation/pages/privacy_securit
 import 'package:teacher_app/features/settings/presentation/pages/settings_page.dart';
 import 'package:teacher_app/features/settings/presentation/pages/support_page.dart';
 import 'package:teacher_app/features/settings/presentation/pages/terms_conditions_page.dart';
+import 'package:teacher_app/features/tasks/data/models/teacher_task_model.dart';
+import 'package:teacher_app/features/tasks/presentation/pages/teacher_task_create_page.dart';
+import 'package:teacher_app/features/tasks/presentation/pages/teacher_task_details_page.dart';
+import 'package:teacher_app/features/tasks/presentation/pages/teacher_tasks_page.dart';
 
 import '../../di/injection_container.dart';
 import '../../../features/classroom/presentation/pages/classroom_page.dart';
@@ -41,6 +45,9 @@ class Routes {
   static const String contactUs = '/contact-us';
   static const String aboutApp = '/about-app';
   static const String appRating = '/app-rating';
+  static const String teacherTasks = '/teacher-tasks';
+  static const String teacherTaskDetails = '/teacher-task-details';
+  static const String teacherTaskCreate = '/teacher-task-create';
 }
 
 class OnGeneratedRoutes {
@@ -154,6 +161,34 @@ class OnGeneratedRoutes {
       case Routes.appRating:
         return MaterialPageRoute(
           builder: (_) => const AppRatingPage(),
+        );
+      case Routes.teacherTasks:
+        return MaterialPageRoute(
+          builder: (_) => const TeacherTasksPage(),
+        );
+      case Routes.teacherTaskDetails:
+        final args = settings.arguments;
+        if (args is! TeacherStudentTaskModel) {
+          return MaterialPageRoute(
+            builder: (_) => const Scaffold(
+              body: Center(child: Text('Invalid teacher task route arguments')),
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (_) => TeacherTaskDetailsPage(task: args),
+        );
+      case Routes.teacherTaskCreate:
+        final args = settings.arguments;
+        if (args is! TeacherTaskDashboardModel) {
+          return MaterialPageRoute(
+            builder: (_) => const Scaffold(
+              body: Center(child: Text('Invalid teacher task create arguments')),
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (_) => TeacherTaskCreatePage(dashboard: args),
         );
       default:
         return MaterialPageRoute(

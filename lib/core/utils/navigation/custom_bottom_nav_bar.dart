@@ -39,7 +39,7 @@ class CustomBottomNavBar extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(

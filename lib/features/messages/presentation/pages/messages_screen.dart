@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teacher_app/core/utils/common/custom_app_bar.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
@@ -76,36 +77,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        leading: widget.showBackButton
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back, color: AppColors.black),
-                onPressed: () {
-                  if (Navigator.canPop(context)) {
-                    Navigator.pop(context);
-                  }
-                },
-              )
-            : const SizedBox(),
-        title: Text(
-          'صندوق الرسائل',
-          style: getBoldStyle(
-            fontFamily: FontConstant.cairo,
-            fontSize: FontSize.size20,
-            color: AppColors.black,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_box_outlined, color: AppColors.black),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(title: 'صندوق الرسائل'),
       body: Column(
         children: [
           const MessagesSearchBarWidget(),
@@ -124,7 +96,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
               itemCount: _contacts.length,
               separatorBuilder: (context, index) => Padding(
                 padding: const EdgeInsets.only(left: 16.0, right: 80.0),
-                child: Divider(color: Colors.grey[100], height: 1),
+                child: Divider(color: Colors.grey[200], height: 1),
               ),
               itemBuilder: (context, index) {
                 final contact = _contacts[index];

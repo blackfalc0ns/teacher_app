@@ -18,7 +18,7 @@ class AppTheme {
     fontFamily: FontConstant.cairo,
     brightness: Brightness.light,
     primaryColor: AppColors.primary,
-    scaffoldBackgroundColor: AppColors.white,
+    scaffoldBackgroundColor: const Color(0xFFF7F9FC),
     textTheme: TTextTheme.lightTextTheme,
     elevatedButtonTheme: TElevatedButtonTheme.lightElevatedButtonTheme,
     appBarTheme: TAppBarTheme.lightAppBarTheme,

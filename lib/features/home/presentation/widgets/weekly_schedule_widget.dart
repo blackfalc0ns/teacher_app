@@ -45,7 +45,7 @@ class WeeklyScheduleWidget extends StatelessWidget {
           'الجدول الدراسي الأسبوعي',
           style: getBoldStyle(
             color: AppColors.primaryDark,
-            fontSize: FontSize.size20,
+            fontSize: FontSize.size16,
             fontFamily: FontConstant.cairo,
           ),
         ),
