@@ -48,23 +48,21 @@ class TeacherTaskBasicsCard extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder:
-          (context) => _StudentPickerSheet(
-            allStudents: students,
-            selectedIds: selectedStudentIds,
-            onSelectionChanged: onStudentsChanged,
-          ),
+      builder: (context) => _StudentPickerSheet(
+        allStudents: students,
+        selectedIds: selectedStudentIds,
+        onSelectionChanged: onStudentsChanged,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final availableStudents =
-        selectedClassId == null
-            ? const <TeacherTaskStudentModel>[]
-            : students
-                .where((student) => student.classId == selectedClassId)
-                .toList();
+    final availableStudents = selectedClassId == null
+        ? const <TeacherTaskStudentModel>[]
+        : students
+              .where((student) => student.classId == selectedClassId)
+              .toList();
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -128,7 +126,7 @@ class TeacherTaskBasicsCard extends StatelessWidget {
             'تحديد المستهدف',
             style: getBoldStyle(
               fontFamily: FontConstant.cairo,
-              fontSize: FontSize.size10,
+              fontSize: FontSize.size13,
               color: AppColors.primaryDark,
             ),
           ),
@@ -163,14 +161,28 @@ class TeacherTaskBasicsCard extends StatelessWidget {
               Icons.class_outlined,
             ),
             items: [
-              const DropdownMenuItem(
+              DropdownMenuItem(
                 value: null,
-                child: Text('اختر الشعبة'),
+                child: Text(
+                  'اختر الشعبة',
+                  style: getSemiBoldStyle(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: FontSize.size13,
+                    color: AppColors.grey,
+                  ),
+                ),
               ),
               ...classes.map(
                 (item) => DropdownMenuItem(
                   value: item.id,
-                  child: Text(item.label),
+                  child: Text(
+                    item.label,
+                    style: getSemiBoldStyle(
+                      fontFamily: FontConstant.cairo,
+                      fontSize: FontSize.size13,
+                      color: AppColors.primaryDark,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -179,10 +191,9 @@ class TeacherTaskBasicsCard extends StatelessWidget {
           if (!isClassTask) ...[
             const SizedBox(height: 10),
             InkWell(
-              onTap:
-                  selectedClassId == null
-                      ? null
-                      : () => _showStudentPicker(context, availableStudents),
+              onTap: selectedClassId == null
+                  ? null
+                  : () => _showStudentPicker(context, availableStudents),
               borderRadius: BorderRadius.circular(16),
               child: Container(
                 padding: const EdgeInsets.all(14),
@@ -208,11 +219,10 @@ class TeacherTaskBasicsCard extends StatelessWidget {
                             : 'تم تحديد ${selectedStudentIds.length} طلاب',
                         style: getSemiBoldStyle(
                           fontFamily: FontConstant.cairo,
-                          fontSize: FontSize.size11,
-                          color:
-                              selectedStudentIds.isEmpty
-                                  ? AppColors.grey
-                                  : AppColors.primaryDark,
+                          fontSize: FontSize.size13,
+                          color: selectedStudentIds.isEmpty
+                              ? AppColors.grey
+                              : AppColors.primaryDark,
                         ),
                       ),
                     ),
@@ -230,53 +240,61 @@ class TeacherTaskBasicsCard extends StatelessWidget {
               Wrap(
                 spacing: 6,
                 runSpacing: 6,
-                children:
-                    selectedStudentIds.map((id) {
-                      final name =
-                          availableStudents
-                              .firstWhere((s) => s.id == id, orElse: () => const TeacherTaskStudentModel(id: '', name: '', classId: '', cycleName: '', gradeName: '', sectionName: ''))
-                              .name;
-                      if (name.isEmpty) return const SizedBox.shrink();
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
+                children: selectedStudentIds.map((id) {
+                  final name = availableStudents
+                      .firstWhere(
+                        (s) => s.id == id,
+                        orElse: () => const TeacherTaskStudentModel(
+                          id: '',
+                          name: '',
+                          classId: '',
+                          cycleName: '',
+                          gradeName: '',
+                          sectionName: '',
                         ),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: AppColors.primary.withValues(alpha: 0.15),
+                      )
+                      .name;
+                  if (name.isEmpty) return const SizedBox.shrink();
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.15),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          name,
+                          style: getMediumStyle(
+                            fontFamily: FontConstant.cairo,
+                            fontSize: FontSize.size12,
+                            color: AppColors.primaryDark,
                           ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              name,
-                              style: getMediumStyle(
-                                fontFamily: FontConstant.cairo,
-                                fontSize: FontSize.size9,
-                                color: AppColors.primaryDark,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            InkWell(
-                              onTap: () {
-                                final newList =
-                                    selectedStudentIds.toList()..remove(id);
-                                onStudentsChanged(newList);
-                              },
-                              child: const Icon(
-                                Icons.close_rounded,
-                                size: 12,
-                                color: AppColors.primary,
-                              ),
-                            ),
-                          ],
+                        const SizedBox(width: 4),
+                        InkWell(
+                          onTap: () {
+                            final newList = selectedStudentIds.toList()
+                              ..remove(id);
+                            onStudentsChanged(newList);
+                          },
+                          child: const Icon(
+                            Icons.close_rounded,
+                            size: 12,
+                            color: AppColors.primary,
+                          ),
                         ),
-                      );
-                    }).toList(),
+                      ],
+                    ),
+                  );
+                }).toList(),
               ),
             ],
           ],
@@ -287,7 +305,7 @@ class TeacherTaskBasicsCard extends StatelessWidget {
             'المكافأة والجدول الزمني',
             style: getBoldStyle(
               fontFamily: FontConstant.cairo,
-              fontSize: FontSize.size10,
+              fontSize: FontSize.size13,
               color: AppColors.primaryDark,
             ),
           ),
@@ -313,7 +331,7 @@ class TeacherTaskBasicsCard extends StatelessWidget {
                         'مادية',
                         style: getSemiBoldStyle(
                           fontFamily: FontConstant.cairo,
-                          fontSize: FontSize.size12,
+                          fontSize: FontSize.size13,
                           color: AppColors.primaryDark,
                         ),
                       ),
@@ -324,7 +342,7 @@ class TeacherTaskBasicsCard extends StatelessWidget {
                         'معنوية',
                         style: getSemiBoldStyle(
                           fontFamily: FontConstant.cairo,
-                          fontSize: FontSize.size12,
+                          fontSize: FontSize.size13,
                           color: AppColors.primaryDark,
                         ),
                       ),
@@ -379,7 +397,7 @@ class TeacherTaskBasicsCard extends StatelessWidget {
                         'تاريخ الاستحقاق',
                         style: getRegularStyle(
                           fontFamily: FontConstant.cairo,
-                          fontSize: FontSize.size12,
+                          fontSize: FontSize.size13,
                           color: AppColors.grey,
                         ),
                       ),
@@ -387,7 +405,7 @@ class TeacherTaskBasicsCard extends StatelessWidget {
                         '${dueDate.day}/${dueDate.month}/${dueDate.year}',
                         style: getBoldStyle(
                           fontFamily: FontConstant.cairo,
-                          fontSize: FontSize.size11,
+                          fontSize: FontSize.size12,
                           color: AppColors.primaryDark,
                         ),
                       ),
@@ -420,7 +438,7 @@ class TeacherTaskBasicsCard extends StatelessWidget {
           : null,
       hintStyle: getSemiBoldStyle(
         fontFamily: FontConstant.cairo,
-        fontSize: FontSize.size11,
+        fontSize: FontSize.size13,
         color: AppColors.grey,
       ),
       filled: true,
@@ -469,12 +487,9 @@ class _StudentPickerSheetState extends State<_StudentPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final filtered =
-        widget.allStudents
-            .where(
-              (s) => s.name.toLowerCase().contains(_searchQuery.toLowerCase()),
-            )
-            .toList();
+    final filtered = widget.allStudents
+        .where((s) => s.name.toLowerCase().contains(_searchQuery.toLowerCase()))
+        .toList();
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
@@ -523,11 +538,13 @@ class _StudentPickerSheetState extends State<_StudentPickerSheet> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      if (_currentSelected.length == widget.allStudents.length) {
+                      if (_currentSelected.length ==
+                          widget.allStudents.length) {
                         _currentSelected.clear();
                       } else {
-                        _currentSelected =
-                            widget.allStudents.map((s) => s.id).toList();
+                        _currentSelected = widget.allStudents
+                            .map((s) => s.id)
+                            .toList();
                       }
                     });
                     widget.onSelectionChanged(_currentSelected);
@@ -577,7 +594,9 @@ class _StudentPickerSheetState extends State<_StudentPickerSheet> {
                     style: getSemiBoldStyle(
                       fontFamily: FontConstant.cairo,
                       fontSize: FontSize.size13,
-                      color: isSelected ? AppColors.primary : AppColors.primaryDark,
+                      color: isSelected
+                          ? AppColors.primary
+                          : AppColors.primaryDark,
                     ),
                   ),
                   subtitle: Text(
@@ -681,7 +700,7 @@ class _TargetOption extends StatelessWidget {
                 label,
                 style: getBoldStyle(
                   fontFamily: FontConstant.cairo,
-                  fontSize: FontSize.size10,
+                  fontSize: FontSize.size13,
                   color: isSelected ? AppColors.primaryDark : AppColors.grey,
                 ),
               ),

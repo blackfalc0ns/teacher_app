@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:teacher_app/core/utils/constant/font_manger.dart';
 import 'package:teacher_app/core/utils/constant/styles_manger.dart';
 import 'package:teacher_app/core/utils/theme/app_colors.dart';
@@ -56,7 +56,7 @@ class _TeacherTaskCreatePageState extends State<TeacherTaskCreatePage> {
         backgroundColor: const Color(0xFFF6F9FC),
         surfaceTintColor: Colors.transparent,
         title: Text(
-          'Ø¥Ø³Ù†Ø§Ø¯ Ù…Ù‡Ù…Ø© Ø¬Ø¯ÙŠØ¯Ø©',
+          'إسناد مهمة جديدة',
           style: getBoldStyle(
             fontFamily: FontConstant.cairo,
             fontSize: FontSize.size16,
@@ -85,11 +85,11 @@ class _TeacherTaskCreatePageState extends State<TeacherTaskCreatePage> {
                   Expanded(
                     child: Text(
                       _isClassTask
-                          ? 'Ø£Ù†Ø´Ø¦ Ù…Ù‡Ù…Ø© Ø¬Ù…Ø§Ø¹ÙŠØ© Ù„Ù„ÙØµÙ„ Ø¨Ø§Ù„ÙƒØ§Ù…Ù„ØŒ ÙˆØ³ÙŠØªÙ… Ø¥Ø³Ù†Ø§Ø¯ Ù†Ø³Ø®Ø© Ù…Ù†Ù‡Ø§ Ù„ÙƒÙ„ Ø·Ø§Ù„Ø¨ ÙÙŠ Ø§Ù„ÙØµÙ„ Ø§Ù„Ù…Ø®ØªØ§Ø±.'
-                          : 'Ø£Ù†Ø´Ø¦ Ù…Ù‡Ù…Ø© ÙØ±Ø¯ÙŠØ© Ù„Ø·Ø§Ù„Ø¨ Ù…Ø­Ø¯Ø¯ØŒ Ø«Ù… Ù‚Ø³Ù‘Ù…Ù‡Ø§ Ø¥Ù„Ù‰ Ù…Ø±Ø§Ø­Ù„ ÙˆØ§Ø¶Ø­Ø© Ù…Ø¹ Ø¥Ø«Ø¨Ø§Øª Ù…Ù†Ø§Ø³Ø¨ Ù„ÙƒÙ„ Ù…Ø±Ø­Ù„Ø© ÙˆÙ…ÙƒØ§ÙØ£Ø© Ù…Ø­ÙØ²Ø©.',
+                          ? 'أنشئ مهمة جماعية للفصل بالكامل، وسيتم إسناد نسخة منها لكل طالب في الفصل المختار.'
+                          : 'أنشئ مهمة فردية لطلاب محددين، ثم قسّمها إلى مراحل واضحة مع إثبات مناسب لكل مرحلة ومكافأة محفزة.',
                       style: getMediumStyle(
                         fontFamily: FontConstant.cairo,
-                        fontSize: FontSize.size12,
+                        fontSize: FontSize.size13,
                         color: AppColors.white.withValues(alpha: 0.95),
                       ),
                     ),
@@ -145,7 +145,7 @@ class _TeacherTaskCreatePageState extends State<TeacherTaskCreatePage> {
               ),
               icon: const Icon(Icons.assignment_turned_in_outlined, size: 18),
               label: Text(
-                'Ø¥Ø³Ù†Ø§Ø¯ Ø§Ù„Ù…Ù‡Ù…Ø©',
+                'إسناد المهمة',
                 style: getBoldStyle(
                   fontFamily: FontConstant.cairo,
                   fontSize: FontSize.size11,
@@ -211,7 +211,7 @@ class _TeacherTaskCreatePageState extends State<TeacherTaskCreatePage> {
         validStages.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Ø£ÙƒÙ…Ù„ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø£Ø³Ø§Ø³ÙŠØ© ÙˆØ§Ù„Ù…Ø±Ø§Ø­Ù„ Ù‚Ø¨Ù„ Ø§Ù„Ø¥Ø³Ù†Ø§Ø¯.'),
+          content: Text('أكمل البيانات الأساسية والمراحل قبل الإسناد.'),
         ),
       );
       return;
@@ -225,7 +225,7 @@ class _TeacherTaskCreatePageState extends State<TeacherTaskCreatePage> {
 
       if (classStudents.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Ù„Ø§ ÙŠÙˆØ¬Ø¯ Ø·Ù„Ø§Ø¨ ÙÙŠ Ù‡Ø°Ø§ Ø§Ù„ÙØµÙ„ Ø­Ø§Ù„ÙŠØ§Ù‹.')),
+          const SnackBar(content: Text('لا يوجد طلاب في هذا الفصل حالياً.')),
         );
         return;
       }
@@ -292,7 +292,6 @@ class _TeacherTaskCreatePageState extends State<TeacherTaskCreatePage> {
       }).toList();
 
       // If only one student is selected, return a single task object
-      // (though handling it as a list is also fine in the page)
       if (tasks.length == 1) {
         Navigator.of(context).pop(tasks.first);
       } else {
@@ -301,4 +300,3 @@ class _TeacherTaskCreatePageState extends State<TeacherTaskCreatePage> {
     }
   }
 }
-

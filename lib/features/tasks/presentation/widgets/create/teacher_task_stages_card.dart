@@ -153,7 +153,7 @@ class TeacherTaskStagesCard extends StatelessWidget {
                       initialValue: stages[index].title,
                       style: getMediumStyle(
                         fontFamily: FontConstant.cairo,
-                        fontSize: FontSize.size12,
+                        fontSize: FontSize.size13,
                       ),
                       onChanged: (value) => onStageChanged(
                         index,
@@ -166,9 +166,9 @@ class TeacherTaskStagesCard extends StatelessWidget {
                     const SizedBox(height: 10),
                     DropdownButtonFormField<TeacherTaskProofType>(
                       initialValue: stages[index].proofType,
-                      style: getMediumStyle(
+                      style: getSemiBoldStyle(
                         fontFamily: FontConstant.cairo,
-                        fontSize: FontSize.size12,
+                        fontSize: FontSize.size13,
                         color: AppColors.primaryDark,
                       ),
                       onChanged: (value) {
@@ -181,18 +181,39 @@ class TeacherTaskStagesCard extends StatelessWidget {
                       decoration: _inputDecoration(
                         'نوع الإثبات المطلوب من الطالب',
                       ),
-                      items: const [
+                      items: [
                         DropdownMenuItem(
                           value: TeacherTaskProofType.image,
-                          child: Text('صورة توثيقية'),
+                          child: Text(
+                            'صورة توثيقية',
+                            style: getSemiBoldStyle(
+                              fontFamily: FontConstant.cairo,
+                              fontSize: FontSize.size13,
+                              color: AppColors.primaryDark,
+                            ),
+                          ),
                         ),
                         DropdownMenuItem(
                           value: TeacherTaskProofType.document,
-                          child: Text('مستند أو ملف'),
+                          child: Text(
+                            'مستند أو ملف',
+                            style: getSemiBoldStyle(
+                              fontFamily: FontConstant.cairo,
+                              fontSize: FontSize.size13,
+                              color: AppColors.primaryDark,
+                            ),
+                          ),
                         ),
                         DropdownMenuItem(
                           value: TeacherTaskProofType.none,
-                          child: Text('لا يوجد إثبات'),
+                          child: Text(
+                            'لا يوجد إثبات',
+                            style: getSemiBoldStyle(
+                              fontFamily: FontConstant.cairo,
+                              fontSize: FontSize.size13,
+                              color: AppColors.primaryDark,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -209,9 +230,9 @@ class TeacherTaskStagesCard extends StatelessWidget {
   InputDecoration _inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: getRegularStyle(
+      hintStyle: getSemiBoldStyle(
         fontFamily: FontConstant.cairo,
-        fontSize: FontSize.size11,
+        fontSize: FontSize.size12,
         color: AppColors.grey,
       ),
       filled: true,
