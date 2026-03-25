@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teacher_app/core/utils/common/custom_app_bar.dart';
 import 'package:teacher_app/core/utils/constant/font_manger.dart';
 import 'package:teacher_app/core/utils/constant/styles_manger.dart';
 import 'package:teacher_app/core/utils/theme/app_colors.dart';
@@ -51,19 +52,7 @@ class _TeacherTaskCreatePageState extends State<TeacherTaskCreatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F9FC),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFF6F9FC),
-        surfaceTintColor: Colors.transparent,
-        title: Text(
-          'إسناد مهمة جديدة',
-          style: getBoldStyle(
-            fontFamily: FontConstant.cairo,
-            fontSize: FontSize.size16,
-            color: AppColors.primaryDark,
-          ),
-        ),
-      ),
+      appBar: CustomAppBar(title: 'إسناد مهمة جديدة'),
       body: TeacherTasksScrollConfiguration(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
