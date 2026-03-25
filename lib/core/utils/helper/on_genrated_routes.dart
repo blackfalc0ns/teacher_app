@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teacher_app/features/home/presentation/pages/main_page.dart';
 import 'package:teacher_app/features/messages/presentation/pages/chat_details_screen.dart';
@@ -17,6 +17,8 @@ import 'package:teacher_app/features/tasks/data/models/teacher_task_model.dart';
 import 'package:teacher_app/features/tasks/presentation/pages/teacher_task_create_page.dart';
 import 'package:teacher_app/features/tasks/presentation/pages/teacher_task_details_page.dart';
 import 'package:teacher_app/features/tasks/presentation/pages/teacher_tasks_page.dart';
+import 'package:teacher_app/features/xp/presentation/pages/xp_students_page.dart';
+import 'package:teacher_app/features/xp/presentation/pages/xp_center_page.dart';
 
 import '../../di/injection_container.dart';
 import '../../../features/classroom/presentation/pages/classroom_page.dart';
@@ -49,6 +51,8 @@ class Routes {
   static const String teacherTasks = '/teacher-tasks';
   static const String teacherTaskDetails = '/teacher-task-details';
   static const String teacherTaskCreate = '/teacher-task-create';
+  static const String xpCenter = '/xp-center';
+  static const String xpStudents = '/xp-students';
 }
 
 class OnGeneratedRoutes {
@@ -131,45 +135,25 @@ class OnGeneratedRoutes {
           ),
         );
       case Routes.settings:
-        return MaterialPageRoute(
-          builder: (_) => const SettingsPage(),
-        );
+        return MaterialPageRoute(builder: (_) => const SettingsPage());
       case Routes.privacySecurity:
-        return MaterialPageRoute(
-          builder: (_) => const PrivacySecurityPage(),
-        );
+        return MaterialPageRoute(builder: (_) => const PrivacySecurityPage());
       case Routes.privacyPolicy:
-        return MaterialPageRoute(
-          builder: (_) => const PrivacyPolicyPage(),
-        );
+        return MaterialPageRoute(builder: (_) => const PrivacyPolicyPage());
       case Routes.termsConditions:
-        return MaterialPageRoute(
-          builder: (_) => const TermsConditionsPage(),
-        );
+        return MaterialPageRoute(builder: (_) => const TermsConditionsPage());
       case Routes.support:
-        return MaterialPageRoute(
-          builder: (_) => const SupportPage(),
-        );
+        return MaterialPageRoute(builder: (_) => const SupportPage());
       case Routes.helpCenter:
-        return MaterialPageRoute(
-          builder: (_) => const HelpCenterPage(),
-        );
+        return MaterialPageRoute(builder: (_) => const HelpCenterPage());
       case Routes.contactUs:
-        return MaterialPageRoute(
-          builder: (_) => const ContactUsPage(),
-        );
+        return MaterialPageRoute(builder: (_) => const ContactUsPage());
       case Routes.aboutApp:
-        return MaterialPageRoute(
-          builder: (_) => const AboutAppPage(),
-        );
+        return MaterialPageRoute(builder: (_) => const AboutAppPage());
       case Routes.appRating:
-        return MaterialPageRoute(
-          builder: (_) => const AppRatingPage(),
-        );
+        return MaterialPageRoute(builder: (_) => const AppRatingPage());
       case Routes.teacherTasks:
-        return MaterialPageRoute(
-          builder: (_) => const TeacherTasksPage(),
-        );
+        return MaterialPageRoute(builder: (_) => const TeacherTasksPage());
       case Routes.teacherTaskDetails:
         final args = settings.arguments;
         if (args is! TeacherStudentTaskModel) {
@@ -187,18 +171,33 @@ class OnGeneratedRoutes {
         if (args is! TeacherTaskDashboardModel) {
           return MaterialPageRoute(
             builder: (_) => const Scaffold(
-              body: Center(child: Text('Invalid teacher task create arguments')),
+              body: Center(
+                child: Text('Invalid teacher task create arguments'),
+              ),
             ),
           );
         }
         return MaterialPageRoute(
           builder: (_) => TeacherTaskCreatePage(dashboard: args),
         );
+      case Routes.xpCenter:
+        return MaterialPageRoute(builder: (_) => const XpCenterPage());
+      case Routes.xpStudents:
+        final args = settings.arguments;
+        if (args is! XpStudentsPageArgs) {
+          return MaterialPageRoute(
+            builder: (_) => const Scaffold(
+              body: Center(child: Text('Invalid xp students route arguments')),
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (_) => XpStudentsPage(args: args),
+        );
       default:
         return MaterialPageRoute(
-          builder: (_) => const Scaffold(
-            body: Center(child: Text('Route not found')),
-          ),
+          builder: (_) =>
+              const Scaffold(body: Center(child: Text('Route not found'))),
         );
     }
   }

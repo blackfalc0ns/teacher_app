@@ -109,12 +109,8 @@ class _SchedulePageState extends State<SchedulePage> {
           section == _allFilter || item.sectionName == section;
       final matchesAttention = !attentionOnly || item.requiresAttention;
 
-      return matchesCycle &&
-          matchesGrade &&
-          matchesSection &&
-          matchesAttention;
-    }).toList()
-      ..sort((a, b) => a.periodIndex.compareTo(b.periodIndex));
+      return matchesCycle && matchesGrade && matchesSection && matchesAttention;
+    }).toList()..sort((a, b) => a.periodIndex.compareTo(b.periodIndex));
   }
 
   ScheduleModel? _pickFocusItem(List<ScheduleModel> schedule) {
@@ -141,11 +137,12 @@ class _SchedulePageState extends State<SchedulePage> {
         builder: (context, state) {
           final allSchedule = state is ScheduleSuccess
               ? (List<ScheduleModel>.from(state.schedule)
-                ..sort((a, b) => a.periodIndex.compareTo(b.periodIndex)))
+                  ..sort((a, b) => a.periodIndex.compareTo(b.periodIndex)))
               : <ScheduleModel>[];
 
-          final cycleOptions =
-              _withAllOption(allSchedule.map((item) => item.cycleName));
+          final cycleOptions = _withAllOption(
+            allSchedule.map((item) => item.cycleName),
+          );
           final effectiveCycle = cycleOptions.contains(_selectedCycle)
               ? _selectedCycle
               : _allFilter;
@@ -156,8 +153,9 @@ class _SchedulePageState extends State<SchedulePage> {
                     .where((item) => item.cycleName == effectiveCycle)
                     .toList();
 
-          final gradeOptions =
-              _withAllOption(cycleScoped.map((item) => item.gradeName));
+          final gradeOptions = _withAllOption(
+            cycleScoped.map((item) => item.gradeName),
+          );
           final effectiveGrade = gradeOptions.contains(_selectedGrade)
               ? _selectedGrade
               : _allFilter;
@@ -168,8 +166,9 @@ class _SchedulePageState extends State<SchedulePage> {
                     .where((item) => item.gradeName == effectiveGrade)
                     .toList();
 
-          final sectionOptions =
-              _withAllOption(gradeScoped.map((item) => item.sectionName));
+          final sectionOptions = _withAllOption(
+            gradeScoped.map((item) => item.sectionName),
+          );
           final effectiveSection = sectionOptions.contains(_selectedSection)
               ? _selectedSection
               : _allFilter;
@@ -183,8 +182,10 @@ class _SchedulePageState extends State<SchedulePage> {
           );
 
           final focusItem = _pickFocusItem(filteredSchedule);
-          final totalClasses =
-              allSchedule.map((item) => item.className).toSet().length;
+          final totalClasses = allSchedule
+              .map((item) => item.className)
+              .toSet()
+              .length;
 
           return Column(
             children: [
@@ -266,14 +267,19 @@ class _SchedulePageState extends State<SchedulePage> {
         effectiveSection != _allFilter ||
         _showAttentionOnly;
 
-    final attentionCount =
-        filteredSchedule.where((item) => item.requiresAttention).length;
-    final classCount =
-        filteredSchedule.map((item) => item.className).toSet().length;
-    final attendanceCount =
-        filteredSchedule.where((item) => item.needsAttendance).length;
-    final homeworkCount =
-        filteredSchedule.where((item) => item.hasHomework).length;
+    final attentionCount = filteredSchedule
+        .where((item) => item.requiresAttention)
+        .length;
+    final classCount = filteredSchedule
+        .map((item) => item.className)
+        .toSet()
+        .length;
+    final attendanceCount = filteredSchedule
+        .where((item) => item.needsAttendance)
+        .length;
+    final homeworkCount = filteredSchedule
+        .where((item) => item.hasHomework)
+        .length;
 
     return CustomScrollView(
       slivers: [
@@ -288,7 +294,7 @@ class _SchedulePageState extends State<SchedulePage> {
             ),
           ),
         ),
-        
+
         // Stats Cards Section
         SliverToBoxAdapter(
           child: Padding(
@@ -336,7 +342,7 @@ class _SchedulePageState extends State<SchedulePage> {
             ),
           ),
         ),
-        
+
         // Filters Section
         SliverToBoxAdapter(
           child: Padding(
@@ -377,7 +383,7 @@ class _SchedulePageState extends State<SchedulePage> {
             ),
           ),
         ),
-        
+
         // Schedule List Section
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
@@ -408,17 +414,18 @@ class _TeacherFocusCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isToday = DateUtils.isSameDay(selectedDate, DateTime.now());
-    final isLastClass = item != null &&
+    final isLastClass =
+        item != null &&
         item!.status != ScheduleStatus.current &&
         item!.status != ScheduleStatus.upcoming;
 
     final title = item == null
         ? 'لا توجد حصة ظاهرة الآن'
         : item!.status == ScheduleStatus.current
-            ? 'الحصة الحالية'
-            : item!.status == ScheduleStatus.upcoming
-                ? 'الحصة القادمة'
-                : 'حصص اليوم انتهت';
+        ? 'الحصة الحالية'
+        : item!.status == ScheduleStatus.upcoming
+        ? 'الحصة القادمة'
+        : 'حصص اليوم انتهت';
 
     final subtitle = item == null
         ? 'يمكنك تغيير اليوم أو توسيع الفلاتر لعرض حصص المدرس.'
@@ -433,7 +440,9 @@ class _TeacherFocusCard extends StatelessWidget {
         title: title,
         subtitle: subtitle,
         footer: footer,
-        icon: isLastClass ? Icons.check_circle_outline_rounded : Icons.info_outline,
+        icon: isLastClass
+            ? Icons.check_circle_outline_rounded
+            : Icons.info_outline,
         color: isLastClass ? AppColors.green : AppColors.primary,
       );
     }
@@ -441,7 +450,7 @@ class _TeacherFocusCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        border: Border.all(width: 1 , color: AppColors.lightGrey),
+        border: Border.all(width: 1, color: AppColors.lightGrey),
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [

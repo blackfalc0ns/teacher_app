@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:teacher_app/core/utils/constant/font_manger.dart';
 import 'package:teacher_app/core/utils/constant/styles_manger.dart';
 import 'package:teacher_app/core/utils/helper/on_genrated_routes.dart';
@@ -60,7 +60,7 @@ class _TeacherTasksPageState extends State<TeacherTasksPage> {
         backgroundColor: const Color(0xFFF6F9FC),
         surfaceTintColor: Colors.transparent,
         title: Text(
-          'Ù…Ù‡Ø§Ù… Ø§Ù„Ø·Ù„Ø§Ø¨',
+          'مهام الطلاب',
           style: getBoldStyle(
             fontFamily: FontConstant.cairo,
             fontSize: FontSize.size16,
@@ -84,7 +84,7 @@ class _TeacherTasksPageState extends State<TeacherTasksPage> {
                       children: [
                         Expanded(
                           child: TeacherTaskSummaryCard(
-                            title: 'Ù†Ø´Ø·Ø©',
+                            title: 'نشطة',
                             value: _tasks
                                 .where(
                                   (task) =>
@@ -93,7 +93,7 @@ class _TeacherTasksPageState extends State<TeacherTasksPage> {
                                 )
                                 .length
                                 .toString(),
-                            subtitle: 'Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ° Ø£Ùˆ Ù„Ù… ØªØ¨Ø¯Ø£',
+                            subtitle: 'قيد التنفيذ أو لم تبدأ',
                             icon: Icons.play_circle_outline_rounded,
                             color: AppColors.primary,
                           ),
@@ -101,12 +101,12 @@ class _TeacherTasksPageState extends State<TeacherTasksPage> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: TeacherTaskSummaryCard(
-                            title: 'Ø¨Ø§Ù†ØªØ¸Ø§Ø± Ø§Ø¹ØªÙ…Ø§Ø¯',
+                            title: 'بانتظار اعتماد',
                             value: _tasks
                                 .where((task) => task.hasPendingApprovals)
                                 .length
                                 .toString(),
-                            subtitle: 'Ù…Ø±Ø§Ø­Ù„ Ù…Ø±ÙÙˆØ¹Ø© Ù…Ù† Ø§Ù„Ø·Ù„Ø§Ø¨',
+                            subtitle: 'مراحل مرفوعة من الطلاب',
                             icon: Icons.approval_outlined,
                             color: AppColors.info,
                           ),
@@ -114,7 +114,7 @@ class _TeacherTasksPageState extends State<TeacherTasksPage> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: TeacherTaskSummaryCard(
-                            title: 'Ù…Ù†ÙØ°Ø©',
+                            title: 'منفذة',
                             value: _tasks
                                 .where(
                                   (task) =>
@@ -123,7 +123,7 @@ class _TeacherTasksPageState extends State<TeacherTasksPage> {
                                 )
                                 .length
                                 .toString(),
-                            subtitle: 'ØªÙ… Ø¥Ù†Ù‡Ø§Ø¤Ù‡Ø§ ÙˆØ§Ø¹ØªÙ…Ø§Ø¯Ù‡Ø§',
+                            subtitle: 'تم إنهاؤها واعتمادها',
                             icon: Icons.check_circle_outline_rounded,
                             color: AppColors.green,
                           ),
@@ -155,7 +155,7 @@ class _TeacherTasksPageState extends State<TeacherTasksPage> {
       children: [
         Expanded(
           child: _StatusTab(
-            label: 'Ø¨Ø§Ù†ØªØ¸Ø§Ø± Ø§Ø¹ØªÙ…Ø§Ø¯',
+            label: 'بانتظار اعتماد',
             selected: _selectedFilter == _TasksViewFilter.pendingApproval,
             onTap: () => setState(
               () => _selectedFilter = _TasksViewFilter.pendingApproval,
@@ -165,7 +165,7 @@ class _TeacherTasksPageState extends State<TeacherTasksPage> {
         const SizedBox(width: 8),
         Expanded(
           child: _StatusTab(
-            label: 'Ù†Ø´Ø·Ø©',
+            label: 'نشطة',
             selected: _selectedFilter == _TasksViewFilter.active,
             onTap: () =>
                 setState(() => _selectedFilter = _TasksViewFilter.active),
@@ -174,7 +174,7 @@ class _TeacherTasksPageState extends State<TeacherTasksPage> {
         const SizedBox(width: 8),
         Expanded(
           child: _StatusTab(
-            label: 'Ù…Ù†ÙØ°Ø©',
+            label: 'منفذة',
             selected: _selectedFilter == _TasksViewFilter.completed,
             onTap: () =>
                 setState(() => _selectedFilter = _TasksViewFilter.completed),
@@ -196,7 +196,7 @@ class _TeacherTasksPageState extends State<TeacherTasksPage> {
           ),
           child: Center(
             child: Text(
-              'Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù‡Ø§Ù… Ù…Ø·Ø§Ø¨Ù‚Ø© Ù„Ù„ÙÙ„Ø§ØªØ± Ø§Ù„Ø­Ø§Ù„ÙŠØ©.',
+              'لا توجد مهام مطابقة للفلاتر الحالية.',
               style: getMediumStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: FontSize.size11,
@@ -223,7 +223,7 @@ class _TeacherTasksPageState extends State<TeacherTasksPage> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
-                '${entry.key} â€¢ ${first.subjectName}',
+                '${entry.key} • ${first.subjectName}',
                 style: getBoldStyle(
                   fontFamily: FontConstant.cairo,
                   fontSize: FontSize.size12,
@@ -348,4 +348,3 @@ class _StatusTab extends StatelessWidget {
     );
   }
 }
-

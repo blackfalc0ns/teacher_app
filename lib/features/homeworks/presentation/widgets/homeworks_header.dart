@@ -25,7 +25,7 @@ class HomeworksHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 18, 16, 8),
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
       decoration: const BoxDecoration(
         gradient: AppColors.primaryGradient,
         borderRadius: BorderRadius.only(
@@ -68,13 +68,17 @@ class HomeworksHeader extends StatelessWidget {
                 backgroundColor: Colors.white,
                 textColor: AppColors.primaryDark,
                 height: 36,
-                prefix: const Icon(Icons.add_task_rounded, size: 16, color: AppColors.primaryDark),
+                prefix: const Icon(
+                  Icons.add_task_rounded,
+                  size: 16,
+                  color: AppColors.primaryDark,
+                ),
                 onPressed: onCreatePressed,
               ),
             ],
           ),
           const SizedBox(height: 20),
-          
+
           // Statistics Row - all in one row
           Row(
             children: [
@@ -144,11 +148,7 @@ class _CompactStat extends StatelessWidget {
               color: AppColors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(
-              icon,
-              size: 16,
-              color: AppColors.white,
-            ),
+            child: Icon(icon, size: 16, color: AppColors.white),
           ),
           const SizedBox(height: 6),
           Text(

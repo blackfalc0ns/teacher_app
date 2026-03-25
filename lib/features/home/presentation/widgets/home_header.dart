@@ -14,7 +14,7 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16,32, 8, 16),
+      padding: const EdgeInsets.fromLTRB(16, 40, 8, 16),
       decoration: const BoxDecoration(
         gradient: AppColors.primaryGradient,
         borderRadius: BorderRadius.only(
@@ -41,11 +41,11 @@ class HomeHeader extends StatelessWidget {
                 constraints: const BoxConstraints(),
               ),
               const SizedBox(width: 12),
-              
+
               // Profile Image
               _buildProfileImage(),
               const SizedBox(width: 12),
-              
+
               // User Info
               Expanded(
                 child: Column(
@@ -73,10 +73,13 @@ class HomeHeader extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               // Points
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.white.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(20),
@@ -98,7 +101,7 @@ class HomeHeader extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              
+
               // Notification Bell
               _buildNotificationBell(),
             ],

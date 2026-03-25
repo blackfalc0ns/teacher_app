@@ -1,9 +1,9 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teacher_app/core/error_widgets/api_error_widget.dart';
+import 'package:teacher_app/core/utils/theme/app_colors.dart';
 import 'package:teacher_app/features/tasks/presentation/widgets/home_teacher_tasks_section.dart';
 
-import '../../../../core/utils/theme/app_colors.dart';
 import '../../data/models/home_data_model.dart';
 import '../cubits/home_cubit.dart';
 import '../cubits/home_state.dart';
@@ -32,12 +32,14 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state) {
         if (state is HomeLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state is HomeError) {
+        }
+        if (state is HomeError) {
           return ApiErrorWidget(
             exception: state.error,
             onRetry: () => context.read<HomeCubit>().getHomeData(),
           );
-        } else if (state is HomeSuccess) {
+        }
+        if (state is HomeSuccess) {
           return _buildContent(state.data);
         }
         return const SizedBox.shrink();
@@ -55,10 +57,11 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 16),
             SizedBox(
               height: 85,
-              child: ListView.builder(
+              child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 itemCount: data.stats.length,
+                separatorBuilder: (context, index) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
                   return StatCard(stat: data.stats[index]);
                 },
